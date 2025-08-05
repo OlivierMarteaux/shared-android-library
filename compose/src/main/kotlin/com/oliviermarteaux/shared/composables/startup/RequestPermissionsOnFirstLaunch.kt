@@ -17,7 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.edit
-import com.oliviermarteaux.shared.R
+import com.oliviermarteaux.shared.compose.R
 
 /**
  * Requests runtime permissions the first time the app is launched.

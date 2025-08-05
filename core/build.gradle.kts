@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.oliviermarteaux.shared"
+    namespace = "com.oliviermarteaux.shared.core"
     compileSdk = 36
 
     defaultConfig {

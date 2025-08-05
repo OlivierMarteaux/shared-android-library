@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
-import com.oliviermarteaux.shared.R
+import com.oliviermarteaux.shared.compose.R
 
 /**
  * Icon button with tooltip support.

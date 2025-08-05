@@ -14,7 +14,7 @@ import coil3.request.crossfade
 import coil3.request.error
 import coil3.request.fallback
 import coil3.request.placeholder
-import com.oliviermarteaux.shared.R
+import com.oliviermarteaux.shared.compose.R
 
 /**
  * Displays an image from a photo URI with placeholder and error handling.
