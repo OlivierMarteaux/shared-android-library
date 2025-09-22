@@ -1,4 +1,4 @@
-package com.example.vitesse.ui.components.texts
+package com.oliviermarteaux.shared.composables.texts
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text

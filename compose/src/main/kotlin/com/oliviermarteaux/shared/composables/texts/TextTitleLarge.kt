@@ -15,7 +15,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 
 @Composable
-fun TextTitleMedium (
+fun TextTitleLarge (
     text: String,
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
@@ -50,6 +50,6 @@ fun TextTitleMedium (
         maxLines = maxLines,
         minLines = minLines,
         onTextLayout = onTextLayout,
-        style = MaterialTheme.typography.titleMedium,
+        style = MaterialTheme.typography.titleLarge,
     )
 }

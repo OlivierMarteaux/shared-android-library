@@ -29,8 +29,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.oliviermarteaux.shared.compose.R
-import com.example.vitesse.ui.components.texts.TextHeadLineLarge
-import com.example.vitesse.ui.components.texts.TextLabelLarge
+import com.oliviermarteaux.shared.composables.texts.TextHeadLineLarge
+import com.oliviermarteaux.shared.composables.texts.TextLabelLarge
 import com.oliviermarteaux.shared.extensions.toLocalDateString
 import com.oliviermarteaux.shared.extensions.toLong
 import com.oliviermarteaux.shared.extensions.upTo
