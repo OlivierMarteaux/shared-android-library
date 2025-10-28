@@ -13,8 +13,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 @Composable
 fun SharedIconToggle(
     // SharedIcon parameters
-    iconChecked: ImageVector,
-    iconUnchecked: ImageVector,
+    iconChecked: IconSource,
+    iconUnchecked: IconSource,
     modifier : Modifier = Modifier,
     contentDescription: String? = null,
     tint: Color = LocalContentColor.current,

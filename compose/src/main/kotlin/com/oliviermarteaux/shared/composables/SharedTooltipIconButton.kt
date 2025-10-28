@@ -18,7 +18,7 @@ import androidx.compose.ui.window.PopupPositionProvider
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SharedTooltipIconButton(
-    icon: ImageVector,
+    icon: IconSource,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
     tint: Color = LocalContentColor.current,

@@ -42,6 +42,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.material3)
     implementation(libs.google.accompanist.systemuicontroller)
+    implementation(libs.material.icons.extended)
     implementation(libs.coil.compose)
     testImplementation(libs.junit)
 }

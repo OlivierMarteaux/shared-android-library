@@ -25,3 +25,13 @@ fun String.stripAccents(): String {
     val normalized = Normalizer.normalize(this, Normalizer.Form.NFD)
     return normalized.replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
 }
+
+fun String.isHardEnough(minChar: Int): Boolean {
+    if (length < minChar) return false
+
+    val hasLetter = any { it.isLetter() }
+    val hasDigit = any { it.isDigit() }
+    val hasSpecial = any { !it.isLetterOrDigit() }
+
+    return hasLetter && hasDigit && hasSpecial
+}
