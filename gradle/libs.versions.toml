@@ -26,6 +26,8 @@ turbine = "1.2.1"
 mockitoKotlin = "6.0.0"
 appcompatVersion = "1.7.1"
 materialIconsExtended = "1.7.8"
+firebase = "34.4.0"
+datastorePreferences = "1.1.7"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityCompose" }
@@ -64,6 +66,9 @@ turbine = {group = "app.cash.turbine", name = "turbine", version.ref = "turbine"
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompatVersion" }
 material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
+datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

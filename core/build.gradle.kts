@@ -44,5 +44,11 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
+    //_ Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging)
+    //_ Preferences DataStore
+    implementation(libs.datastore.preferences)
+
     testImplementation(libs.junit)
 }
