@@ -1,4 +1,4 @@
-package com.oliviermarteaux.shared.com.oliviermarteaux.shared.test.cucumber.steps
+package com.oliviermarteaux.shared.test.cucumber.steps
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
@@ -7,7 +7,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import com.oliviermarteaux.shared.com.oliviermarteaux.shared.test.di.ComposeRuleHolderInterface
+import com.oliviermarteaux.shared.test.di.ComposeRuleHolderInterface
 import io.cucumber.java.en.And
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
