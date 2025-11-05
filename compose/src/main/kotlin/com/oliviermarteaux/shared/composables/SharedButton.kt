@@ -14,6 +14,56 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.style.TextAlign
 
+/**
+ * A reusable, customizable button component that displays a text label and handles user clicks.
+ *
+ * This composable wraps [Button] from Material Design 3, providing sensible defaults
+ * and additional customization options for consistent styling across the app.
+ *
+ * ### Behavior:
+ * - Displays a text label centered inside the button.
+ * - Supports enabling/disabling, custom shapes, borders, colors, and elevation.
+ * - Executes the provided [onClick] lambda when pressed.
+ * - Uses [MaterialTheme.typography.labelMedium] for text styling.
+ *
+ * ### Parameters:
+ * @param text The text label displayed inside the button.
+ * @param modifier The [Modifier] applied to the button layout.
+ * @param enabled Controls whether the button is clickable.
+ * If `false`, the button appears disabled and does not respond to input.
+ * @param shape The shape of the button container.
+ * Defaults to [ButtonDefaults.shape].
+ * @param colors The color configuration for the button’s background and content.
+ * Defaults to [ButtonDefaults.buttonColors].
+ * @param elevation The visual elevation of the button.
+ * Defaults to [ButtonDefaults.buttonElevation].
+ * @param border Optional [BorderStroke] to draw a border around the button.
+ * Defaults to `null` (no border).
+ * @param contentPadding The internal padding around the button content.
+ * Defaults to [ButtonDefaults.ContentPadding].
+ * @param interactionSource An optional [MutableInteractionSource] for observing interaction events
+ * (e.g., pressed, focused, hovered).
+ * Defaults to `null`.
+ * @param textAlign The alignment of the text label within the button.
+ * Defaults to [TextAlign.Center].
+ * @param onClick The callback function invoked when the button is clicked.
+ *
+ * ### Example Usage:
+ * ```kotlin
+ * @Composable
+ * fun SubmitButton(onSubmit: () -> Unit) {
+ *     SharedButton(
+ *         text = "Submit",
+ *         onClick = onSubmit,
+ *         colors = ButtonDefaults.buttonColors(containerColor = Color.Blue)
+ *     )
+ * }
+ * ```
+ *
+ * @see Button
+ * @see ButtonDefaults
+ * @see MaterialTheme.typography
+ */
 @Composable
 fun SharedButton(
     text: String = "",

@@ -23,6 +23,33 @@ import androidx.compose.ui.unit.sp
 import com.oliviermarteaux.shared.utils.TOAST_DURATION
 import kotlinx.coroutines.delay
 
+/**
+ * Displays a temporary toast message at the bottom of the screen using a custom
+ * composable layout. The toast automatically disappears after a specified duration.
+ *
+ * ### Behavior:
+ * - Appears as a small overlay with rounded corners, dark background, and white text.
+ * - Automatically dismisses after [durationMillis] milliseconds.
+ * - Positioned at the bottom center of the screen with optional [bottomPadding].
+ * - Supports animated size changes when content changes.
+ *
+ * ### Parameters:
+ * @param text The message to display inside the toast.
+ * @param modifier [Modifier] applied to the toast's [Surface] for further customization.
+ * @param durationMillis Duration in milliseconds before the toast automatically disappears. Defaults to [TOAST_DURATION].
+ * @param bottomPadding Vertical padding from the bottom of the screen in dp. Defaults to 80.
+ *
+ * ### Example Usage:
+ * ```kotlin
+ * @Composable
+ * fun ExampleScreen() {
+ *     Button(onClick = { /* trigger toast */ }) {
+ *         Text("Show Toast")
+ *     }
+ *     SharedToast(text = "This is a toast message!")
+ * }
+ * ```
+ */
 @Composable
 fun SharedToast(
     text: String,

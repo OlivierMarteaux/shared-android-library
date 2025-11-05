@@ -11,6 +11,12 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
+// Add the plugin for JVM toolchain downloading
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention").version("1.0.0")
+}
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -22,3 +28,4 @@ dependencyResolutionManagement {
 rootProject.name = "shared-android-library"
 include(":core")
 include(":compose")
+include(":test")

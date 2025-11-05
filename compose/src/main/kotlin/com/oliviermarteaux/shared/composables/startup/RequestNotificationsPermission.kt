@@ -11,6 +11,43 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 
+/**
+ * Requests the **POST_NOTIFICATIONS** permission on Android 13 (Tiramisu, API level 33) and above.
+ *
+ * This composable handles the logic for requesting notification permission at runtime.
+ * It uses a [LaunchedEffect] to automatically trigger the permission request process
+ * when the composable is first composed.
+ *
+ * ### Behavior:
+ * - For devices running **below Android 13**, the function does nothing since notification
+ *   permission is granted by default.
+ * - For **Android 13 and above**, it checks whether the app should display a rationale before
+ *   requesting permission using [ActivityCompat.shouldShowRequestPermissionRationale].
+ * - If no rationale is required, it logs that a custom permission request may be needed.
+ * - Otherwise, it launches a permission request dialog using [rememberLauncherForActivityResult].
+ *
+ * ### Logging:
+ * Multiple debug logs (`OM_TAG`, `FCM`) are included to trace the permission request flow.
+ *
+ * ### Example Usage:
+ * ```kotlin
+ * @Composable
+ * fun AppContent() {
+ *     RequestNotificationPermission()
+ * }
+ * ```
+ *
+ * ### Notes:
+ * - This function must be called from within a **@Composable** context.
+ * - The permission request launcher is remembered across recompositions.
+ * - The permission result is logged but not currently handled (you can extend `onResult`
+ *   to perform additional actions based on whether the permission was granted).
+ *
+ * @see rememberLauncherForActivityResult
+ * @see ActivityResultContracts.RequestPermission
+ * @see Manifest.permission.POST_NOTIFICATIONS
+ * @see ActivityCompat.shouldShowRequestPermissionRationale
+ */
 @Composable
 fun RequestNotificationPermission() {
     val context = LocalContext.current

@@ -26,6 +26,29 @@ fun String.stripAccents(): String {
     return normalized.replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
 }
 
+/**
+ * Checks whether this [String] meets a "strong password" criteria based on a minimum length
+ * and character composition.
+ *
+ * The string is considered "hard enough" if:
+ * 1. Its length is at least [minChar].
+ * 2. It contains at least one letter (A-Z or a-z).
+ * 3. It contains at least one digit (0-9).
+ * 4. It contains at least one special character (non-letter and non-digit).
+ *
+ * ### Parameters:
+ * @param minChar The minimum number of characters required.
+ *
+ * ### Returns:
+ * `true` if the string satisfies all the criteria; `false` otherwise.
+ *
+ * ### Example Usage:
+ * ```kotlin
+ * "Abc123!".isHardEnough(6)   // returns true
+ * "abc12".isHardEnough(6)     // returns false (length too short)
+ * "abcdef!".isHardEnough(6)   // returns false (missing digit)
+ * ```
+ */
 fun String.isHardEnough(minChar: Int): Boolean {
     if (length < minChar) return false
 
