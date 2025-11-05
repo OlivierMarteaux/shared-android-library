@@ -4,7 +4,6 @@ activityCompose = "1.11.0"
 agp = "8.13.0"
 coilComposeVersion = "3.3.0"
 composeBom = "2025.10.01"
-cucumber = "7.18.1"
 datastorePreferences = "1.1.7"
 firebase = "34.5.0"
 junit = "4.13.2"
@@ -22,8 +21,6 @@ androidx-activity-compose = { group = "androidx.activity", name = "activity-comp
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilComposeVersion" }
-cucumber-android = { module = "io.cucumber:cucumber-android", version.ref = "cucumber" }
-cucumber-java = { module = "io.cucumber:cucumber-java", version.ref = "cucumber" }
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging" }

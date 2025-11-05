@@ -1,4 +1,4 @@
-package com.oliviermarteaux.shared.test
+package com.oliviermarteaux.shared.test.rule
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

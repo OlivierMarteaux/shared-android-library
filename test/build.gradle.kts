@@ -22,13 +22,7 @@ android {
             )
         }
     }
-//    compileOptions {
-//        sourceCompatibility = JavaVersion.VERSION_11
-//        targetCompatibility = JavaVersion.VERSION_11
-//    }
-//    kotlinOptions {
-//        jvmTarget = "11"
-//    }
+
     buildFeatures {
         compose = true
     }
@@ -39,10 +33,7 @@ android {
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
-
     implementation(libs.junit)
     implementation(libs.ui.test.junit4)
     implementation(libs.kotlinx.coroutines.test)
-    implementation((libs.cucumber.java))
-    implementation((libs.cucumber.android))
 }
