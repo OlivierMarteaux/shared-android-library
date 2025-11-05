@@ -7,7 +7,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import com.oliviermarteaux.shared.test.di.ComposeRuleHolderInterface
+import com.oliviermarteaux.shared.test.di.ComposeRuleHolder
 import io.cucumber.java.en.And
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
@@ -52,15 +52,21 @@ import io.cucumber.java.en.When
  * - Relies on `contentDescription` or `text` to identify Compose nodes.
  * - Useful for end-to-end tests that interact with the Compose UI in a human-readable BDD style.
  */
-class SharedCucumberSteps(private val composeRuleHolder: ComposeRuleHolderInterface) {
+class SharedCucumberSteps(/*private val composeRuleHolder: ComposeRuleHolderInterface*/) {
 
-    private val composeRule = composeRuleHolder.composeRule
+//    private val composeRule = composeRuleHolder.composeRule
+    private val composeRule = ComposeRuleHolder.composeRule
 
     @When("I click on the {string} FAB button")
-    @When("I click on the {string} button")
-    fun iClickOnButton(fabLabel: String) {
+    fun iClickOnFabButton(fabLabel: String) {
         // Use contentDescription or tag for your FABs
         composeRule.onNodeWithContentDescription(fabLabel).performClick()
+    }
+
+    @When("I click on the {string} button")
+    fun iClickOnButton(buttonLabel: String) {
+        // Use contentDescription or tag for your FABs
+        composeRule.onNodeWithContentDescription(buttonLabel).performClick()
     }
 
     @When("I click on the {string} card")
