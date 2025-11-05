@@ -11,18 +11,18 @@ import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
 /**
- * JUnit [TestWatcher] rule for setting the main [CoroutineDispatcher] to a test dispatcher.
+ * JUnit [org.junit.rules.TestWatcher] rule for setting the main [CoroutineDispatcher] to a test dispatcher.
  *
  * This rule is useful for testing coroutines in a deterministic way by replacing
- * `Dispatchers.Main` with a [TestDispatcher] during test execution.
+ * `Dispatchers.Main` with a [kotlinx.coroutines.test.TestDispatcher] during test execution.
  * It ensures that the main dispatcher is properly set before a test starts and
  * reset after the test finishes.
  *
  * ### Constructor:
- * @param testDispatcher The [TestDispatcher] to use as the main dispatcher. Defaults to [StandardTestDispatcher].
+ * @param testDispatcher The [kotlinx.coroutines.test.TestDispatcher] to use as the main dispatcher. Defaults to [kotlinx.coroutines.test.StandardTestDispatcher].
  *
  * ### Properties:
- * @property testScope A [TestScope] associated with the [testDispatcher] for running test coroutines.
+ * @property testScope A [kotlinx.coroutines.test.TestScope] associated with the [testDispatcher] for running test coroutines.
  *
  * ### Behavior:
  * - `starting(description: Description)` sets `Dispatchers.Main` to the [testDispatcher] before each test.

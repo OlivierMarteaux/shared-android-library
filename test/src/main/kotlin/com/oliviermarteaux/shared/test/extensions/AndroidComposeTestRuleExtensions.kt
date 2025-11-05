@@ -1,4 +1,4 @@
-package com.oliviermarteaux.shared.extensions
+package com.oliviermarteaux.shared.test.extensions
 
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
