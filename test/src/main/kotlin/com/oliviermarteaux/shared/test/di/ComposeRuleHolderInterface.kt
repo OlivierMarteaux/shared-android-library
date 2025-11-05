@@ -1,6 +1,7 @@
 package com.oliviermarteaux.shared.test.di
 
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import androidx.compose.ui.test.junit4.ComposeTestRule
 
 /**
  * Provides access to a Jetpack Compose test rule for UI testing.
@@ -20,5 +21,5 @@ import androidx.compose.ui.test.junit4.AndroidComposeTestRule
  * ```
  */
 interface ComposeRuleHolderInterface {
-    val composeRule: AndroidComposeTestRule<*, *>
+    val composeRule: ComposeTestRule
 }
