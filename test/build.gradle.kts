@@ -39,11 +39,10 @@ android {
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
-//    implementation(libs.androidx.material3)
 
-    testImplementation(libs.junit)
-    testImplementation(libs.kotlinx.coroutines.test)
-    androidTestImplementation(libs.ui.test.junit4)
-    androidTestImplementation((libs.cucumber.java))
-    androidTestImplementation((libs.cucumber.android))
+    implementation(libs.junit)
+    implementation(libs.ui.test.junit4)
+    implementation(libs.kotlinx.coroutines.test)
+    implementation((libs.cucumber.java))
+    implementation((libs.cucumber.android))
 }
