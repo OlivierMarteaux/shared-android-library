@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("maven-publish")
 }
 
 android {
@@ -28,6 +29,23 @@ android {
     }
     // Add JVM tooolchain to define global java version
     kotlin { jvmToolchain(17) }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()   // <-- generates sources.jar
+            withJavadocJar()   // optional but recommended
+        }
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            afterEvaluate {
+                from(components["release"])  // <-- works because publishing.singleVariant() was configured
+            }
+        }
+    }
 }
 
 dependencies {
