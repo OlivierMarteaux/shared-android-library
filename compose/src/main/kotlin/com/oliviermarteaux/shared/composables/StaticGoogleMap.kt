@@ -9,7 +9,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import com.oliviermarteaux.secret.apikeys.GOOGLE_MAPS_API_KEY
 import com.oliviermarteaux.shared.compose.R
 
 @Composable
@@ -18,7 +17,7 @@ fun StaticGoogleMap(
     address: String = "1600 Amphitheatre Parkway, Mountain View, CA 94043, USA",
     zoom: Int = 10,
     size: Size = Size(400, 400),
-    mapApiKey: String = GOOGLE_MAPS_API_KEY,
+    mapApiKey: String = "",
     // async image
     modifier: Modifier = Modifier,
     crossfade: Boolean =  true,
