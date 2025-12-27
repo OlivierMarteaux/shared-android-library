@@ -11,6 +11,8 @@ import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.semantics.error
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -99,6 +101,7 @@ fun SharedOutlinedEmail(
     /*text field params*/
     value: String,
     modifier: Modifier = Modifier,
+    textFieldModifier: Modifier = Modifier,
     enabled: Boolean = true,
     readOnly: Boolean = false,
     textStyle: TextStyle = LocalTextStyle.current,
@@ -132,15 +135,20 @@ fun SharedOutlinedEmail(
         errorText = errorText,
         isError = error,
         bottomPadding = bottomPadding,
-    ){
+        modifier = modifier
+    ) {
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
-            modifier = modifier,
+            modifier = textFieldModifier.semantics{
+                if (isError == true) {
+                    this.error(errorText?:"")
+                }
+            },
             enabled = enabled,
             readOnly = readOnly,
             textStyle = textStyle,
-            label = {Text(label)},
+            label = { Text(label) },
             placeholder = { Text(label) },
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon,

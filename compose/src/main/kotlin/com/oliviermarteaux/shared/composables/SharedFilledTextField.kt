@@ -5,15 +5,18 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.semantics.error
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -23,8 +26,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 /**
- * A reusable outlined text field with support for labels, icons, error handling, and
- * supporting text. This composable wraps [OutlinedTextField] and adds a flexible
+ * A reusable text field with support for labels, icons, error handling, and
+ * supporting text. This composable wraps [TextField] and adds a flexible
  * structure for consistent input fields across the app.
  *
  * ### Behavior:
@@ -54,8 +57,8 @@ import androidx.compose.ui.unit.dp
  * @param maxLines Maximum number of text lines allowed.
  * @param minLines Minimum number of text lines allowed.
  * @param interactionSource Optional [MutableInteractionSource] for observing interactions.
- * @param shape The shape of the text field container. Defaults to [OutlinedTextFieldDefaults.shape].
- * @param colors The color scheme of the text field. Defaults to [OutlinedTextFieldDefaults.colors].
+ * @param shape The shape of the text field container. Defaults to [TextFieldDefaults.shape].
+ * @param colors The color scheme of the text field. Defaults to [TextFieldDefaults.colors].
  * @param imeAction The IME action button for the keyboard. Defaults to [ImeAction.Next].
  * @param keyboardType The type of keyboard to use. Defaults to [KeyboardType.Text].
  * @param icon Optional [ImageVector] icon displayed inside the field.
@@ -70,7 +73,7 @@ import androidx.compose.ui.unit.dp
  * ```kotlin
  * @Composable
  * fun NameInput(name: String, onNameChange: (String) -> Unit) {
- *     SharedOutlinedTextField(
+ *     SharedTextField(
  *         value = name,
  *         onValueChange = onNameChange,
  *         label = "Full Name",
@@ -80,13 +83,13 @@ import androidx.compose.ui.unit.dp
  * }
  * ```
  *
- * @see OutlinedTextField
- * @see OutlinedTextFieldDefaults
+ * @see TextField
+ * @see TextFieldDefaults
  * @see TextFieldColors
  * @see KeyboardType
  */
 @Composable
-fun SharedOutlinedTextField(
+fun SharedFilledTextField(
     /*text field params*/
     value: String,
     modifier: Modifier = Modifier,
@@ -94,7 +97,7 @@ fun SharedOutlinedTextField(
     enabled: Boolean = true,
     readOnly: Boolean = false,
     textStyle: TextStyle = LocalTextStyle.current,
-    label: String,
+    label: String = "",
     placeholder: String = "",
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
@@ -108,8 +111,13 @@ fun SharedOutlinedTextField(
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     minLines: Int = 1,
     interactionSource: MutableInteractionSource? = null,
-    shape: Shape = OutlinedTextFieldDefaults.shape,
-    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
+    shape: Shape = MaterialTheme.shapes.extraSmall,
+    colors: TextFieldColors = TextFieldDefaults.colors(
+        focusedIndicatorColor = Color.Transparent,
+        unfocusedIndicatorColor = Color.Transparent,
+        disabledIndicatorColor = Color.Transparent,
+        errorIndicatorColor = Color.Transparent
+    ),
     imeAction: ImeAction = ImeAction.Next,
     keyboardType: KeyboardType = KeyboardType.Text,
     /* icon params */
@@ -129,10 +137,14 @@ fun SharedOutlinedTextField(
         bottomPadding = bottomPadding,
         modifier = modifier
     ) {
-        OutlinedTextField(
+        TextField(
             value = value,
             onValueChange = onValueChange,
-            modifier = textFieldModifier,
+            modifier = textFieldModifier.semantics{
+                if (isError) {
+                    this.error(errorText?:"")
+                }
+            },
             enabled = enabled,
             readOnly = readOnly,
             textStyle = textStyle.copy(textAlign = TextAlign.Start),

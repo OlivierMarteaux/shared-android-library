@@ -7,6 +7,10 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.max
@@ -134,3 +138,11 @@ fun Modifier.fontScaledHeight(
 
     return this.then(Modifier.height(finalHeight))
 }
+
+fun Modifier.cdButtonSemantics(
+    contentDescription: String,
+) =
+    this.clearAndSetSemantics {
+        this.contentDescription = contentDescription
+        this.role = Role.Button
+    }

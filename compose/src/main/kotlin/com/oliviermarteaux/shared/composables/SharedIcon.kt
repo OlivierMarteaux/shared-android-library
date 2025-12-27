@@ -6,21 +6,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 
-/**
- * Represents a flexible source for an icon that can be either a [Painter] or an [ImageVector].
- *
- * This sealed class allows the [SharedIcon] composable to accept both drawable-based
- * and vector-based icons in a type-safe manner.
- *
- * ### Variants:
- * - [PainterIcon]: Wraps a [Painter] resource, typically used for raster or XML drawables.
- * - [VectorIcon]: Wraps an [ImageVector], typically used for Material or custom vector icons.
- */
-sealed class IconSource {
-    data class PainterIcon(val painter: Painter) : IconSource()
-    data class VectorIcon(val imageVector: ImageVector) : IconSource()
-}
 /**
  * Displays an icon using either a [Painter] or [ImageVector] source via [IconSource].
  *
@@ -70,7 +57,7 @@ fun SharedIcon(
     icon: IconSource,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
-    tint: Color = Color.Unspecified
+    tint: Color = LocalContentColor.current
 ) {
     when (icon) {
         is IconSource.PainterIcon -> Icon(

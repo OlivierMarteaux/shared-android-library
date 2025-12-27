@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("maven-publish")
+    // Add the dependency for the Google services Gradle plugin for Firebase authentication
+    alias(libs.plugins.googleservices)
 }
 
 android {
@@ -60,8 +62,16 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     //_ Firebase
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.messaging)
+    implementation(platform(libs.firebase.bom)) // Bom
+    implementation(libs.firebase.analytics)  // Google Analytics
+    implementation(libs.firebase.auth) // Authentication
+    implementation(libs.firebase.firestore) // Database
+    implementation(libs.firebase.messaging) // Cloud notifications
+    implementation(libs.firebase.storage) // Media files storage
+    // For google account authentication
+    implementation(libs.play.services.credentials)
+    implementation(libs.androidx.credentials)
+    implementation(libs.googleid)
     //_ Preferences DataStore
     implementation(libs.datastore.preferences)
 

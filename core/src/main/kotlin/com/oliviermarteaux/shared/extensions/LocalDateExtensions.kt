@@ -10,6 +10,7 @@ import java.time.Period
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.util.Date
 import java.util.Locale
 
 /**
@@ -80,3 +81,7 @@ fun LocalDate.toLong() = this
  */
 @RequiresApi(Build.VERSION_CODES.O)
 fun LocalDate.getAge(): Int = Period.between(this, LocalDate.now()).years
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun LocalDate.toDate(): Date =
+    Date.from(this.atStartOfDay(ZoneId.systemDefault()).toInstant())

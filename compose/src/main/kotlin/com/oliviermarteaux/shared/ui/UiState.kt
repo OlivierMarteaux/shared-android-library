@@ -11,7 +11,7 @@ sealed interface UiState<out T> {
     data class Success<T>(val data: T) : UiState<T>
 
     /** State representing an error during data loading. */
-    data class Error(val throwable: Throwable? = null) : UiState<Throwable>
+    data class Error(val throwable: Throwable? = null) : UiState<Nothing>
 
     /** State representing that data is currently loading. */
     data object Loading : UiState<Nothing>

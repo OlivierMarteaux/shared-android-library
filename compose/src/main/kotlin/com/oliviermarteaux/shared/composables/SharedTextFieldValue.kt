@@ -3,34 +3,31 @@ package com.oliviermarteaux.shared.composables
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 
 /**
- * A reusable outlined text field with support for labels, icons, error handling, and
- * supporting text. This composable wraps [OutlinedTextField] and adds a flexible
+ * A reusable text field with support for labels, icons, error handling, and
+ * supporting text. This composable wraps [TextField] and adds a flexible
  * structure for consistent input fields across the app.
  *
  * ### Behavior:
  * - Displays a label and optional placeholder text.
  * - Supports leading/trailing icons, prefix, and suffix composables.
- * - Handles error state display with optional [errorText].
  * - Displays optional [supportingText] below the field.
  * - Accepts standard text field parameters such as [visualTransformation],
  *   [keyboardActions], [singleLine], and [keyboardType].
@@ -54,23 +51,17 @@ import androidx.compose.ui.unit.dp
  * @param maxLines Maximum number of text lines allowed.
  * @param minLines Minimum number of text lines allowed.
  * @param interactionSource Optional [MutableInteractionSource] for observing interactions.
- * @param shape The shape of the text field container. Defaults to [OutlinedTextFieldDefaults.shape].
- * @param colors The color scheme of the text field. Defaults to [OutlinedTextFieldDefaults.colors].
+ * @param shape The shape of the text field container. Defaults to [TextFieldDefaults.shape].
+ * @param colors The color scheme of the text field. Defaults to [TextFieldDefaults.colors].
  * @param imeAction The IME action button for the keyboard. Defaults to [ImeAction.Next].
  * @param keyboardType The type of keyboard to use. Defaults to [KeyboardType.Text].
- * @param icon Optional [ImageVector] icon displayed inside the field.
- * @param iconModifier [Modifier] applied to the icon.
- * @param contentDescription Content description for accessibility of the icon.
- * @param tint The tint color applied to the icon. Defaults to [LocalContentColor.current].
- * @param bottomPadding Extra vertical spacing below the supporting/error text. Defaults to 0.dp.
- * @param errorText Text displayed when [isError] is true.
  * @param onValueChange Lambda invoked when the input text changes.
  *
  * ### Example Usage:
  * ```kotlin
  * @Composable
  * fun NameInput(name: String, onNameChange: (String) -> Unit) {
- *     SharedOutlinedTextField(
+ *     SharedTextField(
  *         value = name,
  *         onValueChange = onNameChange,
  *         label = "Full Name",
@@ -80,27 +71,26 @@ import androidx.compose.ui.unit.dp
  * }
  * ```
  *
- * @see OutlinedTextField
- * @see OutlinedTextFieldDefaults
+ * @see TextField
+ * @see TextFieldDefaults
  * @see TextFieldColors
  * @see KeyboardType
  */
 @Composable
-fun SharedOutlinedTextField(
-    /*text field params*/
-    value: String,
+fun SharedTextFieldValue(
+    //_ text field params
+    value: TextFieldValue,
     modifier: Modifier = Modifier,
-    textFieldModifier: Modifier = Modifier,
     enabled: Boolean = true,
     readOnly: Boolean = false,
     textStyle: TextStyle = LocalTextStyle.current,
-    label: String,
+    label: String = "",
     placeholder: String = "",
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     prefix: @Composable (() -> Unit)? = null,
     suffix: @Composable (() -> Unit)? = null,
-    supportingText: String ?  = null,
+    supportingText: String  = "",
     isError: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -108,54 +98,47 @@ fun SharedOutlinedTextField(
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     minLines: Int = 1,
     interactionSource: MutableInteractionSource? = null,
-    shape: Shape = OutlinedTextFieldDefaults.shape,
-    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
+    shape: Shape = MaterialTheme.shapes.extraSmall,
+    colors: TextFieldColors = TextFieldDefaults.colors(
+        focusedIndicatorColor = Color.Transparent,
+        unfocusedIndicatorColor = Color.Transparent,
+        disabledIndicatorColor = Color.Transparent,
+        errorIndicatorColor = Color.Transparent,
+        focusedContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+        disabledContainerColor = Color.Transparent,
+    ),
     imeAction: ImeAction = ImeAction.Next,
     keyboardType: KeyboardType = KeyboardType.Text,
-    /* icon params */
-    icon: ImageVector? = null,
-    iconModifier: Modifier = Modifier,
-    contentDescription: String? = null,
-    tint: Color = LocalContentColor.current,
-    bottomPadding: Dp = 0.dp,
-    errorText: String? = null,
-    /*on value change*/
-    onValueChange: (String) -> Unit = {},
+    //_ on value change
+    onValueChange: (TextFieldValue) -> Unit = {},
 ){
-    SupportingText(
-        supportingText = supportingText,
-        errorText = errorText,
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier,
+        enabled = enabled,
+        readOnly = readOnly,
+        textStyle = textStyle.copy(textAlign = TextAlign.Start),
+        label = { Text(label) },
+        placeholder = { Text(placeholder)},
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
+        prefix = prefix,
+        suffix = suffix,
+        supportingText = { Text(supportingText) },
         isError = isError,
-        bottomPadding = bottomPadding,
-        modifier = modifier
-    ) {
-        OutlinedTextField(
-            value = value,
-            onValueChange = onValueChange,
-            modifier = textFieldModifier,
-            enabled = enabled,
-            readOnly = readOnly,
-            textStyle = textStyle.copy(textAlign = TextAlign.Start),
-            label = { Text(label) },
-            placeholder = { Text(placeholder)},
-            leadingIcon = leadingIcon,
-            trailingIcon = trailingIcon,
-            prefix = prefix,
-            suffix = suffix,
-            supportingText = null,
-            isError = isError,
-            visualTransformation = visualTransformation,
-            keyboardActions = keyboardActions,
-            singleLine = singleLine,
-            maxLines = maxLines,
-            minLines = minLines,
-            interactionSource = interactionSource,
-            shape = shape,
-            colors = colors,
-            keyboardOptions = KeyboardOptions(
-                imeAction = imeAction,
-                keyboardType = keyboardType
-            ),
-        )
-    }
+        visualTransformation = visualTransformation,
+        keyboardActions = keyboardActions,
+        singleLine = singleLine,
+        maxLines = maxLines,
+        minLines = minLines,
+        interactionSource = interactionSource,
+        shape = shape,
+        colors = colors,
+        keyboardOptions = KeyboardOptions(
+            imeAction = imeAction,
+            keyboardType = keyboardType
+        ),
+    )
 }

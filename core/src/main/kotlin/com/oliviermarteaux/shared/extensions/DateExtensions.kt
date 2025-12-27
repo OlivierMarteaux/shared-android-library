@@ -1,6 +1,11 @@
 package com.oliviermarteaux.shared.extensions
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -25,3 +30,12 @@ fun Date.toHumanDate(): String {
     val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     return dateFormat.format(calendar.time)
 }
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun Date.toLocalDate(): LocalDate =
+    this.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+
+// Convert Date → LocalTime
+@RequiresApi(Build.VERSION_CODES.O)
+fun Date.toLocalTime(): LocalTime =
+    this.toInstant().atZone(ZoneId.systemDefault()).toLocalTime()

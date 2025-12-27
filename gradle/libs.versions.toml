@@ -1,11 +1,12 @@
 [versions]
+accompanist = "0.32.0"
 accompanistSystemuicontrollerVersion = "0.36.0"
 activityCompose = "1.11.0"
 agp = "8.13.0"
 coilComposeVersion = "3.3.0"
-composeBom = "2025.10.01"
+composeBom = "2025.11.00"
 datastorePreferences = "1.1.7"
-firebase = "34.5.0"
+firebase = "34.6.0"
 junit = "4.13.2"
 kotlin = "2.2.21"
 kotlinxCoroutinesTest = "1.10.2"
@@ -15,6 +16,16 @@ okhttpVersion = "5.3.0"
 retrofit2KotlinxSerializationConverterVersion = "1.0.0"
 retrofitVersion = "3.0.0"
 uiTestJunit4Version = "1.9.4"
+navigationRuntimeKtxVersion = "2.9.6"
+googlemapsAndroid = "2.13.0"
+googlemapsSdk = "19.2.0"
+hilt = "2.57.2"
+hiltNavigationCompose = "1.3.0"
+ksp = "2.2.20-2.0.3"
+cameraX = "1.5.1"
+googleservices = "4.4.4"
+credentials = "1.5.0"
+googleid = "1.1.1"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
@@ -33,9 +44,32 @@ okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttpVersion"
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverterVersion" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "uiTestJunit4Version" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose" }
+androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtxVersion" }
+googlemaps-android = {module = "com.google.maps.android:maps-compose", version.ref = "googlemapsAndroid"}
+googlemaps-sdk = {module = "com.google.android.gms:play-services-maps", version.ref = "googlemapsSdk"}
+google-accompanist = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist"}
+hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+androidx-camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "cameraX" }
+androidx-camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraX" }
+androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraX" }
+androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraX" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
+firebase-auth = { module = "com.google.firebase:firebase-auth" }
+firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
+firebase-storage = { module = "com.google.firebase:firebase-storage" }
+googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
+androidx-credentials = {module = "androidx.credentials:credentials", version.ref = "credentials"}
+play-services-credentials = {module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials"}
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+googleservices = { id = "com.google.gms.google-services", version.ref = "googleservices" }
