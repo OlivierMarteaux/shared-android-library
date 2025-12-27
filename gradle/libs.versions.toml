@@ -7,6 +7,7 @@ coilComposeVersion = "3.3.0"
 composeBom = "2025.11.00"
 datastorePreferences = "1.1.7"
 firebase = "34.6.0"
+guava = "33.5.0-android"
 junit = "4.13.2"
 kotlin = "2.2.21"
 kotlinxCoroutinesTest = "1.10.2"
@@ -36,6 +37,7 @@ datastore-preferences = { module = "androidx.datastore:datastore-preferences", v
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 google-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontrollerVersion" }
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name ="kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJsonVersion" }
@@ -63,7 +65,6 @@ firebase-storage = { module = "com.google.firebase:firebase-storage" }
 googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
 androidx-credentials = {module = "androidx.credentials:credentials", version.ref = "credentials"}
 play-services-credentials = {module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials"}
-
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
