@@ -13,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonElevation
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -78,6 +79,7 @@ fun SharedButton(
     text: String = "",
     modifier: Modifier = Modifier,
     icon: IconSource? = null,
+    tint: Color = LocalContentColor.current,
     enabled: Boolean = true,
     shape: Shape = ButtonDefaults.shape,
     colors: ButtonColors = ButtonDefaults.buttonColors(),
@@ -110,7 +112,8 @@ fun SharedButton(
             icon?.let {
                 SharedIcon(
                     icon = icon,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(24.dp),
+                    tint = tint
                 )
                 Spacer(modifier = Modifier.width(24.dp))
             }
