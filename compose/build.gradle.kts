@@ -84,7 +84,12 @@ dependencies {
     implementation(platform(libs.firebase.bom)) // Bom
     implementation(libs.firebase.auth) // Authentication
     implementation(libs.firebase.firestore) // Database
+    implementation(libs.firebase.storage) // Media files storage
     implementation(libs.firebase.messaging) // Cloud notifications
+    // For google account authentication
+    implementation(libs.play.services.credentials)
+    implementation(libs.androidx.credentials)
+    implementation(libs.googleid)
 
     testImplementation(libs.junit)
 }
