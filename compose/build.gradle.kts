@@ -79,6 +79,11 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.camera2)
+    //_ Firebase
+    implementation(platform(libs.firebase.bom)) // Bom
+    implementation(libs.firebase.auth) // Authentication
+    implementation(libs.firebase.firestore) // Database
+    implementation(libs.firebase.messaging) // Cloud notifications
 
     testImplementation(libs.junit)
 }
