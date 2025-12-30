@@ -131,4 +131,32 @@ class PostFirebaseApi: PostApi {
             throw e
         }
     }
+
+    /**
+     * Deletes a post from Firestore and its associated image from Firebase Storage (if any).
+     *
+     * @param postId The ID of the post to delete.
+     * @param photoUrl Optional photo URL to delete from storage.
+     * @return A [Result] indicating success or failure.
+     */
+    suspend fun deletePost(postId: String, photoUrl: String? = null): Result<Unit> = runCatching {
+        // Delete image from Storage if present
+        photoUrl?.takeIf { it.isNotEmpty() }?.let { url ->
+            try {
+                val storageRef = storage.getReferenceFromUrl(url)
+                storageRef.delete().await()
+                Log.d("OM_TAG", "PostFirebaseApi: deletePost: deleted image $url")
+            } catch (e: Exception) {
+                Log.e("OM_TAG", "PostFirebaseApi: deletePost: failed to delete image $url", e)
+                // optionally, continue even if image deletion fails
+            }
+        }
+
+        // Delete the post document from Firestore
+        postsCollection.document(postId).delete().await()
+        Log.d("OM_TAG", "PostFirebaseApi: deletePost: deleted post $postId")
+        Unit
+    }.onFailure { e ->
+        Log.e("OM_TAG", "PostFirebaseApi: deletePost: failed for post $postId: ${e.message}", e)
+    }
 }
