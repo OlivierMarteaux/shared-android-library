@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -76,9 +77,8 @@ fun SplashScreen(
                 )
                 SharedButton(
                     onClick = navigateToHomeScreen,
-                    modifier = Modifier
-                        .testTag("home_screen")
-                        .size(0.dp)
+                    colors = ButtonDefaults.buttonColors(containerColor = Black),
+                    modifier = Modifier.testTag("home_screen")
                 )
             }
         }
