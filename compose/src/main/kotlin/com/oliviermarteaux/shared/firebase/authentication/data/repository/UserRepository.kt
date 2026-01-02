@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
 
-    val userAuthState: Flow<FirebaseUser?>
+    val userAuthState: Flow<User?>
 
     suspend fun checkEmail(email: String): Result<Boolean>
 

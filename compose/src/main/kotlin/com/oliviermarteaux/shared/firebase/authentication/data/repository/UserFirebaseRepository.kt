@@ -3,9 +3,11 @@ package com.oliviermarteaux.shared.firebase.authentication.data.repository
 import androidx.annotation.StringRes
 import com.google.firebase.auth.FirebaseUser
 import com.oliviermarteaux.shared.firebase.authentication.data.service.UserApi
+import com.oliviermarteaux.shared.firebase.authentication.domain.mapper.toUser
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.NewUser
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.User
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -21,7 +23,9 @@ class UserFirebaseRepository @Inject constructor(private val userApi: UserApi): 
      * A flow that emits the current authentication state of the user.
      * Emits a [FirebaseUser] if a user is signed in, or `null` otherwise.
      */
-    override val userAuthState: Flow<FirebaseUser?> = userApi.userAuthState
+    override val userAuthState: Flow<User?> = userApi.userAuthState.map { firebaseUser ->
+        firebaseUser?.toUser()
+    }
     /**
      * Checks if an email address is already registered.
      *

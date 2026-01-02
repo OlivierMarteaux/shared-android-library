@@ -119,7 +119,7 @@ abstract class AuthUserViewModel(
             delay(200)
             delay(authObserverDelay)
             userRepository.userAuthState.collect { user ->
-                currentUser = user?.toUser()
+                currentUser = user
                 currentUser?:showAuthErrorToast()
                 log.v("AuthUserViewModel: observeUserState(): current user is ${currentUser?.email?:"not connected"}")
             }
