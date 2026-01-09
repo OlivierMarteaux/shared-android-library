@@ -75,11 +75,6 @@ fun SplashScreen(
                     modifier = Modifier.fillMaxWidth(),
                     tint = Color.Unspecified
                 )
-                SharedButton(
-                    onClick = navigateToHomeScreen,
-                    colors = ButtonDefaults.buttonColors(containerColor = Black),
-                    modifier = Modifier.testTag("home_screen")
-                )
             }
         }
     }
