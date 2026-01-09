@@ -35,11 +35,17 @@ import com.oliviermarteaux.shared.compose.R
  * @see rememberLauncherForActivityResult
  */
 @Composable
-fun RequestPermissionsOnFirstLaunch() {
+fun RequestPermissionsOnFirstLaunch(
+    permission1: String,
+    permission2: String? = null,
+    permission3: String? = null,
+    permission4: String? = null,
+    permission5: String? = null
+) {
     val context = LocalContext.current
 
-    val permissions = listOf(
-        Manifest.permission.CALL_PHONE,
+    val permissions = listOfNotNull(
+        permission1 ,permission2, permission3, permission4, permission5
     )
 
     var alertDialog by remember { mutableStateOf(false) }
