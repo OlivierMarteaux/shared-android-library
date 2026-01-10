@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.NewUser
-import com.oliviermarteaux.shared.firebase.authentication.ui.screen.AuthUserViewModel
+import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.ui.showToastFlag
 import com.oliviermarteaux.shared.utils.CoroutineDispatcherProvider
 import com.oliviermarteaux.shared.utils.Logger

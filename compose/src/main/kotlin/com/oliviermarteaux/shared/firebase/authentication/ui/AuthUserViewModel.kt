@@ -1,12 +1,12 @@
-package com.oliviermarteaux.shared.firebase.authentication.ui.screen
+package com.oliviermarteaux.shared.firebase.authentication.ui
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
-import com.oliviermarteaux.shared.firebase.authentication.domain.mapper.toUser
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.User
 import com.oliviermarteaux.shared.ui.showToastFlag
 import com.oliviermarteaux.shared.utils.Logger
@@ -28,11 +28,9 @@ abstract class AuthUserViewModel(
         to test. */
     private val isOnlineFlow: Flow<Boolean>,
 ) : ViewModel() {
-    /**
-     * The currently signed-in user.
-     */
-    var currentUser: User? by mutableStateOf(null)
-        protected set
+
+    var userAuthState: UserAuthState by mutableStateOf(UserAuthState.Loading)
+        private set
     /**
      * A boolean indicating if the device is online.
      */
@@ -61,15 +59,22 @@ abstract class AuthUserViewModel(
      * @param onNoUserLogged The callback to invoke if the user is not logged in.
      */
     fun checkUserState(
-        onUserLogged: () -> Unit,
+        onUserLogged: (User) -> Unit,
         onNoUserLogged: () -> Unit
     ) {
-        currentUser?.let {
-            log.v("AuthUserViewModel: onAuthUserClick: currentUser = ${currentUser?.email}")
-            onUserLogged()
-        }?: run {
-            log.v("AuthUserViewModel: onAuthUserClick: no user logged")
-            onNoUserLogged()
+        when (val state = userAuthState) {
+            is UserAuthState.Connected -> {
+                log.v("AuthUserViewModel: onAuthUserClick: currentUser = ${state.user.email}")
+                onUserLogged(state.user)
+            }
+            is UserAuthState.NotConnected -> {
+                log.v("AuthUserViewModel: onAuthUserClick: no user logged")
+                onNoUserLogged()
+            }
+            is UserAuthState.Loading -> {
+                log.v("AuthUserViewModel: onAuthUserClick: no user logged")
+                onNoUserLogged()
+            }
         }
     }
     /**
@@ -114,19 +119,43 @@ abstract class AuthUserViewModel(
     /**
      * Observes the user's authentication state.
      */
-    private fun observeUserState() {
+    private fun observeUserAuthState() {
         viewModelScope.launch {
-            delay(200)
-            delay(authObserverDelay)
+//            delay(200)
+//            delay(authObserverDelay)
             userRepository.userAuthState.collect { user ->
-                currentUser = user
-                currentUser?:showAuthErrorToast()
-                log.v("AuthUserViewModel: observeUserState(): current user is ${currentUser?.email?:"not connected"}")
+                userAuthState = when (user) {
+                    null -> UserAuthState.NotConnected
+                    else -> UserAuthState.Connected(user)
+                }
+                log.v("AuthUserViewModel: userAuthState = $userAuthState")
             }
         }
     }
+
+    private var hasResolvedAuth = false
+
+    private fun handleAuthErrors() {
+        viewModelScope.launch {
+            snapshotFlow { userAuthState }
+                .collect { state ->
+                    when (state) {
+                        is UserAuthState.Loading -> Unit
+                        is UserAuthState.Connected -> hasResolvedAuth = true
+                        is UserAuthState.NotConnected -> {
+                            if (hasResolvedAuth) {
+                                showAuthErrorToast()
+                            }
+                            hasResolvedAuth = true
+                        }
+                    }
+                }
+        }
+    }
+
     init {
-        observeUserState()
+        observeUserAuthState()
         observeOnlineState()
+        handleAuthErrors()
     }
 }

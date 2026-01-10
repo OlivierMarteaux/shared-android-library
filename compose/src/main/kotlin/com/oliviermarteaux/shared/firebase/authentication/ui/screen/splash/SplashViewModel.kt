@@ -3,7 +3,7 @@ package com.oliviermarteaux.shared.firebase.authentication.ui.screen.splash
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
-import com.oliviermarteaux.shared.firebase.authentication.ui.screen.AuthUserViewModel
+import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
