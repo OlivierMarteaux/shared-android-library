@@ -10,7 +10,6 @@ import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRe
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.User
 import com.oliviermarteaux.shared.ui.showToastFlag
 import com.oliviermarteaux.shared.utils.Logger
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
@@ -107,8 +106,8 @@ abstract class AuthUserViewModel(
      */
     private fun observeOnlineState(){
         viewModelScope.launch {
-            delay(200)
-            delay(authObserverDelay)
+//            delay(200)
+//            delay(authObserverDelay)
             isOnlineFlow.collect{
                 isOnline = it
                 log.v("AuthUserViewModel: checkOnlineState(): online state is $it")
