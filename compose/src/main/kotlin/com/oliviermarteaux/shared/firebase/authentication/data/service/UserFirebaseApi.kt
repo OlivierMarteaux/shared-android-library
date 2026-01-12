@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat.getString
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.NoCredentialException
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
@@ -159,21 +160,37 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         @StringRes serverClientIdStringRes: Int
     ): Result<User?> = runCatching {
 
-        // Instantiate a Google sign-in request
-        val googleIdOption = GetGoogleIdOption.Builder()
-            // Your server's client ID, not your Android client ID.
-            .setServerClientId(getString(context, serverClientIdStringRes))
-            // Only show accounts previously used to sign in.
-            .setFilterByAuthorizedAccounts(true)
-            .build()
+        // This variable will hold the credential from either the silent or interactive attempt.
+        val credential = try {
+            // --- ATTEMPT 1: SILENT SIGN-IN ---
+            Log.d("OM_TAG", "UserFirebaseApi::signInWithGoogle: Attempting silent sign-in...")
+            val silentSignInOption = GetGoogleIdOption.Builder()
+                .setServerClientId(getString(context, serverClientIdStringRes))
+                .setFilterByAuthorizedAccounts(true) // <<< Key for silent sign-in
+                .setAutoSelectEnabled(true)
+                .build()
 
-        // Create the Credential Manager request
-        val request = GetCredentialRequest.Builder()
-            .addCredentialOption(googleIdOption)
-            .build()
+            val silentRequest = GetCredentialRequest.Builder()
+                .addCredentialOption(silentSignInOption)
+                .build()
 
-        // Get the credential
-        val credential = credentialManager.getCredential(context, request).credential
+            credentialManager.getCredential(context, silentRequest).credential
+
+        } catch (e: NoCredentialException) {
+            // --- FALLBACK: INTERACTIVE SIGN-IN ---
+            // This is an expected failure for new users. Fall back to the interactive flow.
+            Log.d("OM_TAG", "UserFirebaseApi::signInWithGoogle: Silent sign-in failed, falling back to interactive.")
+            val interactiveSignInOption = GetGoogleIdOption.Builder()
+                .setServerClientId(getString(context, serverClientIdStringRes))
+                .setFilterByAuthorizedAccounts(false) // <<< Key for interactive sign-in
+                .build()
+
+            val interactiveRequest = GetCredentialRequest.Builder()
+                .addCredentialOption(interactiveSignInOption)
+                .build()
+
+            credentialManager.getCredential(context, interactiveRequest).credential
+        }
 
         // Check if credential is of type Google ID
         if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
@@ -181,7 +198,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
             val idToken = GoogleIdTokenCredential.createFrom(credential.data).idToken
             // Sign-in using credential
             val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
-            firebaseAuth.signInWithCredential(firebaseCredential)
+            firebaseAuth.signInWithCredential(firebaseCredential).await()
             // Sign in success, return the signed-in user
             Log.d("OM_TAG", "UserFirebaseApi::signInWithGoogle: signInWithCredential:success")
             val firebaseUser = firebaseAuth.currentUser
