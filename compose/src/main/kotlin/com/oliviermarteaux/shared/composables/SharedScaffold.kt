@@ -146,6 +146,10 @@ fun SharedScaffold(
     onSortByTitleClick: (() -> Unit)? = null,
     onSortByAscendingDateClick: (() -> Unit)? = null,
     onSortByDescendingDateClick: (() -> Unit)? = null,
+    onSortByNoneClick: (() -> Unit)? = null,
+    onSortByNameClick: (() -> Unit)? = null,
+    onSortByAscendingStockClick: (() -> Unit)? = null,
+    onSortByDescendingStockClick: (() -> Unit)? = null,
     //_ menu function
     onMenuItem1Click: (() -> Unit)? = null,
     onMenuItem2Click: (() -> Unit)? = null,
@@ -271,7 +275,7 @@ fun SharedScaffold(
                             toggleSearchBar()
                         }
                     }
-                    onSortByTitleClick?.let{
+                    (onSortByTitleClick ?: onSortByNameClick)?.let{
                         val cdSortButton =
                             stringResource(R.string.sort_button_double_tap_to_open_the_sort_menu)
                         SharedIconButton(
@@ -283,19 +287,47 @@ fun SharedScaffold(
                             onDismissRequest = { hideSortOptions() }
                         ) {
                             val isTalkBackEnabled = isTalkBackEnabled()
+                            val cdSortedByNone =
+                                stringResource(R.string.not_sorted_double_tap_to_come_back_to_initial_list_state)
                             val cdAscendingTitle =
                                 stringResource(R.string.ascending_title_double_tap_to_sort_by_ascending_title)
+                            val cdAscendingName =
+                                stringResource(R.string.ascending_name_double_tap_to_sort_by_ascending_name)
+                            val cdAscendingStock =
+                                stringResource(R.string.ascending_stock_double_tap_to_sort_by_ascending_stock)
+                            val cdDescendingStock =
+                                stringResource(R.string.descending_stock_double_tap_to_sort_by_descending_stock)
                             val cdAscendingDate =
                                 stringResource(R.string.ascending_date_double_tap_to_sort_by_ascending_date)
                             val cdDescendingDate =
                                 stringResource(R.string.descending_date_double_tap_to_sort_by_descending_date)
                             val cdCloseSortMenu =
                                 stringResource(R.string.close_sort_menu_double_tap_to_close_the_menu)
-                            DropdownMenuItem(
+                            onSortByNoneClick?.let { DropdownMenuItem(
+                                text = { TextTitleSmall(text = stringResource(R.string.none)) },
+                                modifier = Modifier.cdButtonSemantics(cdSortedByNone),
+                                onClick = { onSortByNoneClick() },
+                            )}
+                            onSortByTitleClick?.let { DropdownMenuItem(
                                 text = { TextTitleSmall(text = stringResource(R.string.ascending_title)) },
                                 modifier = Modifier.cdButtonSemantics(cdAscendingTitle),
                                 onClick = { onSortByTitleClick() },
-                            )
+                            )}
+                            onSortByNameClick?.let { DropdownMenuItem(
+                                text = { TextTitleSmall(text = stringResource(R.string.name)) },
+                                modifier = Modifier.cdButtonSemantics(cdAscendingName),
+                                onClick = { onSortByNameClick() },
+                            )}
+                            onSortByAscendingStockClick?.let { DropdownMenuItem(
+                                text = { TextTitleSmall(text = stringResource(R.string.ascending_stock)) },
+                                modifier = Modifier.cdButtonSemantics(cdAscendingStock),
+                                onClick = { onSortByAscendingStockClick() },
+                            )}
+                            onSortByDescendingStockClick?.let { DropdownMenuItem(
+                                text = { TextTitleSmall(text = stringResource(R.string.descending_stock)) },
+                                modifier = Modifier.cdButtonSemantics(cdDescendingStock),
+                                onClick = { onSortByDescendingStockClick() },
+                            )}
                             onSortByAscendingDateClick?.let { DropdownMenuItem(
                                 text = { TextTitleSmall(text = stringResource(R.string.ascending_date)) },
                                 modifier = Modifier.cdButtonSemantics(cdAscendingDate),

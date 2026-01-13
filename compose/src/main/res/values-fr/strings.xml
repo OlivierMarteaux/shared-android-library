@@ -101,4 +101,12 @@
     <string name="welcome_back_you_ve_already_used_to_sign_in_enter_your_password_for_that_account">Bienvenue! Vous avez déja utilisé l\'adresse e-mail %1$s pour vous connecter. Saisissez le mot de passe du compte.</string>
     <string name="you_are_on_the_home_screen_here_you_can_browse_all_the_incoming_events">Vous êtes sur l\'écran d\'accueil. Ici vous pouvez parcourir tous les évènements en attente</string>
     <string name="you_are_on_this_screen">.Vous êtes sur cet écran.</string>
+    <string name="not_sorted_double_tap_to_come_back_to_initial_list_state">Non trié. Appuyer deux fois pour revenir à l\'état initial.</string>
+    <string name="ascending_name_double_tap_to_sort_by_ascending_name">Nom croissant. Appuyer deux fois pour trier par nom croissant.</string>
+    <string name="ascending_stock_double_tap_to_sort_by_ascending_stock">Stock croissant. Appuyer deux fois pour trier par stock croissant.</string>
+    <string name="descending_stock_double_tap_to_sort_by_descending_stock">Stock décroissant. Appuyer deux fois pour trier par stock décroissant.</string>
+    <string name="none">Non trié</string>
+    <string name="stock">Stock</string>
+    <string name="ascending_stock">Stock croissant</string>
+    <string name="descending_stock">Stock décroissant</string>
 </resources>

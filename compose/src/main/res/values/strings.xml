@@ -101,4 +101,12 @@
     <string name="welcome_back_you_ve_already_used_to_sign_in_enter_your_password_for_that_account">Welcome back ! You\'ve already used %1$s to sign in. Enter your password for that account.</string>
     <string name="you_are_on_the_home_screen_here_you_can_browse_all_the_incoming_events">You are on the home screen. Here you can browse all the incoming events</string>
     <string name="you_are_on_this_screen">.You are on this screen.</string>
+    <string name="not_sorted_double_tap_to_come_back_to_initial_list_state">Not sorted. Double tap to come back to initial list state.</string>
+    <string name="ascending_name_double_tap_to_sort_by_ascending_name">Ascending name. Double tap to sort by ascending name.</string>
+    <string name="ascending_stock_double_tap_to_sort_by_ascending_stock">Ascending stock. Double tap to sort by ascending stock.</string>
+    <string name="descending_stock_double_tap_to_sort_by_descending_stock">Descending stock. Double tap to sort by descending stock.</string>
+    <string name="none">None</string>
+    <string name="stock">Stock</string>
+    <string name="ascending_stock">Ascending stock</string>
+    <string name="descending_stock">Descending stock</string>
 </resources>
