@@ -46,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -124,20 +125,28 @@ import com.oliviermarteaux.shared.ui.theme.SharedPadding
 @Composable
 fun SharedScaffold(
     modifier: Modifier = Modifier,
+    testTag: String = "",
     //_ topAppBar
     title: String = "",
     screenContentDescription: String = "",
     topAppBarModifier: Modifier = Modifier,
     trailingIcon: IconSource? = null,
+    trailingIconAction: (() -> Unit)? = null,
+    trailingIconButtonContentDescription: String = "",
     avatarUrl: String? = null,
     onBackClick: (() -> Unit)? = null,
+    //_ Semantic state management
+    semanticState: Boolean = false,
+    semanticStateText: String = "",
     //_ search function
     query: TextFieldValue = TextFieldValue(""),
     searchBarIcon: IconSource = IconSource.VectorIcon(Icons.Default.Clear),
     searchBarIconSemantics: String = "",
     onSearchBarIconClick: () -> Unit = {},
+    searchBarIconModifier: Modifier = Modifier,
     onQueryChange: ((TextFieldValue) -> Unit)? = null,
     searchBarModifier: Modifier = Modifier,
+    searchBarTextFieldModifier: Modifier = Modifier,
     searchLabel: String = "",
     searchBarDisplayed: Boolean = false,
     toggleSearchBar: () -> Unit = {},
@@ -181,6 +190,7 @@ fun SharedScaffold(
 
     Scaffold(
         modifier = modifier
+            .testTag(testTag)
             .pointerInput(Unit) {
                 detectTapGestures(onTap = {
                     toggleSearchBar()
@@ -201,7 +211,7 @@ fun SharedScaffold(
                         ) {
                             TextTitleLarge(
                                 text = title,
-                                modifier = modifier.clearAndSetSemantics(
+                                modifier = Modifier.clearAndSetSemantics(
                                     properties = {
                                         contentDescription = screenContentDescription.ifEmpty { title }
                                     }
@@ -213,8 +223,8 @@ fun SharedScaffold(
                 modifier = topAppBarModifier.height(125.dp),
                 navigationIcon = {
                     onBackClick?.let {
-                        val cdBackButton =
-                            stringResource(R.string.back_button_double_tap_to_go_back_to_the_previous_screen)
+                        val cdBackButton = if (semanticState) semanticStateText
+                        else stringResource(R.string.back_button_double_tap_to_go_back_to_the_previous_screen)
                         SharedIconButton(
                             icon = IconSource.VectorIcon(Icons.AutoMirrored.Filled.ArrowBack),
                             modifier = Modifier.cdButtonSemantics(cdBackButton)
@@ -232,7 +242,15 @@ fun SharedScaffold(
                                 .semantics { hideFromAccessibility() }
                         )
                     }
-                    trailingIcon?.let {
+                    trailingIconAction?.let {
+                        SharedIconButton(
+                            icon  =  trailingIcon?: IconSource.VectorIcon(Icons.Default.MoreVert),
+                            modifier = Modifier
+                                .cdButtonSemantics(trailingIconButtonContentDescription)
+                                .size(48.dp),
+                            onClick = trailingIconAction
+                        )
+                    }?:trailingIcon?.let{
                         SharedIcon(
                             icon  =  trailingIcon,
                             modifier = Modifier
@@ -259,10 +277,12 @@ fun SharedScaffold(
                                 modifier = searchBarModifier
                                     .focusRequester(searchBarFocusRequester)
                                     .fillMaxWidth(),
+                                textFieldModifier = searchBarTextFieldModifier,
                                 onSearch =  { onSearch(); keyboardController?.hide(); toggleSearchBar() },
                                 searchLabel = searchLabel,
                                 icon = searchBarIcon,
                                 iconSemantics = searchBarIconSemantics,
+                                iconModifier = searchBarIconModifier,
                                 onIconClick = onSearchBarIconClick,
                             )
                         }

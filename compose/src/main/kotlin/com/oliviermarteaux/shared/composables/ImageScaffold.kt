@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -28,7 +27,8 @@ fun ImageScaffold(
     image: Painter,
     modifier: Modifier = Modifier,
     imageModifier: Modifier = Modifier,
-    horizontalPadding: Dp = 0.dp,
+    landscapeHorizontalPadding: Dp = 0.dp,
+    landscapeCentralPadding: Dp = 0.dp,
     formPortraitHorizontalPadding: Dp = 0.dp,
     innerPadding: PaddingValues = PaddingValues(),
     content: @Composable () -> Unit
@@ -43,9 +43,7 @@ fun ImageScaffold(
         ) {
             SharedImage(
                 painter = image,
-                modifier = imageModifier
-                    .weight(1f)
-                    .padding(horizontal = horizontalPadding)
+                modifier = imageModifier.weight(1f)
             )
             Column(
                 modifier = Modifier
@@ -61,8 +59,9 @@ fun ImageScaffold(
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
                 .fillMaxHeight()
-                .padding(horizontal = horizontalPadding)
-                .consumeWindowInsets(innerPadding),
+                .padding(innerPadding)
+                .padding(horizontal = landscapeHorizontalPadding)
+                .padding(bottom = 24.dp),
         ) {
             SharedImage(
                 painter = image,
@@ -72,8 +71,7 @@ fun ImageScaffold(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .weight(2f)
-                    .padding(innerPadding)
-                    .padding(start =  horizontalPadding, bottom =  24.dp)
+                    .padding(start = landscapeCentralPadding, bottom = 24.dp)
                     .verticalScroll(rememberScrollState())
             ) {
                 content()

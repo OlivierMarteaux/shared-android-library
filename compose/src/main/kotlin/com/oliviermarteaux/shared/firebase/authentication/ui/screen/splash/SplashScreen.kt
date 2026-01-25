@@ -6,16 +6,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.oliviermarteaux.shared.composables.IconSource
@@ -38,6 +36,10 @@ fun SplashScreen(
     navigateToLoginScreen: () -> Unit,
     navigateToHomeScreen: () -> Unit,
     @StringRes serverClientIdStringRes: Int,
+    landscapeHorizontalPadding: Dp = 85.dp,
+    landscapeCentralPadding: Dp = 85.dp,
+    formPortraitHorizontalPadding: Dp = 85.dp,
+    imageModifier: Modifier = Modifier,
 ) {
     with(splashViewModel) {
         SharedScaffold(
@@ -47,10 +49,12 @@ fun SplashScreen(
                 image = painterResource(id = logoDrawableRes),
                 modifier = Modifier.consumeWindowInsets(innerPadding),
                 innerPadding = innerPadding,
-                horizontalPadding = 85.dp,
-                formPortraitHorizontalPadding = 85.dp,
-                imageModifier = Modifier.height( 120.dp),
+                landscapeHorizontalPadding = landscapeHorizontalPadding,
+                landscapeCentralPadding = landscapeCentralPadding,
+                formPortraitHorizontalPadding = formPortraitHorizontalPadding,
+                imageModifier = imageModifier,
             ) {
+                Spacer(Modifier.height(24.dp))
                 SharedButton(
                     onClick = { signInWithGoogle(serverClientIdStringRes,navigateToHomeScreen) },
                     text = stringResource(R.string.sign_in_with_Google),

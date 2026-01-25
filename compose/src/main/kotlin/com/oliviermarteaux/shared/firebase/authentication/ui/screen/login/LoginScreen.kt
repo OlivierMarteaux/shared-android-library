@@ -20,18 +20,19 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.oliviermarteaux.shared.composables.ImageScaffold
-import com.oliviermarteaux.shared.composables.SharedScaffold
-import com.oliviermarteaux.shared.firebase.authentication.domain.model.NewUser
 import com.oliviermarteaux.shared.composables.SharedButton
 import com.oliviermarteaux.shared.composables.SharedOutlinedEmail
 import com.oliviermarteaux.shared.composables.SharedOutlinedPassword
 import com.oliviermarteaux.shared.composables.SharedOutlinedTextField
+import com.oliviermarteaux.shared.composables.SharedScaffold
 import com.oliviermarteaux.shared.composables.SharedToast
 import com.oliviermarteaux.shared.compose.R
 import com.oliviermarteaux.shared.extensions.isValidEmail
+import com.oliviermarteaux.shared.firebase.authentication.domain.model.NewUser
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 
 /**
@@ -51,7 +52,11 @@ fun LoginScreen(
     navigateToPasswordScreen: (String) -> Unit,
     navigateToHomeScreen: () -> Unit,
     onBackClick: () -> Unit = {},
-    loginViewModel: LoginViewModel = hiltViewModel()
+    loginViewModel: LoginViewModel = hiltViewModel(),
+    landscapeHorizontalPadding: Dp = 85.dp,
+    landscapeCentralPadding: Dp = 85.dp,
+    formPortraitHorizontalPadding: Dp = 24.dp,
+    imageModifier: Modifier = Modifier.fillMaxWidth()
 ){
     with (loginViewModel) {
         SharedScaffold(
@@ -62,9 +67,10 @@ fun LoginScreen(
             ImageScaffold(
                 image = painterResource(id = logoDrawableRes),
                 innerPadding = innerPadding,
-                imageModifier = Modifier.fillMaxWidth(),
-                horizontalPadding = 85.dp,
-                formPortraitHorizontalPadding = 24.dp
+                imageModifier = imageModifier,
+                landscapeHorizontalPadding = landscapeHorizontalPadding,
+                landscapeCentralPadding = landscapeCentralPadding,
+                formPortraitHorizontalPadding = formPortraitHorizontalPadding
             ) {
                 Box {
                     LoginBody(
@@ -140,6 +146,7 @@ private fun LoginBody(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.windowInsetsPadding(WindowInsets(0,0,0,0))
     ) {
+        Spacer(Modifier.height(24.dp))
         SharedOutlinedEmail(
             value = newUser.email,
             onValueChange = { onEmailChange(it) },

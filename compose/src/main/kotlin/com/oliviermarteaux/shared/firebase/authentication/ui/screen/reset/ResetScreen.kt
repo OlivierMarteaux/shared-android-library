@@ -14,17 +14,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.oliviermarteaux.shared.ui.theme.SharedPadding
+import com.oliviermarteaux.shared.composables.ImageScaffold
 import com.oliviermarteaux.shared.composables.SharedAlertDialog
 import com.oliviermarteaux.shared.composables.SharedButton
 import com.oliviermarteaux.shared.composables.SharedOutlinedEmail
 import com.oliviermarteaux.shared.composables.SharedScaffold
 import com.oliviermarteaux.shared.composables.SharedToast
-import com.oliviermarteaux.shared.extensions.isValidEmail
-import com.oliviermarteaux.shared.composables.ImageScaffold
 import com.oliviermarteaux.shared.compose.R
+import com.oliviermarteaux.shared.extensions.isValidEmail
+import com.oliviermarteaux.shared.ui.theme.SharedPadding
 
 /**
  * A screen for resetting the user's password.
@@ -40,7 +41,11 @@ fun ResetScreen(
     navigateToLoginScreen: () -> Unit,
     onBackClick: () -> Unit = {},
     resetViewModel: ResetViewModel = hiltViewModel(),
-    logoDrawableRes: Int
+    logoDrawableRes: Int,
+    landscapeHorizontalPadding: Dp = 85.dp,
+    landscapeCentralPadding: Dp = 85.dp,
+    formPortraitHorizontalPadding: Dp = 24.dp,
+    imageModifier: Modifier = Modifier.fillMaxWidth()
 ) {
 
     SharedScaffold(
@@ -57,7 +62,12 @@ fun ResetScreen(
                     alertDialog = alertDialog,
                     navigateToLoginScreen = navigateToLoginScreen,
                     contentPadding = contentPadding,
-                    logoDrawableRes = logoDrawableRes
+                    logoDrawableRes = logoDrawableRes,
+                    modifier = modifier,
+                    imageModifier = imageModifier,
+                    landscapeHorizontalPadding = landscapeHorizontalPadding,
+                    landscapeCentralPadding = landscapeCentralPadding,
+                    formPortraitHorizontalPadding = formPortraitHorizontalPadding
                 )
                 if(unknownError) SharedToast(text = stringResource(R.string.an_unknown_error_occurred))
                 if(networkError) SharedToast(
@@ -86,15 +96,23 @@ private fun ResetBody(
     alertDialog: Boolean,
     navigateToLoginScreen: () -> Unit,
     contentPadding: PaddingValues,
-    logoDrawableRes: Int
+    logoDrawableRes: Int,
+    modifier: Modifier,
+    landscapeHorizontalPadding: Dp,
+    landscapeCentralPadding: Dp,
+    formPortraitHorizontalPadding: Dp,
+    imageModifier: Modifier
 ) {
     ImageScaffold(
         image = painterResource(id = logoDrawableRes),
-        imageModifier = Modifier.fillMaxWidth(),
-        horizontalPadding = 85.dp,
-        formPortraitHorizontalPadding = 24.dp,
+        imageModifier = imageModifier,
+        landscapeHorizontalPadding = landscapeHorizontalPadding,
+        landscapeCentralPadding = landscapeCentralPadding,
+        formPortraitHorizontalPadding = formPortraitHorizontalPadding,
         innerPadding = contentPadding,
+        modifier =  modifier
     ){
+        Spacer(Modifier.height(24.dp))
         Text(
             text = stringResource(R.string.receive_instructions_to_this_email_that_explain_how_to_reset_your_password),
             textAlign = TextAlign.Center
@@ -130,4 +148,3 @@ private fun ResetBody(
         )
     }
 }
-
