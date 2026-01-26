@@ -28,35 +28,62 @@ abstract class AuthUserViewModel(
     private val isOnlineFlow: Flow<Boolean>,
 ) : ViewModel() {
 
-    var userAuthState: UserAuthState by mutableStateOf(UserAuthState.Loading)
-        private set
-    /**
-     * A boolean indicating if the device is online.
-     */
-    var isOnline: Boolean by mutableStateOf(true)
-        private set
-    /**
-     * A boolean indicating if there is an authentication error.
-     */
-    var authError: Boolean by mutableStateOf(false)
-        private set
-    /**
-     * A boolean indicating if there is a network error.
-     */
+    //_#########################################
+    //_## NETWORK ERROR TOAST
+    //_#########################################
+
     var networkError: Boolean by mutableStateOf(false)
         private set
-    /**
-     * A boolean indicating if there is an unknown error.
-     */
+    fun showNetworkErrorToast() = viewModelScope.launch { showToastFlag { networkError = it } }
+
+    //_#########################################
+    //_## AUTHENTICATION ERROR TOAST
+    //_#########################################
+
+    var authError: Boolean by mutableStateOf(false)
+        private set
+    fun showAuthErrorToast() = viewModelScope.launch { showToastFlag { authError = it } }
+
+    //_#########################################
+    //_## UNKNOWN ERROR TOAST
+    //_#########################################
+
     var unknownError: Boolean by mutableStateOf(false)
         private set
 
-    /**
-     * Checks the user's authentication state and invokes the appropriate callback.
-     *
-     * @param onUserLogged The callback to invoke if the user is logged in.
-     * @param onNoUserLogged The callback to invoke if the user is not logged in.
-     */
+    fun showUnknownErrorToast() = viewModelScope.launch { showToastFlag { unknownError = it } }
+
+    //_#########################################
+    //_## SUCCESSFUL ITEM CREATION TOAST
+    //_#########################################
+
+    var successfulItemCreation: Boolean by mutableStateOf(false)
+        private set
+    fun showSuccessfulItemCreationToast() = viewModelScope.launch { showToastFlag { successfulItemCreation = it } }
+
+    //_#########################################
+    //_## SUCCESSFUL ITEM UPDATE TOAST
+    //_#########################################
+
+    var successfulItemUpdate: Boolean by mutableStateOf(false)
+        private set
+    fun showSuccessfulItemUpdateToast() = viewModelScope.launch { showToastFlag { successfulItemUpdate = it } }
+
+    //_#########################################
+    //_## SUCCESSFUL ITEM DELETION TOAST
+    //_#########################################
+
+    var successfulItemDeletion: Boolean by mutableStateOf(false)
+        private set
+    fun showSuccessfulItemDeletionToast() = viewModelScope.launch { showToastFlag { successfulItemDeletion = it } }
+
+    //_#########################################
+    //_## AUTHENTICATION STATE MANAGEMENT
+    //_#########################################
+
+    var userAuthState: UserAuthState by mutableStateOf(UserAuthState.Loading)
+        private set
+
     fun checkUserState(
         onUserLogged: (User) -> Unit,
         onNoUserLogged: () -> Unit
@@ -76,52 +103,9 @@ abstract class AuthUserViewModel(
             }
         }
     }
-    /**
-     * Shows a toast message for a network error.
-     */
-    fun showNetworkErrorToast() = viewModelScope.launch { showToastFlag { networkError = it } }
-    /**
-     * Shows a toast message for an unknown error.
-     */
-    fun showUnknownErrorToast() = viewModelScope.launch { showToastFlag { unknownError = it } }
-    /**
-     * Shows a toast message for an authentication error.
-     */
-    fun showAuthErrorToast() = viewModelScope.launch { showToastFlag { authError = it } }
 
-    //_ test functions
-    fun disconnectForTest(){
-        viewModelScope.launch {
-            userRepository.signOut()
-        }
-    }
-
-    //_ auth observers
-    private var authObserverDelay: Long = 0
-    protected fun setAuthObserverDelay(delay: Long){
-        authObserverDelay = delay
-    }
-    /**
-     * Observes the online state of the device.
-     */
-    private fun observeOnlineState(){
-        viewModelScope.launch {
-//            delay(200)
-//            delay(authObserverDelay)
-            isOnlineFlow.collect{
-                isOnline = it
-                log.v("AuthUserViewModel: checkOnlineState(): online state is $it")
-                if (!isOnline) showNetworkErrorToast()
-            }
-        }
-    }
-    /**
-     * Observes the user's authentication state.
-     */
     private fun observeUserAuthState() {
         viewModelScope.launch {
-//            delay(200)
-//            delay(authObserverDelay)
             userRepository.userAuthState.collect { user ->
                 userAuthState = when (user) {
                     null -> UserAuthState.NotConnected
@@ -151,6 +135,45 @@ abstract class AuthUserViewModel(
                 }
         }
     }
+
+    //_#########################################
+    //_## ONLINE STATE MANAGEMENT
+    //_#########################################
+
+    var isOnline: Boolean by mutableStateOf(true)
+        private set
+
+    private fun observeOnlineState(){
+        viewModelScope.launch {
+            isOnlineFlow.collect{
+                isOnline = it
+                log.v("AuthUserViewModel: checkOnlineState(): online state is $it")
+                if (!isOnline) showNetworkErrorToast()
+            }
+        }
+    }
+
+    //#########################################
+    //## TEST FUNCTIONS
+    //#########################################
+
+    fun disconnectForTest(){
+        viewModelScope.launch {
+            userRepository.signOut()
+        }
+    }
+
+    //#########################################
+    //## OBSERVERS DELAYS
+    //#########################################
+    private var authObserverDelay: Long = 0
+    protected fun setAuthObserverDelay(delay: Long){
+        authObserverDelay = delay
+    }
+
+    //#########################################
+    //##  VIEWMODEL INIT
+    //#########################################
 
     init {
         observeUserAuthState()
