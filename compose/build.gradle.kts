@@ -7,7 +7,10 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+
+
 android {
+
     namespace = "com.oliviermarteaux.shared.compose"
     compileSdk = 36
 
