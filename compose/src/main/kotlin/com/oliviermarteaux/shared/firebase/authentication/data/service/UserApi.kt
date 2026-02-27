@@ -2,6 +2,7 @@ package com.oliviermarteaux.shared.firebase.authentication.data.service
 
 import androidx.annotation.StringRes
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentSnapshot
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.NewUser
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.User
 import kotlinx.coroutines.flow.Flow
@@ -15,6 +16,10 @@ interface UserApi {
      * Emits a [FirebaseUser] if a user is signed in, or `null` otherwise.
      */
     val userAuthState: Flow<FirebaseUser?>
+
+    fun getAllUsers(): Flow<Result<List<User>>>
+
+    suspend fun updateUser(user: User): Result<Unit>
 
     /**
      * Checks if an email address is already registered.

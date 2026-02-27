@@ -15,16 +15,23 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.messaging.FirebaseMessaging
 import com.oliviermarteaux.shared.firebase.authentication.domain.mapper.toUser
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.NewUser
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.User
+import com.oliviermarteaux.shared.firebase.firestore.utils.PagedList
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+import kotlin.jvm.java
 
 /**
  * A Firebase implementation of the [UserApi] interface.
@@ -33,6 +40,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private val user: FirebaseUser? = firebaseAuth.currentUser
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val usersCollection = firestore.collection("users")
     private val credentialManager = CredentialManager.create(context)
 
     /**
@@ -93,6 +101,47 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         Log.e("OM_TAG", "UserFirebaseApi: CreateAccount: exception: ${e.message}")
     }
 
+    override fun getAllUsers(): Flow<Result<List<User>>> = flow {
+
+        val snapshot = usersCollection.get().await()
+
+        val userList = snapshot.documents.mapNotNull {
+            it.toObject(User::class.java)?.copy(id = it.id)
+        }
+
+        Log.d("OM_TAG", "UserFirebaseApi: getAllUsers: UserList.size = ${userList.size}")
+        emit(
+            Result.success(
+                userList
+            )
+        )
+    }.catch { e ->
+        Log.e("OM_TAG", "UserFirebaseApi: getAllUsers: failed", e)
+        emit(Result.failure(e))
+    }
+
+    //_ #############################################
+    //_ # UPDATE USER
+    //_ #############################################
+
+    override suspend fun updateUser(user: User): Result<Unit> = runCatching {
+
+        require(user.id.isNotBlank()) { "User ID must not be blank" }
+
+        usersCollection
+            .document(user.id)
+            .set(user, SetOptions.merge())
+            .await()
+
+        Unit
+    }.onFailure { e ->
+        Log.e(
+            "OM_TAG",
+            "UserFirebaseApi: updateUser: failed due to Exception",
+            e
+        )
+    }
+
     /**
      * Adds a new user to the Firestore database.
      *
@@ -107,7 +156,9 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
                 "lastname" to newUser.lastname,
                 "fullname" to newUser.fullname,
                 "email" to newUser.email,
-                "photoUrl" to newUser.photoUrl
+                "photoUrl" to newUser.photoUrl,
+                "pseudo" to newUser.pseudo,
+                "score" to newUser.score
             )
             firestore.collection("users").document(uid)
                 .set(userData).await()

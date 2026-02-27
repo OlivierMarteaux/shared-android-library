@@ -10,6 +10,10 @@ interface UserRepository {
 
     val userAuthState: Flow<User?>
 
+    fun getAllUsers(): Flow<Result<List<User>>>
+
+    suspend fun updateUser(user: User): Result<Unit>
+
     suspend fun checkEmail(email: String): Result<Boolean>
 
     suspend fun createAccount(newUser: NewUser): Result<User?>

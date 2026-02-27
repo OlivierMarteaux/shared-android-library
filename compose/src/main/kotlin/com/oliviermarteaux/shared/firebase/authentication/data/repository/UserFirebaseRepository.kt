@@ -19,6 +19,10 @@ import javax.inject.Singleton
 @Singleton
 class UserFirebaseRepository @Inject constructor(private val userApi: UserApi): UserRepository {
 
+    override fun getAllUsers(): Flow<Result<List<User>>> = userApi.getAllUsers()
+
+    override suspend fun updateUser(user: User): Result<Unit> = userApi.updateUser(user)
+
     /**
      * A flow that emits the current authentication state of the user.
      * Emits a [FirebaseUser] if a user is signed in, or `null` otherwise.

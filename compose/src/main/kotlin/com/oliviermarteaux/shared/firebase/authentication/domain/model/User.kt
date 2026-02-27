@@ -15,7 +15,9 @@ data class User(
     val lastname: String = "",
     val fullname: String = "",
     val email: String = "",
-    val photoUrl: String = ""
+    val photoUrl: String = "",
+    val pseudo: String = "",
+    val score: Long = -1
 
 ) : Serializable {
 
@@ -26,7 +28,9 @@ data class User(
         lastname = "",
         fullname = "",
         email = "",
-        photoUrl = ""
+        photoUrl = "",
+        pseudo = "",
+        score = -1
     )
 
     fun getComputedFullName() = fullname.ifEmpty {
