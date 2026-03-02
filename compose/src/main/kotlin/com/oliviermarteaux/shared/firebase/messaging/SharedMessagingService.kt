@@ -22,7 +22,7 @@ import javax.inject.Inject
 /**
  * A service that extends [FirebaseMessagingService] to handle Firebase Cloud Messaging messages.
  */
-@AndroidEntryPoint
+//@AndroidEntryPoint // Do not use @AndroidEntryPoint in lib to avoid unnecessary Instanciations
 class SharedMessagingService(
     private val applicationLogo: Int = R.drawable.placeholder
 ) : FirebaseMessagingService() {
