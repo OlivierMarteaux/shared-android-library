@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import coil3.util.CoilUtils.result
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.User
 import com.oliviermarteaux.shared.ui.UiState
@@ -79,11 +80,47 @@ abstract class AuthUserViewModel(
     fun showSuccessfulItemDeletionToast() = viewModelScope.launch { showToastFlag { successfulItemDeletion = it } }
 
     //_#########################################
-    //_## AUTHENTICATION STATE MANAGEMENT
+    //_## USERS DB OPERATIONS
     //_#########################################
 
-    var user: User by mutableStateOf(User())
+    var user: User? by mutableStateOf(null)
         private set
+
+    var userList: List<User> by mutableStateOf(emptyList())
+
+    fun getUser() {
+        viewModelScope.launch {
+            userRepository.userAuthState.collect {
+                user = it
+            }
+        }
+    }
+
+    fun getAllUsers() {
+        viewModelScope.launch {
+            userRepository.getAllUsers().collect { result ->
+                result.fold(
+                    onSuccess = { userList = it } ,
+                    onFailure = {}
+                )
+            }
+        }
+    }
+
+    fun updateUser() {
+        checkUserState(
+            onUserLogged = {
+                viewModelScope.launch {
+                    userRepository.updateUser(it)
+                }
+            },
+            onNoUserLogged = {}
+        )
+    }
+
+    //_#########################################
+    //_## AUTHENTICATION STATE MANAGEMENT
+    //_#########################################
 
     var userAuthState: UserAuthState by mutableStateOf(UserAuthState.Loading)
         private set
@@ -113,10 +150,7 @@ abstract class AuthUserViewModel(
             userRepository.userAuthState.collect { user ->
                 userAuthState = when (user) {
                     null -> UserAuthState.NotConnected
-                    else -> {
-                        this@AuthUserViewModel.user = user
-                        UserAuthState.Connected(user)
-                    }
+                    else -> UserAuthState.Connected(user)
                 }
                 log.v("AuthUserViewModel: userAuthState = $userAuthState")
             }
