@@ -17,6 +17,8 @@ interface UserApi {
      */
     val userAuthState: Flow<FirebaseUser?>
 
+    fun getUserById(id: String): Flow<Result<User?>>
+
     fun getAllUsers(): Flow<Result<List<User>>>
 
     suspend fun updateUser(user: User): Result<Unit>

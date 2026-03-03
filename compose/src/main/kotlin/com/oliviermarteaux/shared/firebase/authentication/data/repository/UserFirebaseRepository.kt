@@ -19,6 +19,8 @@ import javax.inject.Singleton
 @Singleton
 class UserFirebaseRepository @Inject constructor(private val userApi: UserApi): UserRepository {
 
+    override fun getUserById(id: String): Flow<Result<User?>> = userApi.getUserById(id)
+
     override fun getAllUsers(): Flow<Result<List<User>>> = userApi.getAllUsers()
 
     override suspend fun updateUser(user: User): Result<Unit> = userApi.updateUser(user)

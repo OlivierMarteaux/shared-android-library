@@ -83,17 +83,30 @@ abstract class AuthUserViewModel(
     //_## USERS DB OPERATIONS
     //_#########################################
 
-    var user: User? by mutableStateOf(null)
+    var currentUser: User? by mutableStateOf(null)
         private set
 
     var userList: List<User> by mutableStateOf(emptyList())
+        private set
 
     fun getUser() {
-        viewModelScope.launch {
-            userRepository.userAuthState.collect {
-                user = it
+        checkUserState(
+            onUserLogged = { loggedUser ->
+                viewModelScope.launch {
+                    userRepository.getUserById(loggedUser.id).collect { result ->
+                        result.fold(
+                            onSuccess = { currentUser = it } ,
+                            onFailure = {}
+                        )
+                    }
+                }
+            },
+            onNoUserLogged = {
+                viewModelScope.launch {
+                    currentUser = null
+                }
             }
-        }
+        )
     }
 
     fun getAllUsers() {

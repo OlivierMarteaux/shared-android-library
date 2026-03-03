@@ -10,6 +10,8 @@ interface UserRepository {
 
     val userAuthState: Flow<User?>
 
+    fun getUserById(id: String): Flow<Result<User?>>
+
     fun getAllUsers(): Flow<Result<List<User>>>
 
     suspend fun updateUser(user: User): Result<Unit>

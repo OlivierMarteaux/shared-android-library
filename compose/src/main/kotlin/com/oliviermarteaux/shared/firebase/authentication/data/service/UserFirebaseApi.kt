@@ -55,6 +55,9 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         awaitClose { firebaseAuth.removeAuthStateListener(listener) }
     }
 
+    //_ #############################################
+    //_ # CHECK EMAIL
+    //_ #############################################
     /**
      * Checks if an email address is already registered.
      *
@@ -75,6 +78,9 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         Log.e("OM_TAG", "UserFirebaseApi: checkEmail: exception: ${e.message}")
     }
 
+    //_ #############################################
+    //_ # CREATE ACCOUNT
+    //_ #############################################
     /**
      * Creates a new user account.
      *
@@ -101,6 +107,10 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         Log.e("OM_TAG", "UserFirebaseApi: CreateAccount: exception: ${e.message}")
     }
 
+    //_ #############################################
+    //_ # GET ALL USERS
+    //_ #############################################
+
     override fun getAllUsers(): Flow<Result<List<User>>> = flow {
 
         val snapshot = usersCollection.get().await()
@@ -117,6 +127,35 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         )
     }.catch { e ->
         Log.e("OM_TAG", "UserFirebaseApi: getAllUsers: failed", e)
+        emit(Result.failure(e))
+    }
+
+    //_ #############################################
+    //_ # GET USER
+    //_ #############################################
+
+    override fun getUserById(id: String): Flow<Result<User?>> = flow {
+
+        require(id.isNotBlank()) { "User ID must not be blank" }
+
+        val snapshot = usersCollection
+            .document(id)
+            .get()
+            .await()
+
+        val currentUser = snapshot.toObject(User::class.java)
+
+        emit(
+            Result.success(
+                currentUser
+            )
+        )
+    }.catch { e ->
+        Log.e(
+            "OM_TAG",
+            "UserFirebaseApi: updateUser: failed due to Exception",
+            e
+        )
         emit(Result.failure(e))
     }
 
@@ -142,6 +181,9 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         )
     }
 
+    //_ #############################################
+    //_ # PRIVATE: ADD NEW USER
+    //_ #############################################
     /**
      * Adds a new user to the Firestore database.
      *
@@ -166,6 +208,9 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
             Log.e("OM_TAG", "UserFirebaseApi: CreateAccount: addNewUserToFirestore exception: ${e.message}")
         }
 
+    //_ #############################################
+    //_ # UPDATE FIREBASE USER
+    //_ #############################################
     /**
      * Updates the user's profile in Firebase Authentication.
      *
@@ -182,6 +227,9 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
             Log.e("OM_TAG", "UserFirebaseApi: CreateAccount: updateFirebaseUserProfile exception: ${e.message}")
         }
 
+    //_ #############################################
+    //_ # SIGN IN WITH EMAIL
+    //_ #############################################
     /**
      * Signs in a user with their email and password.
      *
@@ -203,6 +251,9 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         Log.e("OM_TAG", "UserFirebaseApi:signIn: exception: ${e.message}")
     }
 
+    //_ #############################################
+    //_ # SIGN IN WITH GOOGLE
+    //_ #############################################
     /**
      * Launch Google Sign-In using Credential Manager
      * Returns the signed-in FirebaseUser or null
@@ -263,6 +314,9 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         Log.e("OM_TAG", "UserFirebaseApi::signInWithGoogle: signInWithGoogle:failure", e)
     }
 
+    //_ #############################################
+    //_ # SEND PASSWORD RESET
+    //_ #############################################
     /**
      * Sends a password reset email to the specified email address.
      *
@@ -278,6 +332,9 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         Log.e("OM_TAG", "ResetViewModel: sendPasswordResetEmail($email): Password reset failed: ${e.message}")
     }
 
+    //_ #############################################
+    //_ # SIGN OUT
+    //_ #############################################
     /**
      * Signs out the current user.
      *
@@ -292,6 +349,9 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         Log.e("OM_TAG", "UserFirebaseApi: signOut(): Failed to sign out: ${e.message}")
     }
 
+    //_ #############################################
+    //_ # DELETE ACCOUNT
+    //_ #############################################
     /**
      * Deletes the current user's account.
      *
@@ -307,6 +367,9 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         Log.e("OM_TAG", "UserFirebaseApi: deleteAccount(): Failed to delete account: ${e.message}")
     }
 
+    //_ #############################################
+    //_ # PRIVATE: DELETE AUTH USER
+    //_ #############################################
     /**
      * Deletes the authenticated user from Firebase Authentication.
      */
@@ -316,7 +379,9 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
     }.onFailure { e ->
         Log.e("OM_TAG", "UserFirebaseApi: deleteAuthUser(): Failed to delete auth user: ${e.message}")
     }
-
+    //_ #############################################
+    //_ # PRIVATE: DELETE FIRESTORE ENTRY
+    //_ #############################################
     /**
      * Deletes the user's entry from the Firestore "users" collection.
      */
