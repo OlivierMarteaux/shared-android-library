@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.User
+import com.oliviermarteaux.shared.ui.UiState
 import com.oliviermarteaux.shared.ui.showToastFlag
 import com.oliviermarteaux.shared.utils.Logger
 import kotlinx.coroutines.flow.Flow
@@ -81,6 +82,9 @@ abstract class AuthUserViewModel(
     //_## AUTHENTICATION STATE MANAGEMENT
     //_#########################################
 
+    var user: User by mutableStateOf(User())
+        private set
+
     var userAuthState: UserAuthState by mutableStateOf(UserAuthState.Loading)
         private set
 
@@ -109,7 +113,10 @@ abstract class AuthUserViewModel(
             userRepository.userAuthState.collect { user ->
                 userAuthState = when (user) {
                     null -> UserAuthState.NotConnected
-                    else -> UserAuthState.Connected(user)
+                    else -> {
+                        this@AuthUserViewModel.user = user
+                        UserAuthState.Connected(user)
+                    }
                 }
                 log.v("AuthUserViewModel: userAuthState = $userAuthState")
             }
@@ -153,9 +160,9 @@ abstract class AuthUserViewModel(
         }
     }
 
-    //#########################################
-    //## TEST FUNCTIONS
-    //#########################################
+    // _#########################################
+    // _## TEST FUNCTIONS
+    // _#########################################
 
     fun disconnectForTest(){
         viewModelScope.launch {
@@ -163,17 +170,17 @@ abstract class AuthUserViewModel(
         }
     }
 
-    //#########################################
-    //## OBSERVERS DELAYS
-    //#########################################
+    // _#########################################
+    // _## OBSERVERS DELAYS
+    // _#########################################
     private var authObserverDelay: Long = 0
     protected fun setAuthObserverDelay(delay: Long){
         authObserverDelay = delay
     }
 
-    //#########################################
-    //##  VIEWMODEL INIT
-    //#########################################
+    // _#########################################
+    // _##  VIEWMODEL INIT
+    // _#########################################
 
     init {
         observeUserAuthState()
