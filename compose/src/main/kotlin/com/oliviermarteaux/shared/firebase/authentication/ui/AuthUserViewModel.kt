@@ -95,8 +95,14 @@ abstract class AuthUserViewModel(
                 viewModelScope.launch {
                     userRepository.getUserById(loggedUser.id).collect { result ->
                         result.fold(
-                            onSuccess = { currentUser = it } ,
-                            onFailure = {}
+                            onSuccess = {
+                                currentUser = it
+                                log.v("AuthUserViewModel: getUser(): currentUser = $currentUser")
+                                        } ,
+                            onFailure = {
+                                log.e("AuthUserViewModel: getUser(): error = $it")
+                                showUnknownErrorToast()
+                            }
                         )
                     }
                 }
@@ -104,30 +110,61 @@ abstract class AuthUserViewModel(
             onNoUserLogged = {
                 viewModelScope.launch {
                     currentUser = null
+                    log.v("AuthUserViewModel: getUser(): no user logged")
+                    showAuthErrorToast()
                 }
             }
         )
+    }
+
+    private fun getUserById(id: String){
+        viewModelScope.launch {
+            userRepository.getUserById(id).collect { result ->
+                result.fold(
+                    onSuccess = {
+                        currentUser = it
+                        log.v("AuthUserViewModel: getUserById(): currentUser = $currentUser")
+                    },
+                    onFailure = {
+                        log.e("AuthUserViewModel: getUserById(): error = $it")
+                        showUnknownErrorToast()
+                    }
+                )
+            }
+        }
     }
 
     fun getAllUsers() {
         viewModelScope.launch {
             userRepository.getAllUsers().collect { result ->
                 result.fold(
-                    onSuccess = { userList = it } ,
-                    onFailure = {}
+                    onSuccess = {
+                        userList = it
+                        log.v("AuthUserViewModel: getAllUsers(): userList = $userList")
+                                } ,
+                    onFailure = {
+                        log.e("AuthUserViewModel: getAllUsers(): error = $it")
+                        showUnknownErrorToast()
+                    }
                 )
             }
         }
     }
 
-    fun updateUser() {
+    fun updateUser(user:User) {
         checkUserState(
             onUserLogged = {
                 viewModelScope.launch {
-                    userRepository.updateUser(it)
+                    currentUser = user
+                    userRepository.updateUser(user)
                 }
             },
-            onNoUserLogged = {}
+            onNoUserLogged = {
+                viewModelScope.launch {
+                    log.v("AuthUserViewModel: updateUser(): no user logged")
+                    showAuthErrorToast()
+                }
+            }
         )
     }
 
@@ -144,7 +181,7 @@ abstract class AuthUserViewModel(
     ) {
         when (val state = userAuthState) {
             is UserAuthState.Connected -> {
-                log.v("AuthUserViewModel: onAuthUserClick: currentUser = ${state.user.email}")
+                log.v("AuthUserViewModel: onAuthUserClick: userAuthState email = ${state.user.email}")
                 onUserLogged(state.user)
             }
             is UserAuthState.NotConnected -> {
@@ -163,7 +200,10 @@ abstract class AuthUserViewModel(
             userRepository.userAuthState.collect { user ->
                 userAuthState = when (user) {
                     null -> UserAuthState.NotConnected
-                    else -> UserAuthState.Connected(user)
+                    else -> {
+                        getUserById(user.id)
+                        UserAuthState.Connected(user)
+                    }
                 }
                 log.v("AuthUserViewModel: userAuthState = $userAuthState")
             }
