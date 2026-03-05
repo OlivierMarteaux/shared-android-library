@@ -1,6 +1,11 @@
 package com.oliviermarteaux.shared.firebase.authentication.ui.screen.splash
 
+import android.R.attr.text
+import android.R.attr.textColor
 import androidx.annotation.StringRes
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -8,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults.contentPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +26,7 @@ import com.oliviermarteaux.shared.composables.IconSource
 import com.oliviermarteaux.shared.composables.ImageScaffold
 import com.oliviermarteaux.shared.composables.SharedButton
 import com.oliviermarteaux.shared.composables.SharedScaffold
+import com.oliviermarteaux.shared.composables.SharedToast
 import com.oliviermarteaux.shared.compose.R
 
 /**
@@ -54,31 +61,45 @@ fun SplashScreen(
                 formPortraitHorizontalPadding = formPortraitHorizontalPadding,
                 imageModifier = imageModifier,
             ) {
-                Spacer(Modifier.height(24.dp))
-                SharedButton(
-                    onClick = { signInWithGoogle(serverClientIdStringRes,navigateToHomeScreen) },
-                    text = stringResource(R.string.sign_in_with_Google),
-                    textColor = Color.Black,
-                    icon = IconSource.PainterIcon(painterResource(id = R.drawable.ic_google_logo)),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                    shape = MaterialTheme.shapes.extraSmall,
-                    contentPadding = PaddingValues(16.dp),
-                    modifier = Modifier.fillMaxWidth(),
-                    tint = Color.Unspecified
-                )
-                Spacer(Modifier.height(24.dp))
+                Box() {
+                    Column() {
+                        Spacer(Modifier.height(24.dp))
+                        SharedButton(
+                            onClick = {
+                                if (isOnline) signInWithGoogle(
+                                    serverClientIdStringRes,
+                                    navigateToHomeScreen
+                                ) else showNetworkErrorToast()
+                            },
+                            text = stringResource(R.string.sign_in_with_Google),
+                            textColor = Color.Black,
+                            icon = IconSource.PainterIcon(painterResource(id = R.drawable.ic_google_logo)),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                            shape = MaterialTheme.shapes.extraSmall,
+                            contentPadding = PaddingValues(16.dp),
+                            modifier = Modifier.fillMaxWidth()
+                                .border(width = Dp.Hairline, color = Color.Black),
+                            tint = Color.Unspecified
+                        )
+                        Spacer(Modifier.height(24.dp))
 
-                SharedButton(
-                    onClick = navigateToLoginScreen,
-                    text = stringResource(R.string.sign_in_with_email),
-                    textColor = Color.White,
-                    icon = IconSource.PainterIcon(painterResource(id = R.drawable.ic_mail_white_no_outline)),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F)),
-                    shape = MaterialTheme.shapes.extraSmall,
-                    contentPadding = PaddingValues(16.dp),
-                    modifier = Modifier.fillMaxWidth(),
-                    tint = Color.Unspecified
-                )
+                        SharedButton(
+                            onClick = { if (isOnline) navigateToLoginScreen() else showNetworkErrorToast() },
+                            text = stringResource(R.string.sign_in_with_email),
+                            textColor = Color.White,
+                            icon = IconSource.PainterIcon(painterResource(id = R.drawable.ic_mail_white_no_outline)),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F)),
+                            shape = MaterialTheme.shapes.extraSmall,
+                            contentPadding = PaddingValues(16.dp),
+                            modifier = Modifier.fillMaxWidth(),
+                            tint = Color.Unspecified
+                        )
+                    }
+                    if (networkError) SharedToast(
+                        text = stringResource(R.string.network_error_check_your_internet_connection),
+                        bottomPadding = 120
+                    )
+                }
             }
         }
     }

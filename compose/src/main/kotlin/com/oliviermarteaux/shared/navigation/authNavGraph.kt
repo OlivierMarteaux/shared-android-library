@@ -15,6 +15,7 @@ fun NavGraphBuilder.authNavGraph(
     navHostController: NavHostController,
     logoRes: Int,
     imageModifier: Modifier,
+    isNameRequested: Boolean = true,
     @StringRes serverClientIdStringRes: Int = -1,
     navigateToHomeScreen: () -> Unit
 ) {
@@ -38,6 +39,7 @@ fun NavGraphBuilder.authNavGraph(
                 logoDrawableRes = logoRes,
                 imageModifier = imageModifier,
                 onBackClick = { navHostController.navigateUp() },
+                isNameRequested = isNameRequested,
                 navigateToPasswordScreen = {
                         email -> navHostController.navigate("password/$email")
                 },
