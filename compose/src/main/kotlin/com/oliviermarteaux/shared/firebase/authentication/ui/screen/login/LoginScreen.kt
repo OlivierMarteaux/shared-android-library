@@ -1,5 +1,6 @@
 package com.oliviermarteaux.shared.firebase.authentication.ui.screen.login
 
+import android.R.attr.label
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -56,7 +57,8 @@ fun LoginScreen(
     landscapeHorizontalPadding: Dp = 85.dp,
     landscapeCentralPadding: Dp = 85.dp,
     formPortraitHorizontalPadding: Dp = 24.dp,
-    imageModifier: Modifier = Modifier.fillMaxWidth()
+    imageModifier: Modifier = Modifier.fillMaxWidth(),
+    isNameRequested: Boolean = true
 ){
     with (loginViewModel) {
         SharedScaffold(
@@ -90,6 +92,7 @@ fun LoginScreen(
                         navigateToPasswordScreen = navigateToPasswordScreen,
                         showNetworkErrorToast = ::showNetworkErrorToast,
                         onEmailExist = ::onEmailExist,
+                        isNameRequested = isNameRequested
                     )
                     if (unknownError) SharedToast(text = stringResource(R.string.an_unknown_error_occurred))
                     if (networkError) SharedToast(
@@ -140,6 +143,7 @@ private fun LoginBody(
     navigateToPasswordScreen: (String) -> Unit,
     showNetworkErrorToast: () -> Unit,
     onEmailExist: (() -> Unit)-> Unit,
+    isNameRequested: Boolean,
 ){
 
     Column(
@@ -182,28 +186,30 @@ private fun LoginBody(
 
                 LaunchedEffect(Unit) { firstNameFocusRequester.requestFocus() }
 
-                SharedOutlinedTextField(
-                    value = newUser.firstname,
-                    onValueChange = { onFirstNameChange(it) },
-                    label = stringResource(R.string.first_name),
-                    isError = newUser.firstname.isEmpty(),
-                    errorText = stringResource(R.string.please_enter_a_first_name),
-                    bottomPadding = SharedPadding.xl,
-                    modifier = Modifier
-                        .focusRequester(firstNameFocusRequester)
-                        .fillMaxWidth(),
-                    imeAction = ImeAction.Next
-                )
-                SharedOutlinedTextField(
-                    value = newUser.lastname,
-                    onValueChange = { onLastNameChange(it) },
-                    label = stringResource(R.string.last_name),
-                    isError = newUser.lastname.isEmpty(),
-                    errorText = stringResource(R.string.please_enter_a_last_name),
-                    bottomPadding = SharedPadding.xl,
-                    modifier = Modifier.fillMaxWidth(),
-                    imeAction = ImeAction.Next,
-                )
+                if (isNameRequested) {
+                    SharedOutlinedTextField(
+                        value = newUser.firstname,
+                        onValueChange = { onFirstNameChange(it) },
+                        label = stringResource(R.string.first_name),
+                        isError = newUser.firstname.isEmpty(),
+                        errorText = stringResource(R.string.please_enter_a_first_name),
+                        bottomPadding = SharedPadding.xl,
+                        modifier = Modifier
+                            .focusRequester(firstNameFocusRequester)
+                            .fillMaxWidth(),
+                        imeAction = ImeAction.Next
+                    )
+                    SharedOutlinedTextField(
+                        value = newUser.lastname,
+                        onValueChange = { onLastNameChange(it) },
+                        label = stringResource(R.string.last_name),
+                        isError = newUser.lastname.isEmpty(),
+                        errorText = stringResource(R.string.please_enter_a_last_name),
+                        bottomPadding = SharedPadding.xl,
+                        modifier = Modifier.fillMaxWidth(),
+                        imeAction = ImeAction.Next,
+                    )
+                }
                 SharedOutlinedPassword(
                     value = newUser.password,
                     onValueChange = { onPasswordChange(it) },
