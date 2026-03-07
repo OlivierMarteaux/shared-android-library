@@ -200,7 +200,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
                 "email" to newUser.email,
                 "photoUrl" to newUser.photoUrl,
                 "pseudo" to newUser.pseudo,
-                "score" to newUser.score
+                "gameLevel" to newUser.score
             )
             firestore.collection("users").document(uid)
                 .set(userData).await()

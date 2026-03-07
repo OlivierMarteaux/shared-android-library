@@ -162,8 +162,26 @@ fun SharedScaffold(
     //_ menu function
     onMenuItem1Click: (() -> Unit)? = null,
     onMenuItem2Click: (() -> Unit)? = null,
+    onMenuItem3Click: (() -> Unit)? = null,
+    onMenuItem4Click: (() -> Unit)? = null,
+    onMenuItem5Click: (() -> Unit)? = null,
+    onMenuItem6Click: (() -> Unit)? = null,
+    onMenuItem7Click: (() -> Unit)? = null,
+    onMenuItem8Click: (() -> Unit)? = null,
+    onMenuItem9Click: (() -> Unit)? = null,
+    onMenuItem10Click: (() -> Unit)? = null,
+    onMenuItem11Click: (() -> Unit)? = null,
     menuItem1Title: String = "",
     menuItem2Title: String = "",
+    menuItem3Title: String = "",
+    menuItem4Title: String = "",
+    menuItem5Title: String = "",
+    menuItem6Title: String = "",
+    menuItem7Title: String = "",
+    menuItem8Title: String = "",
+    menuItem9Title: String = "",
+    menuItem10Title: String = "",
+    menuItem11Title: String = "",
     //_ fab function
     onFabClick: (() -> Unit)? = null,
     fabVisible: Boolean = true,
@@ -388,6 +406,87 @@ fun SharedScaffold(
                                     text = { TextTitleSmall(text = menuItem2Title) },
                                     onClick = {
                                         onMenuItem2Click()
+                                        hideMenu()
+                                    },
+                                )
+                            }
+                            onMenuItem3Click?.let {
+                                DropdownMenuItem(
+                                    text = { TextTitleSmall(text = menuItem3Title) },
+                                    onClick = {
+                                        onMenuItem3Click()
+                                        hideMenu()
+                                    },
+                                )
+                            }
+                            onMenuItem4Click?.let {
+                                DropdownMenuItem(
+                                    text = { TextTitleSmall(text = menuItem4Title) },
+                                    onClick = {
+                                        onMenuItem4Click()
+                                        hideMenu()
+                                    },
+                                )
+                            }
+                            onMenuItem5Click?.let {
+                                DropdownMenuItem(
+                                    text = { TextTitleSmall(text = menuItem5Title) },
+                                    onClick = {
+                                        onMenuItem5Click()
+                                        hideMenu()
+                                    },
+                                )
+                            }
+                            onMenuItem6Click?.let {
+                                DropdownMenuItem(
+                                    text = { TextTitleSmall(text = menuItem6Title) },
+                                    onClick = {
+                                        onMenuItem6Click()
+                                        hideMenu()
+                                    },
+                                )
+                            }
+                            onMenuItem7Click?.let {
+                                DropdownMenuItem(
+                                    text = { TextTitleSmall(text = menuItem7Title) },
+                                    onClick = {
+                                        onMenuItem7Click()
+                                        hideMenu()
+                                    },
+                                )
+                            }
+                            onMenuItem8Click?.let {
+                                DropdownMenuItem(
+                                    text = { TextTitleSmall(text = menuItem8Title) },
+                                    onClick = {
+                                        onMenuItem8Click()
+                                        hideMenu()
+                                    },
+                                )
+                            }
+                            onMenuItem9Click?.let {
+                                DropdownMenuItem(
+                                    text = { TextTitleSmall(text = menuItem9Title) },
+                                    onClick = {
+                                        onMenuItem9Click()
+                                        hideMenu()
+                                    },
+                                )
+                            }
+                            onMenuItem10Click?.let {
+                                DropdownMenuItem(
+                                    text = { TextTitleSmall(text = menuItem10Title) },
+                                    onClick = {
+                                        onMenuItem10Click()
+                                        hideMenu()
+                                    },
+                                )
+                            }
+                            onMenuItem11Click?.let {
+                                DropdownMenuItem(
+                                    text = { TextTitleSmall(text = menuItem11Title) },
+                                    onClick = {
+                                        onMenuItem11Click()
                                         hideMenu()
                                     },
                                 )
