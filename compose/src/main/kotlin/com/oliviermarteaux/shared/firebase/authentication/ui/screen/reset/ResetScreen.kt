@@ -7,7 +7,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -26,6 +29,7 @@ import com.oliviermarteaux.shared.composables.SharedToast
 import com.oliviermarteaux.shared.compose.R
 import com.oliviermarteaux.shared.extensions.isValidEmail
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
+import androidx.compose.ui.graphics.Color
 
 /**
  * A screen for resetting the user's password.
@@ -45,13 +49,17 @@ fun ResetScreen(
     landscapeHorizontalPadding: Dp = 85.dp,
     landscapeCentralPadding: Dp = 85.dp,
     formPortraitHorizontalPadding: Dp = 24.dp,
-    imageModifier: Modifier = Modifier.fillMaxWidth()
+    imageModifier: Modifier = Modifier.fillMaxWidth(),
+    containerColor: Color = MaterialTheme.colorScheme.background,
+    topAppBarColors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
 ) {
 
     SharedScaffold(
         modifier = modifier,
         title = stringResource(R.string.recover_password),
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
+        containerColor = containerColor,
+        topAppBarColors = topAppBarColors,
     ) { contentPadding ->
         with (resetViewModel) {
             Box {

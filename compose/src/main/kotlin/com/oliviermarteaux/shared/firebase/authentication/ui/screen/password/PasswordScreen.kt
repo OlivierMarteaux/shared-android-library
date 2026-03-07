@@ -1,5 +1,6 @@
 package com.oliviermarteaux.shared.firebase.authentication.ui.screen.password
 
+import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -7,7 +8,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -47,9 +51,13 @@ fun PasswordScreen(
     landscapeHorizontalPadding: Dp = 85.dp,
     landscapeCentralPadding: Dp = 85.dp,
     formPortraitHorizontalPadding: Dp = 24.dp,
-    imageModifier: Modifier = Modifier.fillMaxWidth()
+    imageModifier: Modifier = Modifier.fillMaxWidth(),
+    containerColor: Color = MaterialTheme.colorScheme.background,
+    topAppBarColors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
 ){
     SharedScaffold(
+        containerColor = containerColor,
+        topAppBarColors = topAppBarColors,
         modifier = modifier,
         title = stringResource(R.string.sign_in),
         onBackClick = onBackClick

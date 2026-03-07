@@ -1,7 +1,12 @@
 package com.oliviermarteaux.shared.navigation
 
 import androidx.annotation.StringRes
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -11,13 +16,16 @@ import com.oliviermarteaux.shared.firebase.authentication.ui.screen.password.Pas
 import com.oliviermarteaux.shared.firebase.authentication.ui.screen.reset.ResetScreen
 import com.oliviermarteaux.shared.firebase.authentication.ui.screen.splash.SplashScreen
 
+
 fun NavGraphBuilder.authNavGraph(
     navHostController: NavHostController,
     logoRes: Int,
     imageModifier: Modifier,
     isNameRequested: Boolean = true,
     @StringRes serverClientIdStringRes: Int = -1,
-    navigateToHomeScreen: () -> Unit
+    navigateToHomeScreen: () -> Unit,
+    containerColor: Color,
+    topAppBarColors: TopAppBarColors
 ) {
     navigation(
         startDestination = Screen.Splash.route,
@@ -30,7 +38,9 @@ fun NavGraphBuilder.authNavGraph(
                 imageModifier = imageModifier,
                 serverClientIdStringRes = serverClientIdStringRes,
                 navigateToLoginScreen = { navHostController.navigate(Screen.Login.route) },
-                navigateToHomeScreen = navigateToHomeScreen
+                navigateToHomeScreen = navigateToHomeScreen,
+                containerColor = containerColor,
+                topAppBarColors = topAppBarColors,
             )
         }
         /*_ LOGIN SCREEN #########################################################################*/
@@ -43,7 +53,9 @@ fun NavGraphBuilder.authNavGraph(
                 navigateToPasswordScreen = {
                         email -> navHostController.navigate("password/$email")
                 },
-                navigateToHomeScreen = { navHostController.navigate(Screen.Home.route) }
+                navigateToHomeScreen = { navHostController.navigate(Screen.Home.route) },
+                containerColor = containerColor,
+                topAppBarColors = topAppBarColors,
             )
         }
         /*_ PASSWORD SCREEN ######################################################################*/
@@ -58,7 +70,9 @@ fun NavGraphBuilder.authNavGraph(
                 navigateToHomeScreen = navigateToHomeScreen,
                 navigateToPasswordResetScreen = {
                         email -> navHostController.navigate(Screen.Reset.route + "/${email}")
-                }
+                },
+                containerColor = containerColor,
+                topAppBarColors = topAppBarColors,
             )
         }
         /*_ RESET SCREEN #########################################################################*/
@@ -71,6 +85,8 @@ fun NavGraphBuilder.authNavGraph(
                 navigateToLoginScreen = { navHostController.navigate(Screen.Login.route) },
                 logoDrawableRes = logoRes,
                 imageModifier = imageModifier,
+                containerColor = containerColor,
+                topAppBarColors = topAppBarColors,
             )
         }
     }

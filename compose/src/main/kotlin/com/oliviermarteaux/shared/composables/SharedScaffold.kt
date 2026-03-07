@@ -26,9 +26,12 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults.contentPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -135,6 +138,7 @@ fun SharedScaffold(
     trailingIconButtonContentDescription: String = "",
     avatarUrl: String? = null,
     onBackClick: (() -> Unit)? = null,
+    topAppBarColors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
     //_ Semantic state management
     semanticState: Boolean = false,
     semanticStateText: String = "",
@@ -195,6 +199,8 @@ fun SharedScaffold(
     fabIconTint: Color = contentColorFor(fabContainerColor),
     //_ bottom bar
     bottomBar: @Composable () -> Unit = {},
+    //_ scaffold container color
+    containerColor: Color = MaterialTheme.colorScheme.background,
     //_ content
     content: @Composable (contentPadding: PaddingValues) -> Unit = {},
 ){
@@ -207,6 +213,7 @@ fun SharedScaffold(
     fun hideSortOptions(){ sortOptionsDisplayed = false }
 
     Scaffold(
+        containerColor = containerColor,
         modifier = modifier
             .testTag(testTag)
             .pointerInput(Unit) {
@@ -217,6 +224,7 @@ fun SharedScaffold(
             .fillMaxSize(),
         topBar = {
             TopAppBar(
+                colors = topAppBarColors,
                 title = {
                     Box(
                         modifier = Modifier.fillMaxHeight(),

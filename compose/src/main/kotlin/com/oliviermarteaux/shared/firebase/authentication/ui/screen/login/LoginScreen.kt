@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -35,6 +38,7 @@ import com.oliviermarteaux.shared.compose.R
 import com.oliviermarteaux.shared.extensions.isValidEmail
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.NewUser
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
+import androidx.compose.ui.graphics.Color
 
 /**
  * A screen for logging in or creating an account.
@@ -58,13 +62,17 @@ fun LoginScreen(
     landscapeCentralPadding: Dp = 85.dp,
     formPortraitHorizontalPadding: Dp = 24.dp,
     imageModifier: Modifier = Modifier.fillMaxWidth(),
-    isNameRequested: Boolean = true
+    isNameRequested: Boolean = true,
+    containerColor: Color = MaterialTheme.colorScheme.background,
+    topAppBarColors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
 ){
     with (loginViewModel) {
         SharedScaffold(
             title = stringResource(R.string.sign_in),
             onBackClick = onBackClick,
             modifier = modifier,
+            containerColor = containerColor,
+            topAppBarColors = topAppBarColors,
         ) { innerPadding ->
             ImageScaffold(
                 image = painterResource(id = logoDrawableRes),
