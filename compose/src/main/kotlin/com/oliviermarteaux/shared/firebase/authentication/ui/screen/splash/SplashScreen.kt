@@ -14,6 +14,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults.contentPadding
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,9 +50,13 @@ fun SplashScreen(
     landscapeCentralPadding: Dp = 85.dp,
     formPortraitHorizontalPadding: Dp = 85.dp,
     imageModifier: Modifier = Modifier,
+    containerColor: Color = MaterialTheme.colorScheme.background,
+    topAppBarColors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
 ) {
     with(splashViewModel) {
         SharedScaffold(
+            containerColor = containerColor,
+            topAppBarColors = topAppBarColors,
             modifier = modifier,
         ) { innerPadding ->
             ImageScaffold(

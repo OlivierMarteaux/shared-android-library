@@ -146,4 +146,15 @@
     <string name="successfully_deleted">%1$s %2$s successfully deleted</string>
     <string name="delete_the">delete the %1$s</string>
     <string name="delete">Delete</string>
+    <string name="all_levels">All levels</string>
+    <string name="level_1">Level 1</string>
+    <string name="level_2">Level 2</string>
+    <string name="level_3">Level 3</string>
+    <string name="level_4">Level 4</string>
+    <string name="level_5">Level 5</string>
+    <string name="level_6">Level 6</string>
+    <string name="level_7">Level 7</string>
+    <string name="level_8">Level 8</string>
+    <string name="level_9">Level 9</string>
+    <string name="level_10">Level 10</string>
 </resources>

@@ -89,7 +89,11 @@ abstract class AuthUserViewModel(
     var userList: List<User> by mutableStateOf(emptyList())
         private set
 
+    var currentUserUiState: UiState<User?> by mutableStateOf(UiState.Loading)
+        private set
+
     fun getUser() {
+        currentUserUiState = UiState.Loading
         checkUserState(
             onUserLogged = { loggedUser ->
                 viewModelScope.launch {
@@ -97,9 +101,11 @@ abstract class AuthUserViewModel(
                         result.fold(
                             onSuccess = {
                                 currentUser = it
+                                currentUserUiState = UiState.Success(it)
                                 log.v("AuthUserViewModel: getUser(): currentUser = $currentUser")
                                         } ,
                             onFailure = {
+                                currentUserUiState = UiState.Error(it)
                                 log.e("AuthUserViewModel: getUser(): error = $it")
                                 showUnknownErrorToast()
                             }
@@ -118,14 +124,17 @@ abstract class AuthUserViewModel(
     }
 
     private fun getUserById(id: String){
+        currentUserUiState = UiState.Loading
         viewModelScope.launch {
             userRepository.getUserById(id).collect { result ->
                 result.fold(
                     onSuccess = {
                         currentUser = it
+                        currentUserUiState = UiState.Success(it)
                         log.v("AuthUserViewModel: getUserById(): currentUser = $currentUser")
                     },
                     onFailure = {
+                        currentUserUiState = UiState.Error(it)
                         log.e("AuthUserViewModel: getUserById(): error = $it")
                         showUnknownErrorToast()
                     }
