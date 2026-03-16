@@ -312,21 +312,30 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
             val firebaseUser = firebaseAuth.currentUser
             // Do follow-up work AFTER user is created :
             val user: User? = firebaseUser?.toUser()
-            val newUser: NewUser = NewUser(
-                firstname = user?.firstname ?: "",
-                lastname = user?.lastname ?: "",
-                fullname = user?.fullname ?: "",
-                email = user?.email ?: "",
-                photoUrl = user?.photoUrl ?: "",
-                pseudo = user?.pseudo ?: "",
-            )
-            firebaseUser?.let { uid ->
-                // 1) Update FirebaseUser profile (displayName)
-                // updateFirebaseUserProfile(newUser, firebaseUser)
-                // 2) Add new user to Firestore
-                addNewUserToFirestore(newUser, firebaseUser.uid, LoginMethod.GOOGLE)
-            }
 
+            var isNewAccount: Boolean
+            val snapshot = firestore.collection("users")
+                .whereEqualTo("id", user?.id)
+                .get()
+                .await()
+            isNewAccount = !snapshot.isEmpty
+
+            if (isNewAccount) {
+                val newUser: NewUser = NewUser(
+                    firstname = user?.firstname ?: "",
+                    lastname = user?.lastname ?: "",
+                    fullname = user?.fullname ?: "",
+                    email = user?.email ?: "",
+                    photoUrl = user?.photoUrl ?: "",
+                    pseudo = user?.pseudo ?: "",
+                )
+                firebaseUser?.let { uid ->
+                    // 1) Update FirebaseUser profile (displayName)
+                    // updateFirebaseUserProfile(newUser, firebaseUser)
+                    // 2) Add new user to Firestore
+                    addNewUserToFirestore(newUser, firebaseUser.uid, LoginMethod.GOOGLE)
+                }
+            }
             user
         } else {
             Log.e("OM_TAG", "UserFirebaseApi::signInWithGoogle: Credential is not of type Google ID!")
