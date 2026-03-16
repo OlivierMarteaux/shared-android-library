@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
+import java.util.Date
 import javax.inject.Inject
 
 /**
@@ -164,9 +165,13 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
 
         require(user.id.isNotBlank()) { "User ID must not be blank" }
 
+        val updatedUser = user.copy(
+            lastModifiedDate = Date()
+        )
+
         usersCollection
             .document(user.id)
-            .set(user, SetOptions.merge())
+            .set(updatedUser, SetOptions.merge())
             .await()
 
         Unit
