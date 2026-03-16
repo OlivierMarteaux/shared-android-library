@@ -11,7 +11,6 @@ data class NewUser(
     val password: String = "",
     val photoUrl: String = "",
     val pseudo: String = "",
-    val score: Long = -1
 ){
     fun getComputedFullName() = fullname.ifEmpty {
         listOf(firstname, lastname)

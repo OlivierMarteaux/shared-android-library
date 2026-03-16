@@ -200,7 +200,6 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
                 "email" to newUser.email,
                 "photoUrl" to newUser.photoUrl,
                 "pseudo" to newUser.pseudo,
-                "gameLevel" to newUser.score
             )
             firestore.collection("users").document(uid)
                 .set(userData).await()
@@ -304,7 +303,23 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
             // Sign in success, return the signed-in user
             Log.d("OM_TAG", "UserFirebaseApi::signInWithGoogle: signInWithCredential:success")
             val firebaseUser = firebaseAuth.currentUser
-            val user = firebaseUser?.toUser()
+            // Do follow-up work AFTER user is created :
+            val user: User? = firebaseUser?.toUser()
+            val newUser: NewUser = NewUser(
+                firstname = user?.firstname ?: "",
+                lastname = user?.lastname ?: "",
+                fullname = user?.fullname ?: "",
+                email = user?.email ?: "",
+                photoUrl = user?.photoUrl ?: "",
+                pseudo = user?.pseudo ?: "",
+            )
+            firebaseUser?.let { uid ->
+                // 1) Update FirebaseUser profile (displayName)
+                // updateFirebaseUserProfile(newUser, firebaseUser)
+                // 2) Add new user to Firestore
+                addNewUserToFirestore(newUser, firebaseUser.uid)
+            }
+
             user
         } else {
             Log.e("OM_TAG", "UserFirebaseApi::signInWithGoogle: Credential is not of type Google ID!")
