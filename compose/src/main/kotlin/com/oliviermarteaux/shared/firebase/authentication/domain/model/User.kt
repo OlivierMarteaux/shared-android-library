@@ -1,6 +1,10 @@
 package com.oliviermarteaux.shared.firebase.authentication.domain.model
 
+import com.google.android.gms.common.internal.AccountType
+import com.oliviermarteaux.shared.extensions.toDate
 import java.io.Serializable
+import java.time.LocalDate
+import java.util.Date
 import kotlin.text.ifEmpty
 
 /**
@@ -17,8 +21,11 @@ data class User(
     val email: String = "",
     val photoUrl: String = "",
     val pseudo: String = "",
+    val timestamp: Long = System.currentTimeMillis(),
+    val creationDate: Date = Date(),
+    val lastModifiedDate: Date = Date(),
+    val loginMethod: LoginMethod = LoginMethod.UNKNOWN,
     val gameStat: List<GameLevelStat> = emptyList()
-//    val gameLevel: Long = -1
 
 ) : Serializable {
 

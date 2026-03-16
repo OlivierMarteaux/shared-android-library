@@ -15,15 +15,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.messaging.FirebaseMessaging
 import com.oliviermarteaux.shared.firebase.authentication.domain.mapper.toUser
+import com.oliviermarteaux.shared.firebase.authentication.domain.model.LoginMethod
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.NewUser
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.User
-import com.oliviermarteaux.shared.firebase.firestore.utils.PagedList
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -31,7 +29,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
-import kotlin.jvm.java
 
 /**
  * A Firebase implementation of the [UserApi] interface.
@@ -100,7 +97,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
                 // 1) Update FirebaseUser profile (displayName)
                 updateFirebaseUserProfile(newUser, firebaseUser)
                 // 2) Add new user to Firestore
-                addNewUserToFirestore(newUser, firebaseUser.uid)
+                addNewUserToFirestore(newUser, firebaseUser.uid, LoginMethod.EMAIL)
             }
             firebaseUser?.toUser()
     }.onFailure{ e->
@@ -190,19 +187,24 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
      * @param newUser The new user's data.
      * @param uid The user's unique ID.
      */
-    private suspend fun addNewUserToFirestore(newUser: NewUser, uid: String) =
+    private suspend fun addNewUserToFirestore(newUser: NewUser, uid: String, loginMethod: LoginMethod) =
         try {
-            val userData = mapOf(
-                "id" to uid,
-                "firstname" to newUser.firstname,
-                "lastname" to newUser.lastname,
-                "fullname" to newUser.fullname,
-                "email" to newUser.email,
-                "photoUrl" to newUser.photoUrl,
-                "pseudo" to newUser.pseudo,
-            )
+//            val userData: Map<String, String> = mapOf(
+//                "id" to uid,
+//                "firstname" to newUser.firstname,
+//                "lastname" to newUser.lastname,
+//                "fullname" to newUser.fullname,
+//                "email" to newUser.email,
+//                "photoUrl" to newUser.photoUrl,
+//                "pseudo" to newUser.pseudo,
+//                "timestamp" to newUser.timestamp.toString(),
+//                "creationDate" to newUser.creationDate.toString(),
+//                "accountType" to newUser.accountType.name
+//            )
+            val user: User = newUser.toUser(id = uid, loginMethod = loginMethod)
             firestore.collection("users").document(uid)
-                .set(userData).await()
+                .set(user, SetOptions.merge())
+                .await()
         } catch (e: Exception) {
             Log.e("OM_TAG", "UserFirebaseApi: CreateAccount: addNewUserToFirestore exception: ${e.message}")
         }
@@ -317,7 +319,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
                 // 1) Update FirebaseUser profile (displayName)
                 // updateFirebaseUserProfile(newUser, firebaseUser)
                 // 2) Add new user to Firestore
-                addNewUserToFirestore(newUser, firebaseUser.uid)
+                addNewUserToFirestore(newUser, firebaseUser.uid, LoginMethod.GOOGLE)
             }
 
             user
