@@ -39,6 +39,9 @@ class UserFirebaseRepository @Inject constructor(private val userApi: UserApi): 
      * @return A [Result] indicating whether the email exists. `Result.success(true)` if it exists, `Result.success(false)` otherwise.
      */
     override suspend fun checkEmail(email: String): Result<Boolean> = userApi.checkEmail(email)
+
+    override suspend fun checkPseudo(pseudo: String): Result<Boolean> = userApi.checkPseudo(pseudo)
+
     /**
      * Creates a new user account.
      *

@@ -77,6 +77,28 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
     }
 
     //_ #############################################
+    //_ # CHECK PSEUDO
+    //_ #############################################
+    /**
+     * Checks if the pseudo is already used.
+     *
+     * @param [pseudo] The pseudo to check.
+     * @return A [Boolean] indicating whether the pseudo exists.
+     */
+    override suspend fun checkPseudo(pseudo: String): Result<Boolean> = runCatching {
+        var pseudoExist: Boolean
+        val snapshot = firestore.collection("users")
+            .whereEqualTo("pseudo", pseudo)
+            .get()
+            .await()
+        pseudoExist = !snapshot.isEmpty
+        Log.d("OM_TAG", "UserFirebaseApi: checkEmail: pseudoExist =  $pseudoExist")
+        pseudoExist
+    }.onFailure { e ->
+        Log.e("OM_TAG", "UserFirebaseApi: checkEmail: exception: ${e.message}")
+    }
+
+    //_ #############################################
     //_ # CREATE ACCOUNT
     //_ #############################################
     /**
