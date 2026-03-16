@@ -48,7 +48,7 @@ data class User(
     }
 
     val totalScore: Long
-        get() = if(gameStat.isEmpty()) -1 else gameStat.sumOf{ it.score }
+        get() = if(gameStat.isEmpty()) -1 else gameStat.filter{ it.score >=0 }.sumOf{ it.score }
 
     val totalPlayTime: Long
         get() = if(gameStat.isEmpty()) -1 else gameStat.sumOf{ it.playTime}

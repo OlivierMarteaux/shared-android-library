@@ -318,7 +318,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
                 .whereEqualTo("id", user?.id)
                 .get()
                 .await()
-            isNewAccount = !snapshot.isEmpty
+            isNewAccount = snapshot.isEmpty
 
             if (isNewAccount) {
                 val newUser: NewUser = NewUser(
