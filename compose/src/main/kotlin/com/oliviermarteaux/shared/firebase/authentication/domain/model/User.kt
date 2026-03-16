@@ -50,6 +50,9 @@ data class User(
     val totalScore: Long
         get() = if(gameStat.isEmpty()) -1 else gameStat.sumOf{ it.score }
 
+    val totalPlayTime: Long
+        get() = if(gameStat.isEmpty()) -1 else gameStat.sumOf{ it.playTime}
+
     fun getCompletedGameScore(lastLevel: GameLevel): Long =
         totalScore.takeIf { (gameStat.find { it.level == lastLevel }?.score ?: -1) >= 0 } ?: -1
 
