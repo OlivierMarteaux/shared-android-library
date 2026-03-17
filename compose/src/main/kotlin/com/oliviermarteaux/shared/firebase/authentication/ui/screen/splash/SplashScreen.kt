@@ -106,6 +106,10 @@ fun SplashScreen(
                         text = stringResource(R.string.network_error_check_your_internet_connection),
                         bottomPadding = 120
                     )
+                    if (authError) SharedToast(
+                        text = authErrorMessage,
+                        bottomPadding = 120
+                    )
                 }
             }
         }
