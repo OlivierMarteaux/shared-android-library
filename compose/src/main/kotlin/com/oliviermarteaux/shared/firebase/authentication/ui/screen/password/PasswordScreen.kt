@@ -33,6 +33,9 @@ import com.oliviermarteaux.shared.composables.SharedOutlinedPassword
 import com.oliviermarteaux.shared.composables.SharedScaffold
 import com.oliviermarteaux.shared.composables.SharedToast
 import com.oliviermarteaux.shared.composables.extensions.cdButtonSemantics
+import com.oliviermarteaux.shared.composables.spacer.SpacerLarge
+import com.oliviermarteaux.shared.composables.spacer.SpacerXl
+import com.oliviermarteaux.shared.composables.spacer.SpacerXxl
 import com.oliviermarteaux.shared.compose.R
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 
@@ -188,6 +191,7 @@ private fun PasswordBody(
                     .fillMaxWidth()
                     .cdButtonSemantics(cdSignIn)
             ) { signIn(password) { navigateToHomeScreen() } }
+            SpacerLarge()
         }
     }
 }

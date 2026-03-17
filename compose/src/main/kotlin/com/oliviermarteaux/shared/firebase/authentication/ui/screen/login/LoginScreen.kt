@@ -1,6 +1,7 @@
 package com.oliviermarteaux.shared.firebase.authentication.ui.screen.login
 
 import android.R.attr.label
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarColors
@@ -39,6 +42,7 @@ import com.oliviermarteaux.shared.extensions.isValidEmail
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.NewUser
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 
 /**
  * A screen for logging in or creating an account.
@@ -153,10 +157,19 @@ private fun LoginBody(
     onEmailExist: (() -> Unit)-> Unit,
     isNameRequested: Boolean,
 ){
+    val configuration = LocalConfiguration.current
+    val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+    // Remember scroll state only if portrait
+    val scrollState = rememberScrollState()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.windowInsetsPadding(WindowInsets(0,0,0,0))
+        modifier = Modifier
+            .windowInsetsPadding(WindowInsets(0,0,0,0))
+            .then(
+                if (isPortrait) Modifier.verticalScroll(scrollState)
+                else Modifier // do nothing in landscape
+            )
     ) {
         Spacer(Modifier.height(24.dp))
         SharedOutlinedEmail(
