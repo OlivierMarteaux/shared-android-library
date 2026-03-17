@@ -72,7 +72,7 @@ fun PasswordScreen(
             with (passwordViewModel) {
                 PasswordBody(
                     logoDrawableRes = logoDrawableRes,
-                    email = email,
+                    email = email.lowercase(),
                     password = password,
                     contentPadding = contentPadding,
                     onPasswordChange = ::onPasswordChange,

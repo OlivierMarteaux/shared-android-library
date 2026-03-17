@@ -3,6 +3,7 @@ package com.oliviermarteaux.shared.firebase.authentication.data.service
 import android.content.Context
 import android.util.Log
 import androidx.annotation.StringRes
+import androidx.compose.ui.text.toLowerCase
 import androidx.core.content.ContextCompat.getString
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
@@ -30,6 +31,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 /**
@@ -65,9 +67,10 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
      */
     override suspend fun checkEmail(email: String) = runCatching {
 //        throw IllegalStateException("Forced exception for testing")
+        val normalizedEmail: String = email.lowercase()
         var emailExist: Boolean
         val snapshot = firestore.collection("users")
-            .whereEqualTo("email", email)
+            .whereEqualTo("email", normalizedEmail)
             .get()
             .await()
         emailExist = !snapshot.isEmpty
