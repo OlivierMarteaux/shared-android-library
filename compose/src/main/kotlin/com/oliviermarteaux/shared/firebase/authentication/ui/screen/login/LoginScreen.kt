@@ -171,7 +171,8 @@ private fun LoginBody(
                 newUser.email.isEmpty() -> stringResource(R.string.enter_your_email_address_to_continue)
                 !newUser.email.isValidEmail() -> stringResource(R.string.incorrect_email_address)
                 else -> null
-            }
+            },
+            modifier = Modifier.fillMaxWidth()
         )
         when {
             emailExist == null -> {
@@ -179,7 +180,7 @@ private fun LoginBody(
                 SharedButton(
                     onClick = { if (isOnline) checkEmail(newUser.email) else showNetworkErrorToast() },
                     text = stringResource(R.string.next),
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 60.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     enabled = newUser.email.run { isValidEmail() && isNotEmpty() }
                 )
             }
@@ -232,7 +233,7 @@ private fun LoginBody(
                     onClick = { createAccount(newUser) { navigateToHomeScreen() } },
                     text = stringResource(R.string.save),
                     modifier = Modifier
-                        .padding(vertical = SharedPadding.xl, horizontal = 60.dp)
+                        .padding(vertical = SharedPadding.xl)
                         .fillMaxWidth()
                 )
             }

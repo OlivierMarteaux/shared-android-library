@@ -143,7 +143,7 @@ private fun ResetBody(
 
         SharedButton(
             text = stringResource(R.string.send),
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 60.dp)
+            modifier = Modifier.fillMaxWidth()
         ) { sendPasswordResetEmail(email) }
         Spacer(Modifier.height(SharedPadding.medium))
     }

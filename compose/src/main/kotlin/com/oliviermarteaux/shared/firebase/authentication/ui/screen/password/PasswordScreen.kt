@@ -176,7 +176,6 @@ private fun PasswordBody(
                 text = textTroubleSignIn,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 60.dp)
                     .cdButtonSemantics(cdTroubleSignIn)
             ) { navigateToPasswordResetScreen(email) }
             Spacer(modifier = Modifier.height(SharedPadding.medium))
@@ -187,7 +186,6 @@ private fun PasswordBody(
                 text = textSignIn,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 60.dp)
                     .cdButtonSemantics(cdSignIn)
             ) { signIn(password) { navigateToHomeScreen() } }
         }
