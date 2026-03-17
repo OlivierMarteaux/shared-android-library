@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.messaging.FirebaseMessaging
@@ -73,6 +74,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         Log.d("OM_TAG", "UserFirebaseApi: checkEmail: emailExist =  $emailExist")
         emailExist
     }.onFailure { e ->
+        FirebaseCrashlytics.getInstance().recordException(e)
         Log.e("OM_TAG", "UserFirebaseApi: checkEmail: exception: ${e.message}")
     }
 
@@ -95,6 +97,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         Log.d("OM_TAG", "UserFirebaseApi: checkEmail: pseudoExist =  $pseudoExist")
         pseudoExist
     }.onFailure { e ->
+        FirebaseCrashlytics.getInstance().recordException(e)
         Log.e("OM_TAG", "UserFirebaseApi: checkEmail: exception: ${e.message}")
     }
 
@@ -124,6 +127,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
             }
             firebaseUser?.toUser()
     }.onFailure{ e->
+        FirebaseCrashlytics.getInstance().recordException(e)
         Log.e("OM_TAG", "UserFirebaseApi: CreateAccount: exception: ${e.message}")
     }
 
@@ -146,6 +150,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
             )
         )
     }.catch { e ->
+        FirebaseCrashlytics.getInstance().recordException(e)
         Log.e("OM_TAG", "UserFirebaseApi: getAllUsers: failed", e)
         emit(Result.failure(e))
     }
@@ -171,6 +176,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
             )
         )
     }.catch { e ->
+        FirebaseCrashlytics.getInstance().recordException(e)
         Log.e(
             "OM_TAG",
             "UserFirebaseApi: updateUser: failed due to Exception",
@@ -198,6 +204,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
 
         Unit
     }.onFailure { e ->
+        FirebaseCrashlytics.getInstance().recordException(e)
         Log.e(
             "OM_TAG",
             "UserFirebaseApi: updateUser: failed due to Exception",
@@ -233,6 +240,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
                 .set(user, SetOptions.merge())
                 .await()
         } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
             Log.e("OM_TAG", "UserFirebaseApi: CreateAccount: addNewUserToFirestore exception: ${e.message}")
         }
 
@@ -252,6 +260,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
                 .build()
             firebaseUser.updateProfile(profileUpdates).await()
         } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
             Log.e("OM_TAG", "UserFirebaseApi: CreateAccount: updateFirebaseUserProfile exception: ${e.message}")
         }
 
@@ -276,6 +285,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         Log.d("OM_TAG", "UserFirebaseApi:signIn: success")
         firebaseUser?.toUser()
     }.onFailure { e ->
+        FirebaseCrashlytics.getInstance().recordException(e)
         Log.e("OM_TAG", "UserFirebaseApi:signIn: exception: ${e.message}")
     }
 
@@ -364,6 +374,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
             return Result.failure(IllegalStateException("signInWithGoogle: Credential is not of type Google ID!"))
         }
     }.onFailure { e ->
+        FirebaseCrashlytics.getInstance().recordException(e)
         Log.e("OM_TAG", "UserFirebaseApi::signInWithGoogle: signInWithGoogle:failure", e)
     }
 
@@ -382,6 +393,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         Log.d("OM_TAG", "ResetViewModel: sendPasswordResetEmail($email): Password reset email sent")
         Unit
     }.onFailure { e ->
+        FirebaseCrashlytics.getInstance().recordException(e)
         Log.e("OM_TAG", "ResetViewModel: sendPasswordResetEmail($email): Password reset failed: ${e.message}")
     }
 
@@ -399,6 +411,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         firebaseAuth.signOut()
         null
     }.onFailure { e ->
+        FirebaseCrashlytics.getInstance().recordException(e)
         Log.e("OM_TAG", "UserFirebaseApi: signOut(): Failed to sign out: ${e.message}")
     }
 
@@ -417,6 +430,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         signOut()
         null
     }.onFailure { e ->
+        FirebaseCrashlytics.getInstance().recordException(e)
         Log.e("OM_TAG", "UserFirebaseApi: deleteAccount(): Failed to delete account: ${e.message}")
     }
 
@@ -430,6 +444,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         Log.d("OM_TAG", "UserFirebaseApi: deleteAuthUser(): Deleting auth user")
         user?.delete()?.await()
     }.onFailure { e ->
+        FirebaseCrashlytics.getInstance().recordException(e)
         Log.e("OM_TAG", "UserFirebaseApi: deleteAuthUser(): Failed to delete auth user: ${e.message}")
     }
     //_ #############################################
@@ -446,6 +461,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         }
         Log.d("OM_TAG", "UserFirebaseApi: deleteFireStoreUserEntry(): userUid = $userUid")
     }.onFailure { e ->
+        FirebaseCrashlytics.getInstance().recordException(e)
         Log.e("OM_TAG", "UserFirebaseApi: deleteFireStoreUserEntry(): Failed to delete user: ${e.message}")
     }
 }

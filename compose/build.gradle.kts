@@ -86,6 +86,8 @@ dependencies {
     implementation(libs.firebase.firestore) // Database
     implementation(libs.firebase.storage) // Media files storage
     implementation(libs.firebase.messaging) // Cloud notifications
+    implementation(libs.firebase.analytics) // Analytics
+    implementation(libs.firebase.crashlytics) // Crashlytics
     // For google account authentication
     implementation(libs.play.services.credentials)
     implementation(libs.androidx.credentials)
