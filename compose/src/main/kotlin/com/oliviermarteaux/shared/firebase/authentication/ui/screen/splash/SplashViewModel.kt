@@ -1,5 +1,6 @@
 package com.oliviermarteaux.shared.firebase.authentication.ui.screen.splash
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.annotation.StringRes
@@ -61,9 +62,9 @@ class SplashViewModel @Inject constructor(
         onSuccessfulGoogleSignInDestination = onSuccess
     }
 
-    fun resolveGoogleSignInProvider(serverClientIdString: String) = viewModelScope.launch {
+    fun resolveGoogleSignInProvider(serverClientIdString: String, activity: Activity) = viewModelScope.launch {
 
-        when (val result = provider.signIn(serverClientIdString)) {
+        when (val result = provider.signIn(serverClientIdString, activity )) {
 
             is GoogleSignInResult.Success -> {
                 log.d("SplashViewModel::resolveGoogleSignInProvider: successfully logged")

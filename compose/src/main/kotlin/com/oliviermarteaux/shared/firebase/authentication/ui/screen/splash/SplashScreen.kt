@@ -2,6 +2,8 @@ package com.oliviermarteaux.shared.firebase.authentication.ui.screen.splash
 
 import android.R.attr.text
 import android.R.attr.textColor
+import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.annotation.StringRes
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -74,11 +76,13 @@ fun SplashScreen(
                         Spacer(Modifier.height(24.dp))
 
                         val serverClientId = stringResource(serverClientIdStringRes)
+                        val activity = LocalActivity.current?: Activity()
+
                         SharedButton(
                             onClick = {
                                 if (isOnline) {
                                     setDestination(navigateToHomeScreen)
-                                    resolveGoogleSignInProvider(serverClientId)
+                                    resolveGoogleSignInProvider(serverClientId, activity)
                                 } else showNetworkErrorToast()
                             },
                             text = stringResource(R.string.sign_in_with_Google),
