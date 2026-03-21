@@ -7,6 +7,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -15,6 +16,7 @@ import com.oliviermarteaux.shared.firebase.authentication.ui.screen.login.LoginS
 import com.oliviermarteaux.shared.firebase.authentication.ui.screen.password.PasswordScreen
 import com.oliviermarteaux.shared.firebase.authentication.ui.screen.reset.ResetScreen
 import com.oliviermarteaux.shared.firebase.authentication.ui.screen.splash.SplashScreen
+import com.oliviermarteaux.shared.firebase.authentication.ui.screen.splash.SplashViewModel
 
 
 fun NavGraphBuilder.authNavGraph(
@@ -25,7 +27,8 @@ fun NavGraphBuilder.authNavGraph(
     @StringRes serverClientIdStringRes: Int = -1,
     navigateToHomeScreen: () -> Unit,
     containerColor: Color,
-    topAppBarColors: TopAppBarColors
+    topAppBarColors: TopAppBarColors,
+    splashViewModel: SplashViewModel
 ) {
     navigation(
         startDestination = Screen.Splash.route,
@@ -41,6 +44,7 @@ fun NavGraphBuilder.authNavGraph(
                 navigateToHomeScreen = navigateToHomeScreen,
                 containerColor = containerColor,
                 topAppBarColors = topAppBarColors,
+                splashViewModel = splashViewModel
             )
         }
         /*_ LOGIN SCREEN #########################################################################*/

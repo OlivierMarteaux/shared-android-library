@@ -73,5 +73,6 @@ interface UserApi {
      */
     suspend fun deleteAccount(): Result<User?>
 
-    suspend fun signInWithGoogle(@StringRes serverClientIdStringRes: Int): Result<User?>
+//    suspend fun signInWithGoogle(@StringRes serverClientIdStringRes: Int): Result<User?>
+    suspend fun signInWithGoogle(idToken: String): Result<User?>
 }

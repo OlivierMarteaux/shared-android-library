@@ -299,87 +299,118 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
      * Launch Google Sign-In using Credential Manager
      * Returns the signed-in FirebaseUser or null
      */
-    override suspend fun signInWithGoogle(
-        @StringRes serverClientIdStringRes: Int
-    ): Result<User?> = runCatching {
+    override suspend fun signInWithGoogle(idToken: String): Result<User?> = runCatching {
 
-        // This variable will hold the credential from either the silent or interactive attempt.
-        val credential = try {
-            // --- ATTEMPT 1: SILENT SIGN-IN ---
-            Log.d("OM_TAG", "UserFirebaseApi::signInWithGoogle: Attempting silent sign-in...")
-            val silentSignInOption = GetGoogleIdOption.Builder()
-                .setServerClientId(getString(context, serverClientIdStringRes))
-                .setFilterByAuthorizedAccounts(true) // <<< Key for silent sign-in
-                .setAutoSelectEnabled(true)
-                .build()
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
 
-            val silentRequest = GetCredentialRequest.Builder()
-                .addCredentialOption(silentSignInOption)
-                .build()
+        firebaseAuth.signInWithCredential(credential).await()
 
-            credentialManager.getCredential(context, silentRequest).credential
+        val firebaseUser = firebaseAuth.currentUser
+        val user = firebaseUser?.toUser()
 
-        } catch (e: NoCredentialException) {
-            // --- FALLBACK: INTERACTIVE SIGN-IN ---
-            // This is an expected failure for new users. Fall back to the interactive flow.
-            Log.d("OM_TAG", "UserFirebaseApi::signInWithGoogle: Silent sign-in failed, falling back to interactive.")
-            val interactiveSignInOption = GetGoogleIdOption.Builder()
-                .setServerClientId(getString(context, serverClientIdStringRes))
-                .setFilterByAuthorizedAccounts(false) // <<< Key for interactive sign-in
-                .build()
+        val snapshot = firestore.collection("users")
+            .whereEqualTo("id", user?.id)
+            .get()
+            .await()
 
-            val interactiveRequest = GetCredentialRequest.Builder()
-                .addCredentialOption(interactiveSignInOption)
-                .build()
+        val isNewAccount = snapshot.isEmpty
 
-            credentialManager.getCredential(context, interactiveRequest).credential
+        if (isNewAccount && firebaseUser != null) {
+            val newUser = NewUser(
+                firstname = user?.firstname ?: "",
+                lastname = user?.lastname ?: "",
+                fullname = user?.fullname ?: "",
+                email = user?.email ?: "",
+                photoUrl = user?.photoUrl ?: "",
+                pseudo = user?.pseudo ?: "",
+            )
+
+            addNewUserToFirestore(newUser, firebaseUser.uid, LoginMethod.GOOGLE)
         }
 
-        // Check if credential is of type Google ID
-        if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-            // Create Google ID Token
-            val idToken = GoogleIdTokenCredential.createFrom(credential.data).idToken
-            // Sign-in using credential
-            val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
-            firebaseAuth.signInWithCredential(firebaseCredential).await()
-            // Sign in success, return the signed-in user
-            Log.d("OM_TAG", "UserFirebaseApi::signInWithGoogle: signInWithCredential:success")
-            val firebaseUser = firebaseAuth.currentUser
-            // Do follow-up work AFTER user is created :
-            val user: User? = firebaseUser?.toUser()
-
-            var isNewAccount: Boolean
-            val snapshot = firestore.collection("users")
-                .whereEqualTo("id", user?.id)
-                .get()
-                .await()
-            isNewAccount = snapshot.isEmpty
-
-            if (isNewAccount) {
-                val newUser: NewUser = NewUser(
-                    firstname = user?.firstname ?: "",
-                    lastname = user?.lastname ?: "",
-                    fullname = user?.fullname ?: "",
-                    email = user?.email ?: "",
-                    photoUrl = user?.photoUrl ?: "",
-                    pseudo = user?.pseudo ?: "",
-                )
-                firebaseUser?.let { uid ->
-                    // 1) Update FirebaseUser profile (displayName)
-                    // updateFirebaseUserProfile(newUser, firebaseUser)
-                    // 2) Add new user to Firestore
-                    addNewUserToFirestore(newUser, firebaseUser.uid, LoginMethod.GOOGLE)
-                }
-            }
-            user
-        } else {
-            Log.e("OM_TAG", "UserFirebaseApi::signInWithGoogle: Credential is not of type Google ID!")
-            return Result.failure(IllegalStateException("signInWithGoogle: Credential is not of type Google ID!"))
-        }
-    }.onFailure { e ->
-        FirebaseCrashlytics.getInstance().recordException(e)
-        Log.e("OM_TAG", "UserFirebaseApi::signInWithGoogle: signInWithGoogle:failure", e)
+        user
     }
+//    override suspend fun signInWithGoogle(
+//        @StringRes serverClientIdStringRes: Int
+//    ): Result<User?> = runCatching {
+//
+//        // This variable will hold the credential from either the silent or interactive attempt.
+//        val credential = try {
+//            // --- ATTEMPT 1: SILENT SIGN-IN ---
+//            Log.d("OM_TAG", "UserFirebaseApi::signInWithGoogle: Attempting silent sign-in...")
+//            val silentSignInOption = GetGoogleIdOption.Builder()
+//                .setServerClientId(getString(context, serverClientIdStringRes))
+//                .setFilterByAuthorizedAccounts(true) // <<< Key for silent sign-in
+//                .setAutoSelectEnabled(true)
+//                .build()
+//
+//            val silentRequest = GetCredentialRequest.Builder()
+//                .addCredentialOption(silentSignInOption)
+//                .build()
+//
+//            credentialManager.getCredential(context, silentRequest).credential
+//
+//        } catch (e: NoCredentialException) {
+//            // --- FALLBACK: INTERACTIVE SIGN-IN ---
+//            // This is an expected failure for new users. Fall back to the interactive flow.
+//            Log.d("OM_TAG", "UserFirebaseApi::signInWithGoogle: Silent sign-in failed, falling back to interactive.")
+//            val interactiveSignInOption = GetGoogleIdOption.Builder()
+//                .setServerClientId(getString(context, serverClientIdStringRes))
+//                .setFilterByAuthorizedAccounts(false) // <<< Key for interactive sign-in
+//                .build()
+//
+//            val interactiveRequest = GetCredentialRequest.Builder()
+//                .addCredentialOption(interactiveSignInOption)
+//                .build()
+//
+//            credentialManager.getCredential(context, interactiveRequest).credential
+//        }
+//
+//        // Check if credential is of type Google ID
+//        if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+//            // Create Google ID Token
+//            val idToken = GoogleIdTokenCredential.createFrom(credential.data).idToken
+//            // Sign-in using credential
+//            val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
+//            firebaseAuth.signInWithCredential(firebaseCredential).await()
+//            // Sign in success, return the signed-in user
+//            Log.d("OM_TAG", "UserFirebaseApi::signInWithGoogle: signInWithCredential:success")
+//            val firebaseUser = firebaseAuth.currentUser
+//            // Do follow-up work AFTER user is created :
+//            val user: User? = firebaseUser?.toUser()
+//
+//            var isNewAccount: Boolean
+//            val snapshot = firestore.collection("users")
+//                .whereEqualTo("id", user?.id)
+//                .get()
+//                .await()
+//            isNewAccount = snapshot.isEmpty
+//
+//            if (isNewAccount) {
+//                val newUser: NewUser = NewUser(
+//                    firstname = user?.firstname ?: "",
+//                    lastname = user?.lastname ?: "",
+//                    fullname = user?.fullname ?: "",
+//                    email = user?.email ?: "",
+//                    photoUrl = user?.photoUrl ?: "",
+//                    pseudo = user?.pseudo ?: "",
+//                )
+//                firebaseUser?.let { uid ->
+//                    // 1) Update FirebaseUser profile (displayName)
+//                    // updateFirebaseUserProfile(newUser, firebaseUser)
+//                    // 2) Add new user to Firestore
+//                    addNewUserToFirestore(newUser, firebaseUser.uid, LoginMethod.GOOGLE)
+//                }
+//            }
+//            user
+//        } else {
+//            Log.e("OM_TAG", "UserFirebaseApi::signInWithGoogle: Credential is not of type Google ID!")
+//            return Result.failure(IllegalStateException("signInWithGoogle: Credential is not of type Google ID!"))
+//        }
+//    }.onFailure { e ->
+//        FirebaseCrashlytics.getInstance().recordException(e)
+//        Log.e("OM_TAG", "UserFirebaseApi::signInWithGoogle: signInWithGoogle:failure", e)
+//    }
 
     //_ #############################################
     //_ # SEND PASSWORD RESET

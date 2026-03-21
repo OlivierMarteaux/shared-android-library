@@ -79,6 +79,9 @@ class UserFirebaseRepository @Inject constructor(private val userApi: UserApi): 
      */
     override suspend fun deleteAccount(): Result<User?> = userApi.deleteAccount()
 
-    override suspend fun signInWithGoogle(@StringRes serverClientIdStringRes: Int): Result<User?> =
-        userApi.signInWithGoogle(serverClientIdStringRes)
+//    override suspend fun signInWithGoogle(@StringRes serverClientIdStringRes: Int): Result<User?> =
+//        userApi.signInWithGoogle(serverClientIdStringRes)
+
+    override suspend fun signInWithGoogle(idToken: String): Result<User?> =
+        userApi.signInWithGoogle(idToken)
 }

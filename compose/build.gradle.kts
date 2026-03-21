@@ -92,6 +92,7 @@ dependencies {
     implementation(libs.play.services.credentials)
     implementation(libs.androidx.credentials)
     implementation(libs.googleid)
+    implementation(libs.play.services.auth)
 
     testImplementation(libs.junit)
 }

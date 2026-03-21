@@ -20,6 +20,7 @@ import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -71,12 +72,14 @@ fun SplashScreen(
                 Box() {
                     Column() {
                         Spacer(Modifier.height(24.dp))
+
+                        val serverClientId = stringResource(serverClientIdStringRes)
                         SharedButton(
                             onClick = {
-                                if (isOnline) signInWithGoogle(
-                                    serverClientIdStringRes,
-                                    navigateToHomeScreen
-                                ) else showNetworkErrorToast()
+                                if (isOnline) {
+                                    setDestination(navigateToHomeScreen)
+                                    resolveGoogleSignInProvider(serverClientId)
+                                } else showNetworkErrorToast()
                             },
                             text = stringResource(R.string.sign_in_with_Google),
                             textColor = Color.Black,
@@ -84,7 +87,8 @@ fun SplashScreen(
                             colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                             shape = MaterialTheme.shapes.extraSmall,
                             contentPadding = PaddingValues(16.dp),
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
                                 .border(width = Dp.Hairline, color = Color.Black),
                             tint = Color.Unspecified
                         )
