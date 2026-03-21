@@ -81,7 +81,8 @@ class SplashViewModel @Inject constructor(
                 val e = result.exception
                 FirebaseCrashlytics.getInstance().recordException(e)
                 log.e("splashViewModel::signInWithGoogle: failed to log",e)
-//                handleError(result.exception)
+                authErrorMessage = (e.message ?: "Google authentication error")+", try with email"
+                showAuthErrorToast()
             }
         }
     }
