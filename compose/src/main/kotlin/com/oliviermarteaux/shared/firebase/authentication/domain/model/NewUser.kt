@@ -21,7 +21,7 @@ data class NewUser (
     val timestamp: Long = System.currentTimeMillis(),
     val creationDate: Date = Date(),
     val lastModifiedDate: Date = Date(),
-    val loginMethod: LoginMethod = LoginMethod.UNKNOWN
+    val loginMethod: LoginMethod = LoginMethod.UNKNOWN,
 ){
     fun getComputedFullName() = fullname.ifEmpty {
         listOf(firstname, lastname)

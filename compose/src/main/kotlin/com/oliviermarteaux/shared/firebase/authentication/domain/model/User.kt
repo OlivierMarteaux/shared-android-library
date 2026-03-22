@@ -38,6 +38,10 @@ data class User(
         email = "",
         photoUrl = "",
         pseudo = "",
+        timestamp = 0,
+        creationDate = Date(),
+        lastModifiedDate = Date(),
+        loginMethod = LoginMethod.UNKNOWN,
         gameStat = emptyList()
     )
 

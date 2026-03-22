@@ -2,6 +2,7 @@ package com.oliviermarteaux.shared.firebase.authentication.ui.screen.login
 
 import android.R.attr.label
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -43,6 +44,7 @@ import com.oliviermarteaux.shared.firebase.authentication.domain.model.NewUser
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import com.oliviermarteaux.shared.composables.SharedAlertDialog
 
 /**
  * A screen for logging in or creating an account.
@@ -115,6 +117,31 @@ fun LoginScreen(
                         text = stringResource(R.string.email_account_registration_unsuccessful),
                         bottomPadding = 160
                     )
+                    if (emailNotVerifiedError) SharedToast(
+                        text = """
+                            Your email has not been verified yet.
+                            If you don't receive the email, try another email provider or login with Google.
+                            """.trimIndent(),
+                        bottomPadding = 160
+                    )
+                    AnimatedVisibility(emailVerification) {
+                        SharedAlertDialog(
+                            title = "Please verify your email",
+                            text = "A verification email has been sent. Please check your mailbox.",
+                            onConfirm = {
+                                verifyEmail {
+                                    hideEmailVerificationAlertDialog()
+                                    navigateToHomeScreen()
+                                }
+                                        },
+                            confirmText = stringResource(R.string.ok),
+                            onDismiss = {
+                                hideEmailVerificationAlertDialog()
+                                onBackClick()
+                            },
+                            dismissText = "Cancel"
+                        )
+                    }
                 }
             }
         }
@@ -149,7 +176,7 @@ private fun LoginBody(
     onFirstNameChange: (String) -> Unit,
     onLastNameChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
-    createAccount: (NewUser, () -> Unit) -> Unit,
+    createAccount: (NewUser/*, () -> Unit*/) -> Unit,
     checkEmail: (String) -> Unit,
     navigateToHomeScreen: () -> Unit,
     navigateToPasswordScreen: (String) -> Unit,
@@ -179,10 +206,11 @@ private fun LoginBody(
             imeAction = ImeAction.Done,
             textFieldModifier = Modifier.fillMaxWidth(),
             bottomPadding = SharedPadding.xl,
-            isError = newUser.email.isEmpty() || !newUser.email.isValidEmail(),
+            isError = newUser.email.isEmpty() || !newUser.email.isValidEmail() || newUser.email.endsWith("gmail.com", ignoreCase = true),
             errorText = when {
                 newUser.email.isEmpty() -> stringResource(R.string.enter_your_email_address_to_continue)
                 !newUser.email.isValidEmail() -> stringResource(R.string.incorrect_email_address)
+                newUser.email.endsWith("gmail.com", ignoreCase = true) -> "Please use \"Sign in with Google\" with your gmail address"
                 else -> null
             },
             modifier = Modifier.fillMaxWidth()
@@ -194,7 +222,7 @@ private fun LoginBody(
                     onClick = { if (isOnline) checkEmail(newUser.email) else showNetworkErrorToast() },
                     text = stringResource(R.string.next),
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = newUser.email.run { isValidEmail() && isNotEmpty() }
+                    enabled = newUser.email.run { isValidEmail() && isNotEmpty() && !endsWith("gmail.com", ignoreCase = true)}
                 )
             }
 
@@ -243,7 +271,8 @@ private fun LoginBody(
                     imeAction = ImeAction.Done,
                 )
                 SharedButton(
-                    onClick = { createAccount(newUser) { navigateToHomeScreen() } },
+//                    onClick = { createAccount(newUser) { navigateToHomeScreen() } },
+                    onClick = { createAccount(newUser) /*{ navigateToPasswordScreen(newUser.email) }*/ },
                     text = stringResource(R.string.save),
                     modifier = Modifier
                         .padding(vertical = SharedPadding.xl)

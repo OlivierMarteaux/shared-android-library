@@ -22,6 +22,6 @@ fun NewUser.toUser(id: String, loginMethod: LoginMethod): User {
         timestamp = timestamp,
         creationDate = creationDate,
         lastModifiedDate = lastModifiedDate,
-        loginMethod = loginMethod
+        loginMethod = loginMethod,
     )
 }

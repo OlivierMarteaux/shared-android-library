@@ -2,6 +2,7 @@ package com.oliviermarteaux.shared.firebase.authentication.data.service
 
 import android.content.Context
 import android.util.Log
+import android.webkit.ConsoleMessage
 import androidx.annotation.StringRes
 import androidx.compose.ui.text.toLowerCase
 import androidx.core.content.ContextCompat.getString
@@ -13,6 +14,7 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -21,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.messaging.FirebaseMessaging
 import com.oliviermarteaux.shared.firebase.authentication.domain.mapper.toUser
+import com.oliviermarteaux.shared.firebase.authentication.domain.model.GameLevelStat
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.LoginMethod
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.NewUser
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.User
@@ -68,6 +71,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
     override suspend fun checkEmail(email: String) = runCatching {
 //        throw IllegalStateException("Forced exception for testing")
         val normalizedEmail: String = email.lowercase()
+//        if (normalizedEmail.endsWith("gmail.com", ignoreCase = true)) return@runCatching false
         var emailExist: Boolean
         val snapshot = firestore.collection("users")
             .whereEqualTo("email", normalizedEmail)
@@ -123,16 +127,54 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
             // Do follow-up work AFTER user is created :
             val firebaseUser = authResult.user
             firebaseUser?.let { uid ->
-                // 1) Update FirebaseUser profile (displayName)
+                // 1) Send verification email
+                firebaseUser.sendEmailVerification().await()
+                Log.d("OM_TAG", "UserFirebaseApi: CreateAccount: email verification sent")
+                // 2) Update FirebaseUser profile (displayName)
                 updateFirebaseUserProfile(newUser, firebaseUser)
-                // 2) Add new user to Firestore
+                // 3) Add new user to Firestore
                 addNewUserToFirestore(newUser, firebaseUser.uid, LoginMethod.EMAIL)
             }
-            firebaseUser?.toUser()
+            firebaseUser?.toUser(LoginMethod.EMAIL)
     }.onFailure{ e->
         FirebaseCrashlytics.getInstance().recordException(e)
-        Log.e("OM_TAG", "UserFirebaseApi: CreateAccount: exception: ${e.message}")
+        Log.e("OM_TAG", "UserFirebaseApi: CreateAccount: exception: ${e.message}",e)
     }
+
+    override suspend fun sendEmailVerificationLink(){
+        val firebaseUser = firebaseAuth.currentUser
+        firebaseUser?.reload()?.await()
+        firebaseUser?.sendEmailVerification()?.await()
+        Log.d("OM_TAG", "UserFirebaseApi: sendEmailVerificationLink: email verification sent")
+    }
+
+    override suspend fun verifyEmail(): Result<User?> = runCatching {
+        val firebaseUser = firebaseAuth.currentUser
+        firebaseUser?.reload()?.await()
+        if (firebaseUser?.isEmailVerified != true) {
+            throw IllegalStateException("Email not verified")
+        }
+        Log.d("OM_TAG", "UserFirebaseApi: verifyEmail: firebaseUser.isEmailVerified = ${firebaseUser.isEmailVerified}")
+        val user = firebaseUser.toUser(LoginMethod.EMAIL)
+        updateUser(user)
+        Log.d("OM_TAG", "UserFirebaseApi: verifyEmail: updated user = $user")
+        user
+    }.onFailure{ e->
+        FirebaseCrashlytics.getInstance().recordException(e)
+        Log.e("OM_TAG", "UserFirebaseApi: finalizeAccount: exception: ${e.message}",e)
+    }
+
+//    override suspend fun checkEmailVerification() = runCatching {
+//        val firebaseUser = firebaseAuth.currentUser
+//        firebaseUser?.reload()?.await()
+//        if (firebaseUser?.isEmailVerified?:false) {} else {
+//            firebaseUser?.sendEmailVerification()?.await()
+//            throw IllegalStateException("Email not verified")
+//        }
+//    }.onFailure{ e->
+//        FirebaseCrashlytics.getInstance().recordException(e)
+//        Log.e("OM_TAG", "UserFirebaseApi: checkEmailVerification: exception: ${e.message}",e)
+//    }
 
     //_ #############################################
     //_ # GET ALL USERS
@@ -215,6 +257,30 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         )
     }
 
+//    override suspend fun updatePseudo(id: String, pseudo: String): Result<Unit> = runCatching {
+//        usersCollection
+//            .document(id)
+//            .update(
+//                mapOf(
+//                    "pseudo" to pseudo,
+//                    "lastModifiedDate" to Date()
+//                )
+//            )
+//            .await()
+//    }
+//
+//    override suspend fun updateGameStat(id: String, gameStat: List<GameLevelStat>): Result<Unit> = runCatching {
+//        usersCollection
+//            .document(id)
+//            .update(
+//                mapOf(
+//                    "gameStat" to gameStat,
+//                    "lastModifiedDate" to Date()
+//                )
+//            )
+//            .await()
+//    }
+
     //_ #############################################
     //_ # PRIVATE: ADD NEW USER
     //_ #############################################
@@ -239,6 +305,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
 //                "accountType" to newUser.accountType.name
 //            )
             val user: User = newUser.toUser(id = uid, loginMethod = loginMethod)
+            Log.d("OM_TAG", "UserFirebaseApi: CreateAccount: addNewUserToFirestore: user = $user")
             firestore.collection("users").document(uid)
                 .set(user, SetOptions.merge())
                 .await()
@@ -281,12 +348,29 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
 //        throw IllegalStateException("Forced exception for testing")
         val authResult = firebaseAuth.signInWithEmailAndPassword(email, password).await()
         val firebaseUser = authResult.user
+        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser uid: ${firebaseUser?.uid}")
+        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser email: ${firebaseUser?.email}")
+        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser providerData: ${firebaseUser?.providerData}")
+        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser isAnonymous: ${firebaseUser?.isAnonymous}")
+        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser metadata: ${firebaseUser?.metadata}")
+        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser multiFactor: ${firebaseUser?.multiFactor}")
+        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser tenantId: ${firebaseUser?.tenantId}")
+        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser isEmailVerified: ${firebaseUser?.isEmailVerified}")
+        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser phoneNumber: ${firebaseUser?.phoneNumber}")
+        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser providerId: ${firebaseUser?.providerId}")
+
+        if (firebaseUser?.isEmailVerified != true) {
+            firebaseUser?.sendEmailVerification()
+            Log.d("OM_TAG", "UserFirebaseApi:signIn: email verification link sent")
+            throw IllegalStateException("Email not verified")
+        }
+
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             val token = task.result
             firestore.collection("users").document(firebaseUser?.uid ?:"").update("fcmToken", token)
         }
         Log.d("OM_TAG", "UserFirebaseApi:signIn: success")
-        firebaseUser?.toUser()
+        firebaseUser?.toUser(LoginMethod.EMAIL)
     }.onFailure { e ->
         FirebaseCrashlytics.getInstance().recordException(e)
         Log.e("OM_TAG", "UserFirebaseApi:signIn: exception: ${e.message}")
@@ -306,7 +390,18 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         firebaseAuth.signInWithCredential(credential).await()
 
         val firebaseUser = firebaseAuth.currentUser
-        val user = firebaseUser?.toUser()
+        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser uid: ${firebaseUser?.uid}")
+        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser email: ${firebaseUser?.email}")
+        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser providerData: ${firebaseUser?.providerData}")
+        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser isAnonymous: ${firebaseUser?.isAnonymous}")
+        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser metadata: ${firebaseUser?.metadata}")
+        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser multiFactor: ${firebaseUser?.multiFactor}")
+        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser tenantId: ${firebaseUser?.tenantId}")
+        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser isEmailVerified: ${firebaseUser?.isEmailVerified}")
+        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser phoneNumber: ${firebaseUser?.phoneNumber}")
+        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser providerId: ${firebaseUser?.providerId}")
+
+        val user = firebaseUser?.toUser(LoginMethod.GOOGLE)
 
         val snapshot = firestore.collection("users")
             .whereEqualTo("id", user?.id)
@@ -428,7 +523,7 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
         Unit
     }.onFailure { e ->
         FirebaseCrashlytics.getInstance().recordException(e)
-        Log.e("OM_TAG", "ResetViewModel: sendPasswordResetEmail($email): Password reset failed: ${e.message}")
+        Log.e("OM_TAG", "ResetViewModel: sendPasswordResetEmail($email): Password reset failed: ${e.message}", e)
     }
 
     //_ #############################################

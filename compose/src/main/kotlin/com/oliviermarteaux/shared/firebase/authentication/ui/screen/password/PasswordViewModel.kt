@@ -10,10 +10,12 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
 import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.ui.showToastFlag
+import com.oliviermarteaux.shared.utils.CoroutineDispatcherProvider
 import com.oliviermarteaux.shared.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -29,7 +31,8 @@ class PasswordViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val userRepository: UserRepository,
     private val log: Logger,
-    private val isOnlineFlow: Flow<Boolean>
+    private val isOnlineFlow: Flow<Boolean>,
+    private val dispatchers: CoroutineDispatcherProvider,
 ) : AuthUserViewModel(
     userRepository = userRepository,
     isOnlineFlow = isOnlineFlow,
@@ -49,6 +52,11 @@ class PasswordViewModel @Inject constructor(
      */
     var password: String by mutableStateOf("")
         private set
+
+    var emailVerification: Boolean by mutableStateOf(false)
+        private set
+    var emailNotVerifiedError: Boolean by mutableStateOf(false)
+        private set
     /**
      * Updates the password.
      *
@@ -67,9 +75,13 @@ class PasswordViewModel @Inject constructor(
      */
     fun signIn(password: String, onSignIn: () -> Unit) = viewModelScope.launch {
         userRepository.signIn(email, password).fold(
-            onSuccess = { onSignIn() },
+            onSuccess = {  onSignIn() },
             onFailure = { error ->
                 when (error) {
+                    is IllegalStateException -> {
+                        log.e("PasswordViewModel: signIn: ${error.message ?: ""}")
+                        showEmailVerificationAlertDialog()
+                    }
                     is FirebaseAuthInvalidCredentialsException,
                     is IllegalArgumentException -> {
                         log.e("PasswordViewModel: signIn: Invalid credentials: ${ error.message ?: "" }")
@@ -83,5 +95,23 @@ class PasswordViewModel @Inject constructor(
                 }
             }
         )
+    }
+
+    fun showEmailVerificationAlertDialog()= viewModelScope.launch {
+        emailVerification = true
+    }
+    fun hideEmailVerificationAlertDialog()= viewModelScope.launch {
+        emailVerification = false
+    }
+    fun showEmailNotVerifiedErrorToast()= viewModelScope.launch {
+        showToastFlag { emailNotVerifiedError = it }
+    }
+    fun verifyEmail(onEmailVerified: () -> Unit = {}) {
+        viewModelScope.launch(dispatchers.io) {
+            userRepository.verifyEmail().fold(
+                onSuccess = { withContext(dispatchers.main) { onEmailVerified()  }},
+                onFailure = { withContext(dispatchers.main) { showEmailNotVerifiedErrorToast() }}
+            )
+        }
     }
 }

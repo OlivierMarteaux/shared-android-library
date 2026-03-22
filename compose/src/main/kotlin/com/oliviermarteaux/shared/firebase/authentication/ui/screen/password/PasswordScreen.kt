@@ -1,6 +1,7 @@
 package com.oliviermarteaux.shared.firebase.authentication.ui.screen.password
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.oliviermarteaux.shared.composables.ImageScaffold
+import com.oliviermarteaux.shared.composables.SharedAlertDialog
 import com.oliviermarteaux.shared.composables.SharedButton
 import com.oliviermarteaux.shared.composables.SharedOutlinedPassword
 import com.oliviermarteaux.shared.composables.SharedScaffold
@@ -97,6 +99,31 @@ fun PasswordScreen(
                     text = stringResource(R.string.incorrect_password),
                     bottomPadding = 160
                 )
+                if (emailNotVerifiedError) SharedToast(
+                    text = """
+                            Your email has not been verified yet.
+                            If you don't receive the email, try another email provider or login with Google.
+                            """.trimIndent(),
+                    bottomPadding = 160
+                )
+                AnimatedVisibility(emailVerification) {
+                    SharedAlertDialog(
+                        title = "Please verify your email",
+                        text = "A verification email has been sent. Please check your mailbox.",
+                        onConfirm = {
+                            verifyEmail {
+                                hideEmailVerificationAlertDialog()
+                                navigateToHomeScreen()
+                            }
+                        },
+                        confirmText = stringResource(R.string.ok),
+                        onDismiss = {
+                            hideEmailVerificationAlertDialog()
+                            onBackClick()
+                        },
+                        dismissText = "Cancel"
+                    )
+                }
             }
         }
     }
@@ -190,7 +217,9 @@ private fun PasswordBody(
                 modifier = Modifier
                     .fillMaxWidth()
                     .cdButtonSemantics(cdSignIn)
-            ) { signIn(password) { navigateToHomeScreen() } }
+            ) {
+                signIn(password) { navigateToHomeScreen()
+                } }
             SpacerLarge()
         }
     }
