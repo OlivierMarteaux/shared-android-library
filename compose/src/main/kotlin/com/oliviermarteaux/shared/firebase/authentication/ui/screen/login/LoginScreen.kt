@@ -118,16 +118,14 @@ fun LoginScreen(
                         bottomPadding = 160
                     )
                     if (emailNotVerifiedError) SharedToast(
-                        text = """
-                            Your email has not been verified yet.
-                            If you don't receive the email, try another email provider or login with Google.
-                            """.trimIndent(),
+                        text = stringResource(R.string.your_email_has_not_been_verified_yet) +"\n"+
+                                stringResource(R.string.if_you_don_t_receive_the_email_try_another_email_provider_or_login_with_google),
                         bottomPadding = 160
                     )
                     AnimatedVisibility(emailVerification) {
                         SharedAlertDialog(
-                            title = "Please verify your email",
-                            text = "A verification email has been sent. Please check your mailbox.",
+                            title = stringResource(R.string.please_verify_your_email),
+                            text = stringResource(R.string.a_verification_email_has_been_sent_please_check_your_mailbox),
                             onConfirm = {
                                 verifyEmail {
                                     hideEmailVerificationAlertDialog()
@@ -139,7 +137,7 @@ fun LoginScreen(
                                 hideEmailVerificationAlertDialog()
                                 onBackClick()
                             },
-                            dismissText = "Cancel"
+                            dismissText = stringResource(R.string.cancel)
                         )
                     }
                 }
@@ -192,7 +190,7 @@ private fun LoginBody(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .windowInsetsPadding(WindowInsets(0,0,0,0))
+            .windowInsetsPadding(WindowInsets(0, 0, 0, 0))
             .then(
                 if (isPortrait) Modifier.verticalScroll(scrollState)
                 else Modifier // do nothing in landscape
@@ -210,7 +208,7 @@ private fun LoginBody(
             errorText = when {
                 newUser.email.isEmpty() -> stringResource(R.string.enter_your_email_address_to_continue)
                 !newUser.email.isValidEmail() -> stringResource(R.string.incorrect_email_address)
-                newUser.email.endsWith("gmail.com", ignoreCase = true) -> "Please use \"Sign in with Google\" with your gmail address"
+                newUser.email.endsWith("gmail.com", ignoreCase = true) -> stringResource(R.string.please_use_sign_in_with_google_with_your_gmail_address)
                 else -> null
             },
             modifier = Modifier.fillMaxWidth()
