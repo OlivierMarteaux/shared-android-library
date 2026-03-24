@@ -157,4 +157,10 @@
     <string name="level_8">स्तर 8</string>
     <string name="level_9">स्तर 9</string>
     <string name="level_10">स्तर 10</string>
+    <string name="your_email_has_not_been_verified_yet">आपका ईमेल अभी तक सत्यापित नहीं हुआ है।</string>
+    <string name="if_you_don_t_receive_the_email_try_another_email_provider_or_login_with_google">यदि आपको ईमेल प्राप्त नहीं होता है, तो किसी अन्य ईमेल प्रदाता को आज़माएं या Google से लॉगिन करें।</string>
+    <string name="please_verify_your_email">कृपया अपना ईमेल सत्यापित करें</string>
+    <string name="a_verification_email_has_been_sent_please_check_your_mailbox">सत्यापन ईमेल भेजा गया है। कृपया अपना इनबॉक्स जांचें।</string>
+    <string name="cancel">रद्द करें</string>
+    <string name="please_use_sign_in_with_google_with_your_gmail_address">कृपया अपने Gmail पते के साथ "Google के साथ साइन इन करें" का उपयोग करें</string>
 </resources>

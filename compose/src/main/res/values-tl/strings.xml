@@ -157,4 +157,10 @@
     <string name="level_8">Level 8</string>
     <string name="level_9">Level 9</string>
     <string name="level_10">Level 10</string>
+    <string name="your_email_has_not_been_verified_yet">Ang iyong email ay hindi pa nabe-verify.</string>
+    <string name="if_you_don_t_receive_the_email_try_another_email_provider_or_login_with_google">Kung hindi mo matanggap ang email, subukan ang ibang email provider o mag-login gamit ang Google.</string>
+    <string name="please_verify_your_email">Mangyaring i-verify ang iyong email</string>
+    <string name="a_verification_email_has_been_sent_please_check_your_mailbox">Naipadala na ang verification email. Mangyaring suriin ang iyong inbox.</string>
+    <string name="cancel">Kanselahin</string>
+    <string name="please_use_sign_in_with_google_with_your_gmail_address">Mangyaring gamitin ang "Mag-sign in gamit ang Google" kasama ang iyong Gmail address</string>
 </resources>

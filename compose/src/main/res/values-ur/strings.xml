@@ -157,4 +157,10 @@
     <string name="level_8">درجہ 8</string>
     <string name="level_9">درجہ 9</string>
     <string name="level_10">درجہ 10</string>
+    <string name="your_email_has_not_been_verified_yet">آپ کا ای میل ابھی تک تصدیق شدہ نہیں ہے۔</string>
+    <string name="if_you_don_t_receive_the_email_try_another_email_provider_or_login_with_google">اگر آپ کو ای میل موصول نہیں ہوتی ہے، تو کوئی اور ای میل فراہم کنندہ آزمائیں یا گوگل کے ساتھ لاگ ان کریں۔</string>
+    <string name="please_verify_your_email">براہ کرم اپنے ای میل کی تصدیق کریں</string>
+    <string name="a_verification_email_has_been_sent_please_check_your_mailbox">تصدیقی ای میل بھیج دیا گیا ہے۔ براہ کرم اپنا ان باکس چیک کریں۔</string>
+    <string name="cancel">منسوخ کریں</string>
+    <string name="please_use_sign_in_with_google_with_your_gmail_address">براہ کرم اپنے جی میل ایڈریس کے ساتھ "Google کے ساتھ سائن ان کریں" استعمال کریں</string>
 </resources>

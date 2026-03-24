@@ -157,4 +157,10 @@
     <string name="level_8">Seviye 8</string>
     <string name="level_9">Seviye 9</string>
     <string name="level_10">Seviye 10</string>
+    <string name="your_email_has_not_been_verified_yet">E-postanız henüz doğrulanmadı.</string>
+    <string name="if_you_don_t_receive_the_email_try_another_email_provider_or_login_with_google">E-postayı almazsanız, başka bir e-posta sağlayıcısı deneyin veya Google ile giriş yapın.</string>
+    <string name="please_verify_your_email">Lütfen e-postanızı doğrulayın</string>
+    <string name="a_verification_email_has_been_sent_please_check_your_mailbox">Bir doğrulama e-postası gönderildi. Lütfen gelen kutunuzu kontrol edin.</string>
+    <string name="cancel">İptal</string>
+    <string name="please_use_sign_in_with_google_with_your_gmail_address">Lütfen Gmail adresinizle "Google ile Oturum Aç"ı kullanın</string>
 </resources>
