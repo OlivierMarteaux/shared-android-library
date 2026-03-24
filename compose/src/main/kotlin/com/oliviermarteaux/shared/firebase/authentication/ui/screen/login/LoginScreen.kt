@@ -115,12 +115,12 @@ fun LoginScreen(
                     )
                     if (accountCreationError) SharedToast(
                         text = stringResource(R.string.email_account_registration_unsuccessful),
-                        bottomPadding = 160
+                        bottomPadding = 80
                     )
                     if (emailNotVerifiedError) SharedToast(
                         text = stringResource(R.string.your_email_has_not_been_verified_yet) +"\n"+
                                 stringResource(R.string.if_you_don_t_receive_the_email_try_another_email_provider_or_login_with_google),
-                        bottomPadding = 160
+                        bottomPadding = 80
                     )
                     AnimatedVisibility(emailVerification) {
                         SharedAlertDialog(

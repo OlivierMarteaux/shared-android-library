@@ -97,19 +97,17 @@ fun PasswordScreen(
                 )
                 if(incorrectPassword)SharedToast(
                     text = stringResource(R.string.incorrect_password),
-                    bottomPadding = 160
+                    bottomPadding = 80
                 )
                 if (emailNotVerifiedError) SharedToast(
-                    text = """
-                            Your email has not been verified yet.
-                            If you don't receive the email, try another email provider or login with Google.
-                            """.trimIndent(),
-                    bottomPadding = 160
+                    text = stringResource(R.string.your_email_has_not_been_verified_yet) +"\n"+
+                            stringResource(R.string.if_you_don_t_receive_the_email_try_another_email_provider_or_login_with_google),
+                    bottomPadding = 80
                 )
                 AnimatedVisibility(emailVerification) {
                     SharedAlertDialog(
-                        title = "Please verify your email",
-                        text = "A verification email has been sent. Please check your mailbox.",
+                        title = stringResource(R.string.please_verify_your_email),
+                        text = stringResource(R.string.a_verification_email_has_been_sent_please_check_your_mailbox),
                         onConfirm = {
                             verifyEmail {
                                 hideEmailVerificationAlertDialog()
@@ -121,7 +119,7 @@ fun PasswordScreen(
                             hideEmailVerificationAlertDialog()
                             onBackClick()
                         },
-                        dismissText = "Cancel"
+                        dismissText = stringResource(R.string.cancel)
                     )
                 }
             }
