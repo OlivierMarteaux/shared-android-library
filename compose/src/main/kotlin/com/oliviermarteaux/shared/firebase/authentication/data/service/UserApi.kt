@@ -3,7 +3,7 @@ package com.oliviermarteaux.shared.firebase.authentication.data.service
 import androidx.annotation.StringRes
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
-import com.oliviermarteaux.shared.firebase.authentication.domain.model.GameLevelStat
+import com.oliviermarteaux.shared.firebase.firestore.domain.model.GameLevelStat
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.NewUser
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.User
 import kotlinx.coroutines.flow.Flow

@@ -1,4 +1,4 @@
-package com.oliviermarteaux.shared.firebase.authentication.domain.model
+package com.oliviermarteaux.shared.firebase.firestore.domain.model
 
 import java.io.Serializable
 

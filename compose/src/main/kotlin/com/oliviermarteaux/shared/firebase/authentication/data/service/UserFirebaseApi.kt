@@ -23,7 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.messaging.FirebaseMessaging
 import com.oliviermarteaux.shared.firebase.authentication.domain.mapper.toUser
-import com.oliviermarteaux.shared.firebase.authentication.domain.model.GameLevelStat
+import com.oliviermarteaux.shared.firebase.firestore.domain.model.GameLevelStat
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.LoginMethod
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.NewUser
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.User
