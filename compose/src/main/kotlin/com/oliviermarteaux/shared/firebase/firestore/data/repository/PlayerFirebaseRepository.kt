@@ -11,4 +11,8 @@ class PlayerFirebaseRepository @Inject constructor(
 
     override suspend fun checkPseudo(pseudo: String): Result<Boolean> =
         playerApi.checkPseudo(pseudo)
+
+    override suspend fun createNewPlayer(currentUserUid: String, pseudo: String) : Result<Unit> =
+        playerApi.createNewPlayer(currentUserUid, pseudo)
+
 }
