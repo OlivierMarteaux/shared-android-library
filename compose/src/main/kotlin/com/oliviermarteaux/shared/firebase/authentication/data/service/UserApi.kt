@@ -36,7 +36,7 @@ interface UserApi {
      */
     suspend fun checkEmail(email: String): Result<Boolean>
 
-    suspend fun checkPseudo(pseudo: String): Result<Boolean>
+//    suspend fun checkPseudo(pseudo: String): Result<Boolean>
 
 
     /**

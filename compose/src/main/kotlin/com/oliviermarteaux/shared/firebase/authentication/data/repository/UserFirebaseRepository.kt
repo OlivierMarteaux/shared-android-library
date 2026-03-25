@@ -42,7 +42,7 @@ class UserFirebaseRepository @Inject constructor(private val userApi: UserApi): 
      */
     override suspend fun checkEmail(email: String): Result<Boolean> = userApi.checkEmail(email)
 
-    override suspend fun checkPseudo(pseudo: String): Result<Boolean> = userApi.checkPseudo(pseudo)
+//    override suspend fun checkPseudo(pseudo: String): Result<Boolean> = userApi.checkPseudo(pseudo)
 
     /**
      * Creates a new user account.

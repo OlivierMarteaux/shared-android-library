@@ -20,7 +20,7 @@ interface UserRepository {
 
     suspend fun checkEmail(email: String): Result<Boolean>
 
-    suspend fun checkPseudo(pseudo: String): Result<Boolean>
+//    suspend fun checkPseudo(pseudo: String): Result<Boolean>
 
     suspend fun createAccount(newUser: NewUser): Result<User?>
 
