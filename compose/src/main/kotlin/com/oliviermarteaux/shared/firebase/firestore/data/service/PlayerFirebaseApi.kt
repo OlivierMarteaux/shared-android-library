@@ -2,6 +2,7 @@ package com.oliviermarteaux.shared.firebase.firestore.data.service
 
 import android.util.Log
 import androidx.core.net.toUri
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -13,6 +14,7 @@ import com.oliviermarteaux.shared.firebase.firestore.domain.model.Post
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.Date
 
@@ -50,6 +52,26 @@ class PlayerFirebaseApi : PlayerApi {
         newPlayer
     }.onFailure { e ->
         Log.e("OM_TAG", "PlayerFirebaseApi: createNewPlayer: failed due to Exception: ${e.message}")
+    }
+
+    override fun getAllPlayers(): Flow<Result<List<Player>>> = flow {
+
+        val snapshot = playersCollection.get().await()
+
+        val playerList = snapshot.documents.mapNotNull {
+            it.toObject(Player::class.java)?.copy(id = it.id)
+        }
+
+        Log.d("OM_TAG", "PlayerFirebaseApi::getAllPlayers: PlayerList.size = ${playerList.size}")
+        emit(
+            Result.success(
+                playerList
+            )
+        )
+    }.catch { e ->
+        FirebaseCrashlytics.getInstance().recordException(e)
+        Log.e("OM_TAG", "PlayerFirebaseApi::getAllPlayers: failed", e)
+        emit(Result.failure(e))
     }
 
     override suspend fun getCurrentPlayer() : Flow<Result<Player?>> = flow {
