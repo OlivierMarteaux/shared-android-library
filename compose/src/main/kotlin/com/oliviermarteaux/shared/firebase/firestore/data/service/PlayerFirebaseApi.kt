@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.User
 import com.oliviermarteaux.shared.firebase.firestore.domain.model.Player
 import com.oliviermarteaux.shared.firebase.firestore.domain.model.Post
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
+import java.util.Date
 
 class PlayerFirebaseApi : PlayerApi {
 
@@ -74,5 +76,28 @@ class PlayerFirebaseApi : PlayerApi {
             e
         )
         emit(Result.failure(e))
+    }
+
+    override suspend fun updatePlayer(player: Player): Result<Player> = runCatching {
+
+        require(player.id.isNotBlank()) { "Player ID must not be blank" }
+
+        val updatedPlayer = player.copy(
+            lastModifiedDate = Date()
+        )
+
+        playersCollection
+            .document(player.id)
+            .set(updatedPlayer, SetOptions.merge())
+            .await()
+
+        updatedPlayer
+    }.onFailure { e ->
+        FirebaseCrashlytics.getInstance().recordException(e)
+        Log.e(
+            "OM_TAG",
+            "PlayerFirebaseApi::updatePlayer: failed due to Exception",
+            e
+        )
     }
 }

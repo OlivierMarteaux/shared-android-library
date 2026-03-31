@@ -20,4 +20,7 @@ class PlayerFirebaseRepository @Inject constructor(
     override suspend fun getCurrentPlayer() : Flow<Result<Player?>> =
         playerApi.getCurrentPlayer()
 
+    override suspend fun updatePlayer(player: Player): Result<Player> =
+        playerApi.updatePlayer(player)
+
 }

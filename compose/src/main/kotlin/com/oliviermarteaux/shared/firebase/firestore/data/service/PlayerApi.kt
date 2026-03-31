@@ -9,4 +9,6 @@ interface PlayerApi {
     suspend fun createNewPlayer(pseudo: String) : Result<Player>
     suspend fun getCurrentPlayer() : Flow<Result<Player?>>
 
+    suspend fun updatePlayer(player: Player): Result<Player>
+
 }
