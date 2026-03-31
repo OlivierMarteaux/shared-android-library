@@ -14,8 +14,8 @@ class PlayerFirebaseRepository @Inject constructor(
     override suspend fun checkPseudoAvailability(pseudo: String): Result<Boolean> =
         playerApi.checkPseudoAvailability(pseudo)
 
-    override suspend fun createNewPlayer(pseudo: String) : Result<Player> =
-        playerApi.createNewPlayer(pseudo)
+    override suspend fun createNewPlayer(player: Player) : Result<Player> =
+        playerApi.createNewPlayer(player)
 
     override suspend fun getCurrentPlayer() : Flow<Result<Player?>> =
         playerApi.getCurrentPlayer()

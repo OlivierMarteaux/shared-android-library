@@ -36,12 +36,12 @@ class PlayerFirebaseApi : PlayerApi {
         Log.e("OM_TAG", "PlayerFirebaseApi: checkPseudo: exception: ${e.message}")
     }
 
-    override suspend fun createNewPlayer(pseudo: String) : Result<Player> = runCatching {
+    override suspend fun createNewPlayer(player: Player) : Result<Player> = runCatching {
 
         val uid = requireNotNull(firebaseAuth.uid) {
             "User must be authenticated to create new player"
         }
-        val newPlayer = Player(id = uid, pseudo = pseudo)
+        val newPlayer = Player(id = uid, pseudo = player.pseudo)
         playersCollection
             .document(uid)
             .set(newPlayer)
