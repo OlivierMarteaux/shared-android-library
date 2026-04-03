@@ -27,7 +27,6 @@ data class User(
     val creationDate: Date = Date(),
     val lastModifiedDate: Date = Date(),
     val loginMethod: LoginMethod = LoginMethod.UNKNOWN,
-    val gameStat: List<GameLevelStat> = emptyList()
 
 ) : Serializable {
 
@@ -44,7 +43,6 @@ data class User(
         creationDate = Date(),
         lastModifiedDate = Date(),
         loginMethod = LoginMethod.UNKNOWN,
-        gameStat = emptyList()
     )
 
     fun getComputedFullName() = fullname.ifEmpty {
@@ -52,16 +50,4 @@ data class User(
             .filter { it.isNotBlank() }
             .joinToString(" ")
     }
-
-    val totalScore: Long
-        get() = if(gameStat.isEmpty()) -1 else gameStat.filter{ it.score >=0 }.sumOf{ it.score }
-
-    val totalPlayTime: Long
-        get() = if(gameStat.isEmpty()) -1 else gameStat.sumOf{ it.playTime}
-
-    fun getCompletedGameScore(lastLevel: GameLevel): Long =
-        totalScore.takeIf { (gameStat.find { it.level == lastLevel }?.score ?: -1) >= 0 } ?: -1
-
-    fun scoreForLevel(level: GameLevel): Long =
-        gameStat.find { it.level == level }?.score?.takeIf { it >= 0 }?:-1
 }
