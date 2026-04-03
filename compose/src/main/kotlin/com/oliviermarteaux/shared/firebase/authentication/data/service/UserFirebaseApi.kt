@@ -68,22 +68,22 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
      * @param email The email address to check.
      * @return A [Result] indicating whether the email exists. `Result.success(true)` if it exists, `Result.success(false)` otherwise.
      */
-    override suspend fun checkEmail(email: String) = runCatching {
-//        throw IllegalStateException("Forced exception for testing")
-        val normalizedEmail: String = email.lowercase()
-//        if (normalizedEmail.endsWith("gmail.com", ignoreCase = true)) return@runCatching false
-        var emailExist: Boolean
-        val snapshot = firestore.collection("users")
-            .whereEqualTo("email", normalizedEmail)
-            .get()
-            .await()
-        emailExist = !snapshot.isEmpty
-        Log.d("OM_TAG", "UserFirebaseApi: checkEmail: emailExist =  $emailExist")
-        emailExist
-    }.onFailure { e ->
-        FirebaseCrashlytics.getInstance().recordException(e)
-        Log.e("OM_TAG", "UserFirebaseApi: checkEmail: exception: ${e.message}")
-    }
+//    override suspend fun checkEmail(email: String) = runCatching {
+////        throw IllegalStateException("Forced exception for testing")
+//        val normalizedEmail: String = email.lowercase()
+////        if (normalizedEmail.endsWith("gmail.com", ignoreCase = true)) return@runCatching false
+//        var emailExist: Boolean
+//        val snapshot = firestore.collection("users")
+//            .whereEqualTo("email", normalizedEmail)
+//            .get()
+//            .await()
+//        emailExist = !snapshot.isEmpty
+//        Log.d("OM_TAG", "UserFirebaseApi: checkEmail: emailExist =  $emailExist")
+//        emailExist
+//    }.onFailure { e ->
+//        FirebaseCrashlytics.getInstance().recordException(e)
+//        Log.e("OM_TAG", "UserFirebaseApi: checkEmail: exception: ${e.message}")
+//    }
 
     //_ #############################################
     //_ # CHECK PSEUDO
@@ -111,6 +111,28 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
     //_ #############################################
     //_ # CREATE ACCOUNT
     //_ #############################################
+
+    override suspend fun checkEmail(email: String): Result<Boolean>  {
+        try {
+            Log.d("OM_TAG", "UserFirebaseApi::checkEmail: checking...")
+            Log.d("OM_TAG", "UserFirebaseApi::checkEmail: creating temporary account to check email")
+            val authResult = firebaseAuth
+                .createUserWithEmailAndPassword(email, "fakePassword")
+                .await()
+            Log.d("OM_TAG", "UserFirebaseApi::checkEmail: deleting temporary account")
+            authResult.user?.delete()?.await()
+            Log.d("OM_TAG", "UserFirebaseApi::checkEmail: check result: email is not registered")
+            return Result.success(false)
+        } catch (e: FirebaseAuthUserCollisionException){
+            Log.d("OM_TAG", "UserFirebaseApi::checkEmail: check result: email already registered, collision:${e.message}")
+            return Result.success(true)
+        } catch (e: Exception){
+            FirebaseCrashlytics.getInstance().recordException(e)
+            Log.e("OM_TAG", "UserFirebaseApi::checkEmail: exception: ${e.message}")
+            return Result.failure(e)
+        }
+    }
+
     /**
      * Creates a new user account.
      *
