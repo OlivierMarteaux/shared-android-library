@@ -53,6 +53,8 @@ class UserFirebaseApi @Inject constructor(private val context: Context): UserApi
      */
     override val userAuthState: Flow<FirebaseUser?> = callbackFlow {
         val listener = FirebaseAuth.AuthStateListener { auth ->
+            val idToken = auth.currentUser?.getIdToken(true)
+            Log.d("OM_TAG", "UserFirebaseApi: userAuthState: idToken = $idToken")
             trySend(auth.currentUser)
         }
         firebaseAuth.addAuthStateListener(listener)
