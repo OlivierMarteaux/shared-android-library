@@ -157,4 +157,10 @@
     <string name="level_8">레벨 8</string>
     <string name="level_9">레벨 9</string>
     <string name="level_10">레벨 10</string>
+    <string name="your_email_has_not_been_verified_yet">이메일이 아직 인증되지 않았습니다.</string>
+    <string name="if_you_don_t_receive_the_email_try_another_email_provider_or_login_with_google">이메일을 받지 못했다면 다른 이메일 제공업체를 이용하거나 Google로 로그인해 보세요.</string>
+    <string name="please_verify_your_email">이메일을 인증해 주세요</string>
+    <string name="a_verification_email_has_been_sent_please_check_your_mailbox">인증 이메일이 전송되었습니다. 받은 편지함을 확인해 주세요.</string>
+    <string name="cancel">취소</string>
+    <string name="please_use_sign_in_with_google_with_your_gmail_address">Gmail 주소로 "Google로 로그인"을 사용해 주세요</string>
 </resources>

@@ -157,4 +157,10 @@
     <string name="level_8">Уровень 8</string>
     <string name="level_9">Уровень 9</string>
     <string name="level_10">Уровень 10</string>
+    <string name="your_email_has_not_been_verified_yet">Ваш адрес электронной почты еще не подтвержден.</string>
+    <string name="if_you_don_t_receive_the_email_try_another_email_provider_or_login_with_google">Если вы не получили письмо, попробуйте другого поставщика электронной почты или войдите с помощью Google.</string>
+    <string name="please_verify_your_email">Пожалуйста, подтвердите свою электронную почту</string>
+    <string name="a_verification_email_has_been_sent_please_check_your_mailbox">Письмо с подтверждением было отправлено. Пожалуйста, проверьте свой почтовый ящик.</string>
+    <string name="cancel">Отмена</string>
+    <string name="please_use_sign_in_with_google_with_your_gmail_address">Пожалуйста, используйте "Войти с помощью Google" с вашим адресом Gmail</string>
 </resources>

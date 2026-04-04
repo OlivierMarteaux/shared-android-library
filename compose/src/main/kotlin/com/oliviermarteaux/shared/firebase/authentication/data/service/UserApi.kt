@@ -3,6 +3,7 @@ package com.oliviermarteaux.shared.firebase.authentication.data.service
 import androidx.annotation.StringRes
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
+import com.oliviermarteaux.shared.firebase.firestore.domain.model.GameLevelStat
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.NewUser
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.User
 import kotlinx.coroutines.flow.Flow
@@ -23,6 +24,10 @@ interface UserApi {
 
     suspend fun updateUser(user: User): Result<Unit>
 
+//    suspend fun updatePseudo(id: String, pseudo: String): Result<Unit>
+//
+//    suspend fun updateGameStat(id: String, gameStat: List<GameLevelStat>): Result<Unit>
+
     /**
      * Checks if an email address is already registered.
      *
@@ -31,6 +36,9 @@ interface UserApi {
      */
     suspend fun checkEmail(email: String): Result<Boolean>
 
+//    suspend fun checkPseudo(pseudo: String): Result<Boolean>
+
+
     /**
      * Creates a new user account.
      *
@@ -38,6 +46,12 @@ interface UserApi {
      * @return A [Result] containing the created [User] on success, or an error.
      */
     suspend fun createAccount(newUser: NewUser): Result<User?>
+
+    suspend fun verifyEmail(): Result<User?>
+
+    suspend fun sendEmailVerificationLink()
+
+//    suspend fun checkEmailVerification(): Result<Unit>
 
     /**
      * Signs in a user with their email and password.
@@ -70,5 +84,6 @@ interface UserApi {
      */
     suspend fun deleteAccount(): Result<User?>
 
-    suspend fun signInWithGoogle(@StringRes serverClientIdStringRes: Int): Result<User?>
+//    suspend fun signInWithGoogle(@StringRes serverClientIdStringRes: Int): Result<User?>
+    suspend fun signInWithGoogle(idToken: String): Result<User?>
 }

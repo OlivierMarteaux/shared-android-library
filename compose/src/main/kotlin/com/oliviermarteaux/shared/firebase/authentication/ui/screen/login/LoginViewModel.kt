@@ -40,6 +40,10 @@ class LoginViewModel @Inject constructor(
      */
     var accountCreationError: Boolean by mutableStateOf(false)
         private set
+
+    var emailNotVerifiedError: Boolean by mutableStateOf(false)
+        private set
+
     /**
      * The new user object.
      */
@@ -50,6 +54,10 @@ class LoginViewModel @Inject constructor(
      */
     var emailExist: Boolean? by mutableStateOf(null)
         private set
+
+    var emailVerification: Boolean by mutableStateOf(false)
+        private set
+
     /**
      * Updates the email of the new user.
      *
@@ -93,8 +101,7 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch(dispatchers.io) {
             emailExist = userRepository.checkEmail(email).fold(
                 onSuccess = { withContext(dispatchers.main) { it }},
-                onFailure = {
-                    withContext(dispatchers.main){
+                onFailure = { withContext(dispatchers.main){
                         showUnknownErrorToast()
                         null
                     }
@@ -108,11 +115,21 @@ class LoginViewModel @Inject constructor(
      * @param newUser The new user to create.
      * @param onAccountCreated A callback to invoke when the account is created successfully.
      */
-    fun createAccount(newUser: NewUser, onAccountCreated: () -> Unit) {
+    fun createAccount(newUser: NewUser/*, onAccountCreated: () -> Unit = {}*/ ) {
         viewModelScope.launch(dispatchers.io) {
             userRepository.createAccount(newUser).fold(
-                onSuccess = { withContext(dispatchers.main) { onAccountCreated() } },
+//                onSuccess = { withContext(dispatchers.main) { onAccountCreated() } },
+                onSuccess = { withContext(dispatchers.main) { showEmailVerificationAlertDialog() } },
                 onFailure = { withContext(dispatchers.main) { showAccountCreationErrorToast() } }
+            )
+        }
+    }
+
+    fun verifyEmail(onEmailVerified: () -> Unit = {}) {
+        viewModelScope.launch(dispatchers.io) {
+            userRepository.verifyEmail().fold(
+                onSuccess = { withContext(dispatchers.main) { onEmailVerified()  }},
+                onFailure = { withContext(dispatchers.main) { showEmailNotVerifiedErrorToast() }}
             )
         }
     }
@@ -122,6 +139,18 @@ class LoginViewModel @Inject constructor(
     fun showAccountCreationErrorToast()= viewModelScope.launch {
         showToastFlag { accountCreationError = it }
     }
+
+    fun showEmailNotVerifiedErrorToast()= viewModelScope.launch {
+        showToastFlag { emailNotVerifiedError = it }
+    }
+
+    fun showEmailVerificationAlertDialog()= viewModelScope.launch {
+        emailVerification = true
+    }
+    fun hideEmailVerificationAlertDialog()= viewModelScope.launch {
+        emailVerification = false
+    }
+
     /**
      * Updates the new user object.
      *

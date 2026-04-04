@@ -1,6 +1,8 @@
 package com.oliviermarteaux.shared.firebase.authentication.ui.screen.login
 
 import android.R.attr.label
+import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarColors
@@ -39,6 +43,8 @@ import com.oliviermarteaux.shared.extensions.isValidEmail
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.NewUser
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import com.oliviermarteaux.shared.composables.SharedAlertDialog
 
 /**
  * A screen for logging in or creating an account.
@@ -109,8 +115,31 @@ fun LoginScreen(
                     )
                     if (accountCreationError) SharedToast(
                         text = stringResource(R.string.email_account_registration_unsuccessful),
-                        bottomPadding = 160
+                        bottomPadding = 80
                     )
+                    if (emailNotVerifiedError) SharedToast(
+                        text = stringResource(R.string.your_email_has_not_been_verified_yet) +"\n"+
+                                stringResource(R.string.if_you_don_t_receive_the_email_try_another_email_provider_or_login_with_google),
+                        bottomPadding = 80
+                    )
+                    AnimatedVisibility(emailVerification) {
+                        SharedAlertDialog(
+                            title = stringResource(R.string.please_verify_your_email),
+                            text = stringResource(R.string.a_verification_email_has_been_sent_please_check_your_mailbox),
+                            onConfirm = {
+                                verifyEmail {
+                                    hideEmailVerificationAlertDialog()
+                                    navigateToHomeScreen()
+                                }
+                                        },
+                            confirmText = stringResource(R.string.ok),
+                            onDismiss = {
+                                hideEmailVerificationAlertDialog()
+                                onBackClick()
+                            },
+                            dismissText = stringResource(R.string.cancel)
+                        )
+                    }
                 }
             }
         }
@@ -145,7 +174,7 @@ private fun LoginBody(
     onFirstNameChange: (String) -> Unit,
     onLastNameChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
-    createAccount: (NewUser, () -> Unit) -> Unit,
+    createAccount: (NewUser/*, () -> Unit*/) -> Unit,
     checkEmail: (String) -> Unit,
     navigateToHomeScreen: () -> Unit,
     navigateToPasswordScreen: (String) -> Unit,
@@ -153,10 +182,19 @@ private fun LoginBody(
     onEmailExist: (() -> Unit)-> Unit,
     isNameRequested: Boolean,
 ){
+    val configuration = LocalConfiguration.current
+    val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+    // Remember scroll state only if portrait
+    val scrollState = rememberScrollState()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.windowInsetsPadding(WindowInsets(0,0,0,0))
+        modifier = Modifier
+            .windowInsetsPadding(WindowInsets(0, 0, 0, 0))
+            .then(
+                if (isPortrait) Modifier.verticalScroll(scrollState)
+                else Modifier // do nothing in landscape
+            )
     ) {
         Spacer(Modifier.height(24.dp))
         SharedOutlinedEmail(
@@ -166,12 +204,14 @@ private fun LoginBody(
             imeAction = ImeAction.Done,
             textFieldModifier = Modifier.fillMaxWidth(),
             bottomPadding = SharedPadding.xl,
-            isError = newUser.email.isEmpty() || !newUser.email.isValidEmail(),
+            isError = newUser.email.isEmpty() || !newUser.email.isValidEmail() || newUser.email.endsWith("gmail.com", ignoreCase = true),
             errorText = when {
                 newUser.email.isEmpty() -> stringResource(R.string.enter_your_email_address_to_continue)
                 !newUser.email.isValidEmail() -> stringResource(R.string.incorrect_email_address)
+                newUser.email.endsWith("gmail.com", ignoreCase = true) -> stringResource(R.string.please_use_sign_in_with_google_with_your_gmail_address)
                 else -> null
-            }
+            },
+            modifier = Modifier.fillMaxWidth()
         )
         when {
             emailExist == null -> {
@@ -179,8 +219,8 @@ private fun LoginBody(
                 SharedButton(
                     onClick = { if (isOnline) checkEmail(newUser.email) else showNetworkErrorToast() },
                     text = stringResource(R.string.next),
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 60.dp),
-                    enabled = newUser.email.run { isValidEmail() && isNotEmpty() }
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = newUser.email.run { isValidEmail() && isNotEmpty() && !endsWith("gmail.com", ignoreCase = true)}
                 )
             }
 
@@ -229,10 +269,11 @@ private fun LoginBody(
                     imeAction = ImeAction.Done,
                 )
                 SharedButton(
-                    onClick = { createAccount(newUser) { navigateToHomeScreen() } },
+//                    onClick = { createAccount(newUser) { navigateToHomeScreen() } },
+                    onClick = { createAccount(newUser) /*{ navigateToPasswordScreen(newUser.email) }*/ },
                     text = stringResource(R.string.save),
                     modifier = Modifier
-                        .padding(vertical = SharedPadding.xl, horizontal = 60.dp)
+                        .padding(vertical = SharedPadding.xl)
                         .fillMaxWidth()
                 )
             }

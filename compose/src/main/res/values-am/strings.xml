@@ -62,7 +62,7 @@
     <string name="notification_are_disabled_double_tap_to_enable_it">ማሳወቂያዎች ተሰናክለዋል። እሱን ለማንቃት ሁለቴ መታ ያድርጉ</string>
     <string name="notification_are_enabled_double_tap_to_disable_it">ማሳወቂያዎች ነቅተዋል። እሱን ለማሰናከል ሁለቴ መታ ያድርጉ</string>
     <string name="notifications">ማሳወቂያዎች</string>
-    <string name="notifications_setting_notifications_are_double_tap_to_toggle_notifications">የማሳወቂያ ቅንብር። ማሳወቂያዎች %1$s ናቸው። ማሳወቂያዎችን ለመቀያየር ሁለቴ መታ ያድርጉ።</string>
+    <string name="notifications_setting_notifications_are_double_tap_to_toggle_notifications">የማሳወቂያ ቅንብር። ማሳወቂያዎች %1$s ናቸው። ማሳወቂያዎችን ለመቀያየር ሁለቴ መታ ያድርጉ。</string>
     <string name="ok">እሺ</string>
     <string name="password">የይለፍ ቃል</string>
     <string name="password_is_not_strong_enough_use_at_least_6_characters_and_a_mix_of_letters_numbers_and_a_special_character">የይለፍ ቃሉ በቂ ጥንካሬ የለውም። ቢያንስ 6 ቁምፊዎችን እና የፊደሎችን፣ የቁጥሮችን እና የልዩ ቁምፊን ድብልቅ ይጠቀሙ።</string>
@@ -103,7 +103,7 @@
     <string name="you_are_on_this_screen">. እርስዎ በዚህ ማያ ገጽ ላይ ነዎት።</string>
     <string name="not_sorted_double_tap_to_come_back_to_initial_list_state">አልተደረደረም። ወደ መጀመሪያው የዝርዝር ሁኔታ ለመመለስ ሁለቴ መታ ያድርጉ።</string>
     <string name="ascending_name_double_tap_to_sort_by_ascending_name">ስም ወደ ላይ። በስም ወደ ላይ ለመደርደር ሁለቴ መታ ያድርጉ።</string>
-    <string name="ascending_stock_double_tap_to_sort_by_ascending_stock">ክምችት ወደ ላይ። በክምችት ወደ ላይ ለመደርደር ሁለቴ መታ ያድርጉ።</string>
+    <string name="ascending_stock_double_tap_to_sort_by_ascending_stock">ክምችት ወደ ላይ። በክምችት ወደ ላይ ለመደርደር ሁለቴ መታ ያድርጉ。</string>
     <string name="descending_stock_double_tap_to_sort_by_descending_stock">ክምችት ወደ ታች። በክምችት ወደ ታች ለመደርደር ሁለቴ መታ ያድርጉ。</string>
     <string name="none">ምንም</string>
     <string name="stock">ክምችት</string>
@@ -157,4 +157,10 @@
     <string name="level_8">ደረጃ 8</string>
     <string name="level_9">ደረጃ 9</string>
     <string name="level_10">ደረጃ 10</string>
+    <string name="your_email_has_not_been_verified_yet">ኢሜልዎ ገና አልተረጋገጠም።</string>
+    <string name="if_you_don_t_receive_the_email_try_another_email_provider_or_login_with_google">ኢሜሉን ካልተቀበሉ፣ ሌላ የኢሜይል አቅራቢ ይሞክሩ ወይም በ Google ይግቡ።</string>
+    <string name="please_verify_your_email">እባክዎ ኢሜልዎን ያረጋግጡ</string>
+    <string name="a_verification_email_has_been_sent_please_check_your_mailbox">የማረጋገጫ ኢሜል ተልኳል። እባክዎ የገቢ መልእክት ሳጥንዎን ያረጋግጡ።</string>
+    <string name="cancel">ይቅር</string>
+    <string name="please_use_sign_in_with_google_with_your_gmail_address">እባክዎ ከ Gmail አድራሻዎ ጋር "በ Google ይግቡ" ይጠቀሙ</string>
 </resources>

@@ -62,7 +62,7 @@
     <string name="notification_are_disabled_double_tap_to_enable_it">বিজ্ঞপ্তিগুলি অক্ষম করা হয়েছে৷ এটি সক্ষম করতে দুবার আলতো চাপুন</string>
     <string name="notification_are_enabled_double_tap_to_disable_it">বিজ্ঞপ্তিগুলি সক্ষম করা হয়েছে৷ এটি অক্ষম করতে দুবার আলতো চাপুন</string>
     <string name="notifications">বিজ্ঞপ্তিগুলি</string>
-    <string name="notifications_setting_notifications_are_double_tap_to_toggle_notifications">বিজ্ঞপ্তি সেটিং। বিজ্ঞপ্তিগুলি হল %1$s। বিজ্ঞপ্তি টগল করতে দুবার আলতো চাপুন।</string>
+    <string name="notifications_setting_notifications_are_double_tap_to_toggle_notifications">বিজ্ঞপ্তি সেটিং। বিজ্ঞপ্তিগুলি হল %1$s। বিজ্ঞপ্তি টগল করতে দুবার আলতো চাপুন。</string>
     <string name="ok">ঠিক আছে</string>
     <string name="password">পাসওয়ার্ড</string>
     <string name="password_is_not_strong_enough_use_at_least_6_characters_and_a_mix_of_letters_numbers_and_a_special_character">পাসওয়ার্ড যথেষ্ট শক্তিশালী নয়। কমপক্ষে 6 টি অক্ষর এবং অক্ষর, সংখ্যা এবং একটি বিশেষ অক্ষরের মিশ্রণ ব্যবহার করুন।</string>
@@ -157,4 +157,10 @@
     <string name="level_8">স্তর 8</string>
     <string name="level_9">স্তর 9</string>
     <string name="level_10">স্তর 10</string>
+    <string name="your_email_has_not_been_verified_yet">আপনার ইমেল এখনও যাচাই করা হয়নি।</string>
+    <string name="if_you_don_t_receive_the_email_try_another_email_provider_or_login_with_google">যদি আপনি ইমেলটি না পান, তবে অন্য একটি ইমেল প্রদানকারী চেষ্টা করুন বা Google এর সাথে লগইন করুন।</string>
+    <string name="please_verify_your_email">দয়া করে আপনার ইমেল যাচাই করুন</string>
+    <string name="a_verification_email_has_been_sent_please_check_your_mailbox">একটি যাচাইকরণ ইমেল পাঠানো হয়েছে। অনুগ্রহ করে আপনার ইনবক্স চেক করুন।</string>
+    <string name="cancel">বাতিল করুন</string>
+    <string name="please_use_sign_in_with_google_with_your_gmail_address">অনুগ্রহ করে আপনার জিমেইল ঠিকানার সাথে "Google এর সাথে সাইন ইন করুন" ব্যবহার করুন</string>
 </resources>

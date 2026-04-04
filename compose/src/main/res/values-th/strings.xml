@@ -157,4 +157,10 @@
     <string name="level_8">ระดับ 8</string>
     <string name="level_9">ระดับ 9</string>
     <string name="level_10">ระดับ 10</string>
+    <string name="your_email_has_not_been_verified_yet">อีเมลของคุณยังไม่ได้รับการยืนยัน</string>
+    <string name="if_you_don_t_receive_the_email_try_another_email_provider_or_login_with_google">หากคุณไม่ได้รับอีเมล ให้ลองใช้ผู้ให้บริการอีเมลอื่นหรือเข้าสู่ระบบด้วย Google</string>
+    <string name="please_verify_your_email">โปรดยืนยันอีเมลของคุณ</string>
+    <string name="a_verification_email_has_been_sent_please_check_your_mailbox">ส่งอีเมลยืนยันแล้ว โปรดตรวจสอบกล่องจดหมายของคุณ</string>
+    <string name="cancel">ยกเลิก</string>
+    <string name="please_use_sign_in_with_google_with_your_gmail_address">โปรดใช้ "ลงชื่อเข้าใช้ด้วย Google" ด้วยที่อยู่ Gmail ของคุณ</string>
 </resources>

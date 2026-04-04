@@ -157,4 +157,10 @@
     <string name="level_8">Livello 8</string>
     <string name="level_9">Livello 9</string>
     <string name="level_10">Livello 10</string>
+    <string name="your_email_has_not_been_verified_yet">La tua email non è ancora stata verificata.</string>
+    <string name="if_you_don_t_receive_the_email_try_another_email_provider_or_login_with_google">Se non ricevi l\'email, prova con un altro provider di posta elettronica o accedi con Google.</string>
+    <string name="please_verify_your_email">Per favore verifica la tua email</string>
+    <string name="a_verification_email_has_been_sent_please_check_your_mailbox">Un\'email di verifica è stata inviata. Controlla la tua casella di posta.</string>
+    <string name="cancel">Annulla</string>
+    <string name="please_use_sign_in_with_google_with_your_gmail_address">Per favore usa "Accedi con Google" con il tuo indirizzo Gmail</string>
 </resources>

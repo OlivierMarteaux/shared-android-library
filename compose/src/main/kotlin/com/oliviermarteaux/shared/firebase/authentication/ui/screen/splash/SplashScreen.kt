@@ -2,6 +2,8 @@ package com.oliviermarteaux.shared.firebase.authentication.ui.screen.splash
 
 import android.R.attr.text
 import android.R.attr.textColor
+import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.annotation.StringRes
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -20,6 +22,7 @@ import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -71,12 +74,16 @@ fun SplashScreen(
                 Box() {
                     Column() {
                         Spacer(Modifier.height(24.dp))
+
+                        val serverClientId = stringResource(serverClientIdStringRes)
+                        val activity = LocalActivity.current?: Activity()
+
                         SharedButton(
                             onClick = {
-                                if (isOnline) signInWithGoogle(
-                                    serverClientIdStringRes,
-                                    navigateToHomeScreen
-                                ) else showNetworkErrorToast()
+                                if (isOnline) {
+                                    setDestination(navigateToHomeScreen)
+                                    resolveGoogleSignInProvider(serverClientId, activity)
+                                } else showNetworkErrorToast()
                             },
                             text = stringResource(R.string.sign_in_with_Google),
                             textColor = Color.Black,
@@ -84,7 +91,8 @@ fun SplashScreen(
                             colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                             shape = MaterialTheme.shapes.extraSmall,
                             contentPadding = PaddingValues(16.dp),
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
                                 .border(width = Dp.Hairline, color = Color.Black),
                             tint = Color.Unspecified
                         )
@@ -104,7 +112,11 @@ fun SplashScreen(
                     }
                     if (networkError) SharedToast(
                         text = stringResource(R.string.network_error_check_your_internet_connection),
-                        bottomPadding = 120
+                        bottomPadding = 40
+                    )
+                    if (authError) SharedToast(
+                        text = authErrorMessage,
+                        bottomPadding = 40
                     )
                 }
             }

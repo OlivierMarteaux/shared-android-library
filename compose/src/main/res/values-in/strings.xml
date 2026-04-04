@@ -157,4 +157,10 @@
     <string name="level_8">Level 8</string>
     <string name="level_9">Level 9</string>
     <string name="level_10">Level 10</string>
+    <string name="your_email_has_not_been_verified_yet">Email Anda belum diverifikasi.</string>
+    <string name="if_you_don_t_receive_the_email_try_another_email_provider_or_login_with_google">Jika Anda tidak menerima email tersebut, cobalah penyedia email lain atau masuk dengan Google.</string>
+    <string name="please_verify_your_email">Silakan verifikasi email Anda</string>
+    <string name="a_verification_email_has_been_sent_please_check_your_mailbox">Email verifikasi telah dikirim. Silakan periksa kotak masuk Anda.</string>
+    <string name="cancel">Batal</string>
+    <string name="please_use_sign_in_with_google_with_your_gmail_address">Silakan gunakan "Masuk dengan Google" menggunakan alamat Gmail Anda</string>
 </resources>

@@ -36,7 +36,7 @@
     <string name="email_account_registration_unsuccessful">El registro de la cuenta de correo ha fallado</string>
     <string name="enabled">activado</string>
     <string name="enter_full_address">Introduce la dirección completa</string>
-    <string name="enter_your_email_address_to_continue">Introduce tu correo electrónico para continuar</string>
+    <string name="enter_your_email_address_to_continue">Introduce tu correo electrónico para continue</string>
     <string name="error">Error</string>
     <string name="error_message">Error: %1$s</string>
     <string name="event_list">Lista de eventos</string>
@@ -157,4 +157,10 @@
     <string name="level_8">Nivel 8</string>
     <string name="level_9">Nivel 9</string>
     <string name="level_10">Nivel 10</string>
+    <string name="your_email_has_not_been_verified_yet">Tu correo electrónico aún no ha sido verificado.</string>
+    <string name="if_you_don_t_receive_the_email_try_another_email_provider_or_login_with_google">Si no recibes el correo electrónico, prueba con otro proveedor de correo o inicia sesión con Google.</string>
+    <string name="please_verify_your_email">Por favor, verifica tu correo electrónico</string>
+    <string name="a_verification_email_has_been_sent_please_check_your_mailbox">Se ha enviado un correo de verificación. Por favor, revisa tu bandeja de entrada.</string>
+    <string name="cancel">Cancelar</string>
+    <string name="please_use_sign_in_with_google_with_your_gmail_address">Por favor, usa \"Iniciar sesión con Google\" con tu dirección de Gmail</string>
 </resources>

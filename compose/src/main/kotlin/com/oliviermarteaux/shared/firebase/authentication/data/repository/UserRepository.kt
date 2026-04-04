@@ -16,9 +16,20 @@ interface UserRepository {
 
     suspend fun updateUser(user: User): Result<Unit>
 
+//    suspend fun updatePseudo(id: String, pseudo: String): Result<Unit>
+
     suspend fun checkEmail(email: String): Result<Boolean>
 
+//    suspend fun checkPseudo(pseudo: String): Result<Boolean>
+
     suspend fun createAccount(newUser: NewUser): Result<User?>
+
+    suspend fun verifyEmail(): Result<User?>
+
+    suspend fun sendEmailVerificationLink()
+
+
+//    suspend fun checkEmailVerification(): Result<Unit>
 
     suspend fun signIn(email: String, password: String): Result<User?>
 
@@ -28,5 +39,6 @@ interface UserRepository {
 
     suspend fun deleteAccount(): Result<User?>
 
-    suspend fun signInWithGoogle(@StringRes serverClientIdStringRes: Int): Result<User?>
+//    suspend fun signInWithGoogle(@StringRes serverClientIdStringRes: Int): Result<User?>
+    suspend fun signInWithGoogle(idToken: String): Result<User?>
 }

@@ -157,4 +157,10 @@
     <string name="level_8">المستوى 8</string>
     <string name="level_9">المستوى 9</string>
     <string name="level_10">المستوى 10</string>
+    <string name="your_email_has_not_been_verified_yet">لم يتم التحقق من بريدك الإلكتروني بعد.</string>
+    <string name="if_you_don_t_receive_the_email_try_another_email_provider_or_login_with_google">إذا لم تتلق البريد الإلكتروني، فحاول استخدام موفر بريد إلكتروني آخر أو قم بتسجيل الدخول باستخدام Google.</string>
+    <string name="please_verify_your_email">يرجى التحقق من بريدك الإلكتروني</string>
+    <string name="a_verification_email_has_been_sent_please_check_your_mailbox">تم إرسال بريد إلكتروني للتحقق. يرجى التحقق من صندوق الوارد الخاص بك.</string>
+    <string name="cancel">إلغاء</string>
+    <string name="please_use_sign_in_with_google_with_your_gmail_address">يرجى استخدام "تسجيل الدخول باستخدام Google" باستخدام عنوان Gmail الخاص بك</string>
 </resources>

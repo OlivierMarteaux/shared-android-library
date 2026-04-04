@@ -1,12 +1,18 @@
 package com.oliviermarteaux.shared.firebase.authentication.ui.screen.password
 
+import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -14,6 +20,7 @@ import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -22,11 +29,15 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.oliviermarteaux.shared.composables.ImageScaffold
+import com.oliviermarteaux.shared.composables.SharedAlertDialog
 import com.oliviermarteaux.shared.composables.SharedButton
 import com.oliviermarteaux.shared.composables.SharedOutlinedPassword
 import com.oliviermarteaux.shared.composables.SharedScaffold
 import com.oliviermarteaux.shared.composables.SharedToast
 import com.oliviermarteaux.shared.composables.extensions.cdButtonSemantics
+import com.oliviermarteaux.shared.composables.spacer.SpacerLarge
+import com.oliviermarteaux.shared.composables.spacer.SpacerXl
+import com.oliviermarteaux.shared.composables.spacer.SpacerXxl
 import com.oliviermarteaux.shared.compose.R
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
 
@@ -66,7 +77,7 @@ fun PasswordScreen(
             with (passwordViewModel) {
                 PasswordBody(
                     logoDrawableRes = logoDrawableRes,
-                    email = email,
+                    email = email.lowercase(),
                     password = password,
                     contentPadding = contentPadding,
                     onPasswordChange = ::onPasswordChange,
@@ -86,8 +97,31 @@ fun PasswordScreen(
                 )
                 if(incorrectPassword)SharedToast(
                     text = stringResource(R.string.incorrect_password),
-                    bottomPadding = 160
+                    bottomPadding = 80
                 )
+                if (emailNotVerifiedError) SharedToast(
+                    text = stringResource(R.string.your_email_has_not_been_verified_yet) +"\n"+
+                            stringResource(R.string.if_you_don_t_receive_the_email_try_another_email_provider_or_login_with_google),
+                    bottomPadding = 80
+                )
+                AnimatedVisibility(emailVerification) {
+                    SharedAlertDialog(
+                        title = stringResource(R.string.please_verify_your_email),
+                        text = stringResource(R.string.a_verification_email_has_been_sent_please_check_your_mailbox),
+                        onConfirm = {
+                            verifyEmail {
+                                hideEmailVerificationAlertDialog()
+                                navigateToHomeScreen()
+                            }
+                        },
+                        confirmText = stringResource(R.string.ok),
+                        onDismiss = {
+                            hideEmailVerificationAlertDialog()
+                            onBackClick()
+                        },
+                        dismissText = stringResource(R.string.cancel)
+                    )
+                }
             }
         }
     }
@@ -128,44 +162,63 @@ private fun PasswordBody(
         formPortraitHorizontalPadding = formPortraitHorizontalPadding,
         innerPadding = contentPadding,
     ){
-        Spacer(Modifier.height(24.dp))
-        Text(
-            text = stringResource(R.string.welcome_back_you_ve_already_used_to_sign_in_enter_your_password_for_that_account, email),
-            textAlign = TextAlign.Center,
-        )
-        Spacer(modifier = Modifier.height(SharedPadding.medium))
 
-        SharedOutlinedPassword(
-            value = password,
-            onValueChange = { onPasswordChange(it) },
-            label = stringResource(R.string.password),
-            imeAction = ImeAction.Done,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(SharedPadding.medium))
+        val configuration = LocalConfiguration.current
+        val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        // Remember scroll state only if portrait
+        val scrollState = rememberScrollState()
 
-        val textTroubleSignIn = stringResource(R.string.trouble_signing_in)
-        val cdTroubleSignIn = stringResource(
-            R.string.button_double_tap_to_open_the_password_reset_screen,
-            textTroubleSignIn
-        )
-        SharedButton(
-            text = textTroubleSignIn,
+        Column (
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 60.dp)
-                .cdButtonSemantics(cdTroubleSignIn)
-        ){ navigateToPasswordResetScreen(email) }
-        Spacer(modifier = Modifier.height(SharedPadding.medium))
+                .fillMaxSize()
+                .then(
+                    if (isPortrait) Modifier.verticalScroll(scrollState)
+                    else Modifier // do nothing in landscape
+                ),
+        ){
+            Spacer(Modifier.height(24.dp))
+            Text(
+                text = stringResource(
+                    R.string.welcome_back_you_ve_already_used_to_sign_in_enter_your_password_for_that_account,
+                    email
+                ),
+                textAlign = TextAlign.Center,
+            )
+            Spacer(modifier = Modifier.height(SharedPadding.medium))
 
-        val textSignIn = stringResource(R.string.sign_in)
-        val cdSignIn = stringResource(R.string.button_double_tap_to_sign_in, textSignIn)
-        SharedButton(
-            text = textSignIn,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 60.dp)
-                .cdButtonSemantics(cdSignIn)
-        ){ signIn(password) { navigateToHomeScreen() } }
+            SharedOutlinedPassword(
+                value = password,
+                onValueChange = { onPasswordChange(it) },
+                label = stringResource(R.string.password),
+                imeAction = ImeAction.Done,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(SharedPadding.medium))
+
+            val textTroubleSignIn = stringResource(R.string.trouble_signing_in)
+            val cdTroubleSignIn = stringResource(
+                R.string.button_double_tap_to_open_the_password_reset_screen,
+                textTroubleSignIn
+            )
+            SharedButton(
+                text = textTroubleSignIn,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .cdButtonSemantics(cdTroubleSignIn)
+            ) { navigateToPasswordResetScreen(email) }
+            Spacer(modifier = Modifier.height(SharedPadding.medium))
+
+            val textSignIn = stringResource(R.string.sign_in)
+            val cdSignIn = stringResource(R.string.button_double_tap_to_sign_in, textSignIn)
+            SharedButton(
+                text = textSignIn,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .cdButtonSemantics(cdSignIn)
+            ) {
+                signIn(password) { navigateToHomeScreen()
+                } }
+            SpacerLarge()
+        }
     }
 }

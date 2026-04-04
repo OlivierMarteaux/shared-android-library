@@ -25,6 +25,8 @@ class UserFirebaseRepository @Inject constructor(private val userApi: UserApi): 
 
     override suspend fun updateUser(user: User): Result<Unit> = userApi.updateUser(user)
 
+//    override suspend fun updatePseudo(id: String, pseudo: String): Result<Unit> = userApi.updatePseudo(id, pseudo)
+
     /**
      * A flow that emits the current authentication state of the user.
      * Emits a [FirebaseUser] if a user is signed in, or `null` otherwise.
@@ -39,6 +41,9 @@ class UserFirebaseRepository @Inject constructor(private val userApi: UserApi): 
      * @return A [Result] indicating whether the email exists. `Result.success(true)` if it exists, `Result.success(false)` otherwise.
      */
     override suspend fun checkEmail(email: String): Result<Boolean> = userApi.checkEmail(email)
+
+//    override suspend fun checkPseudo(pseudo: String): Result<Boolean> = userApi.checkPseudo(pseudo)
+
     /**
      * Creates a new user account.
      *
@@ -46,6 +51,13 @@ class UserFirebaseRepository @Inject constructor(private val userApi: UserApi): 
      * @return A [Result] containing the created [User] on success, or an error.
      */
     override suspend fun createAccount(newUser: NewUser): Result<User?> = userApi.createAccount(newUser)
+
+    override suspend fun verifyEmail(): Result<User?> = userApi.verifyEmail()
+
+    override suspend fun sendEmailVerificationLink() = userApi.sendEmailVerificationLink()
+
+
+//    override suspend fun checkEmailVerification(): Result<Unit> = userApi.checkEmailVerification()
     /**
      * Signs in a user with their email and password.
      *
@@ -76,6 +88,9 @@ class UserFirebaseRepository @Inject constructor(private val userApi: UserApi): 
      */
     override suspend fun deleteAccount(): Result<User?> = userApi.deleteAccount()
 
-    override suspend fun signInWithGoogle(@StringRes serverClientIdStringRes: Int): Result<User?> =
-        userApi.signInWithGoogle(serverClientIdStringRes)
+//    override suspend fun signInWithGoogle(@StringRes serverClientIdStringRes: Int): Result<User?> =
+//        userApi.signInWithGoogle(serverClientIdStringRes)
+
+    override suspend fun signInWithGoogle(idToken: String): Result<User?> =
+        userApi.signInWithGoogle(idToken)
 }

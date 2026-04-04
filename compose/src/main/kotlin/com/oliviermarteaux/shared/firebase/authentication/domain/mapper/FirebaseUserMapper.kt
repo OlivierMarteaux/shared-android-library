@@ -1,6 +1,7 @@
 package com.oliviermarteaux.shared.firebase.authentication.domain.mapper
 
 import com.google.firebase.auth.FirebaseUser
+import com.oliviermarteaux.shared.firebase.authentication.domain.model.LoginMethod
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.User
 
 /**
@@ -8,13 +9,14 @@ import com.oliviermarteaux.shared.firebase.authentication.domain.model.User
  *
  * @return A [User] object.
  */
-fun FirebaseUser.toUser(): User {
+fun FirebaseUser.toUser(loginMethod: LoginMethod = LoginMethod.UNKNOWN): User {
     return User(
         id = uid,
         firstname = displayName?.substringBefore(" ") ?: "",
         lastname = displayName?.substringAfter(" ") ?: "",
         fullname = displayName ?: "",
         email = email ?: "",
-        photoUrl = photoUrl?.toString() ?: ""
+        photoUrl = photoUrl?.toString() ?: "",
+        loginMethod = loginMethod
     )
 }

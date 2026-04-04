@@ -157,4 +157,10 @@
     <string name="level_8">Kiwango 8</string>
     <string name="level_9">Kiwango 9</string>
     <string name="level_10">Kiwango 10</string>
+    <string name="your_email_has_not_been_verified_yet">Barua pepe yako bado haijathibitishwa.</string>
+    <string name="if_you_don_t_receive_the_email_try_another_email_provider_or_login_with_google">Ikiwa hutapokea barua pepe, jaribu mtoa huduma mwingine wa barua pepe au ingia na Google.</string>
+    <string name="please_verify_your_email">Tafadhali thibitisha barua pepe yako</string>
+    <string name="a_verification_email_has_been_sent_please_check_your_mailbox">Barua pepe ya uthibitishaji imetumwa. Tafadhali angalia kikasha chako.</string>
+    <string name="cancel">Ghairi</string>
+    <string name="please_use_sign_in_with_google_with_your_gmail_address">Tafadhali tumia "Ingia ukitumia Google" na anwani yako ya Gmail</string>
 </resources>

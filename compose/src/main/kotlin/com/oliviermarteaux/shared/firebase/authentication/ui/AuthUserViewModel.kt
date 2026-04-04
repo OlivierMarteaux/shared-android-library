@@ -214,7 +214,7 @@ abstract class AuthUserViewModel(
                         UserAuthState.Connected(user)
                     }
                 }
-                log.v("AuthUserViewModel: userAuthState = $userAuthState")
+                log.v("AuthUserViewModel::observeUserAuthState: userAuthState = $userAuthState")
             }
         }
     }
