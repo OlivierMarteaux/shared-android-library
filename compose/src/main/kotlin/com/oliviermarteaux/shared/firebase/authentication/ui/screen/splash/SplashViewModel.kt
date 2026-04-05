@@ -15,6 +15,7 @@ import com.oliviermarteaux.shared.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,6 +33,7 @@ class SplashViewModel @Inject constructor(
     var authErrorMessage: String by mutableStateOf("")
         private set
     private val _launchIntent = MutableSharedFlow<Intent>()
+    val launchIntent = _launchIntent.asSharedFlow() // UI observes this
     private var onSuccessfulGoogleSignInDestination: () -> Unit = {}
 
     fun setDestination(onSuccess: () -> Unit) {
