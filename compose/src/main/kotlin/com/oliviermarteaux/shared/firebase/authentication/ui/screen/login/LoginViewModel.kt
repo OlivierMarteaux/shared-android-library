@@ -109,16 +109,10 @@ class LoginViewModel @Inject constructor(
             )
         }
     }
-    /**
-     * Creates a new account.
-     *
-     * @param newUser The new user to create.
-     * @param onAccountCreated A callback to invoke when the account is created successfully.
-     */
-    fun createAccount(newUser: NewUser/*, onAccountCreated: () -> Unit = {}*/ ) {
+
+    fun createAccount(newUser: NewUser) {
         viewModelScope.launch(dispatchers.io) {
             userRepository.createAccount(newUser).fold(
-//                onSuccess = { withContext(dispatchers.main) { onAccountCreated() } },
                 onSuccess = { withContext(dispatchers.main) { showEmailVerificationAlertDialog() } },
                 onFailure = { withContext(dispatchers.main) { showAccountCreationErrorToast() } }
             )

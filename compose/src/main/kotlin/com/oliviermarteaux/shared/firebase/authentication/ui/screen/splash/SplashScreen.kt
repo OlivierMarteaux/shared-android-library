@@ -1,7 +1,5 @@
 package com.oliviermarteaux.shared.firebase.authentication.ui.screen.splash
 
-import android.R.attr.text
-import android.R.attr.textColor
 import android.app.Activity
 import androidx.activity.compose.LocalActivity
 import androidx.annotation.StringRes
@@ -15,14 +13,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextFieldDefaults.contentPadding
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -71,8 +66,8 @@ fun SplashScreen(
                 formPortraitHorizontalPadding = formPortraitHorizontalPadding,
                 imageModifier = imageModifier,
             ) {
-                Box() {
-                    Column() {
+                Box {
+                    Column {
                         Spacer(Modifier.height(24.dp))
 
                         val serverClientId = stringResource(serverClientIdStringRes)

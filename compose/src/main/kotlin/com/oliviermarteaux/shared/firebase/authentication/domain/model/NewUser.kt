@@ -1,10 +1,5 @@
 package com.oliviermarteaux.shared.firebase.authentication.domain.model
 
-import android.os.Build
-import androidx.annotation.RequiresApi
-import com.google.android.gms.common.internal.AccountType
-import com.oliviermarteaux.shared.extensions.toDate
-import java.time.LocalDate
 import java.util.Date
 
 /**

@@ -1,11 +1,8 @@
 package com.oliviermarteaux.shared.firebase.authentication.data.service
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.util.Log
-import androidx.core.content.ContextCompat.getString
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
@@ -17,7 +14,6 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class GoogleTokenProvider @Inject constructor(
@@ -37,9 +33,9 @@ class GoogleTokenProvider @Inject constructor(
         return true
     }
 
-    // -----------------------------
-    // MODERN FLOW (Credential Manager)
-    // -----------------------------
+    //_ -----------------------------
+    //_ MODERN FLOW (Credential Manager)
+    //_ -----------------------------
     private suspend fun signInWithCredentialManager(
         serverClientId: String, activity: Activity
     ): GoogleSignInResult {
@@ -105,9 +101,9 @@ class GoogleTokenProvider @Inject constructor(
         }
     }
 
-    // -----------------------------
-    // LEGACY FLOW (GoogleSignInClient)
-    // -----------------------------
+    //_ -----------------------------
+    //_ LEGACY FLOW (GoogleSignInClient)
+    //_ -----------------------------
     private fun signInLegacy(serverClientId: String, activity: Activity): GoogleSignInResult {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(serverClientId)

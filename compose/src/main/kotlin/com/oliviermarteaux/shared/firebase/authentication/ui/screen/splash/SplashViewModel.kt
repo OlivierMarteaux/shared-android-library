@@ -1,34 +1,29 @@
 package com.oliviermarteaux.shared.firebase.authentication.ui.screen.splash
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import androidx.annotation.StringRes
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
+import com.oliviermarteaux.shared.firebase.authentication.data.service.GoogleSignInResult
+import com.oliviermarteaux.shared.firebase.authentication.data.service.GoogleTokenProvider
 import com.oliviermarteaux.shared.firebase.authentication.ui.AuthUserViewModel
 import com.oliviermarteaux.shared.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
-import javax.inject.Inject
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.core.content.ContextCompat.getString
-import coil3.util.CoilUtils.result
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.oliviermarteaux.shared.firebase.authentication.data.service.GoogleSignInResult
-import com.oliviermarteaux.shared.firebase.authentication.data.service.GoogleTokenProvider
-import com.oliviermarteaux.shared.firebase.authentication.data.service.UserFirebaseApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val log: Logger,
-    private val isOnlineFlow: Flow<Boolean>,
+    isOnlineFlow: Flow<Boolean>,
     val provider: GoogleTokenProvider
 ) : AuthUserViewModel(
     userRepository = userRepository,
@@ -37,25 +32,8 @@ class SplashViewModel @Inject constructor(
 ) {
     var authErrorMessage: String by mutableStateOf("")
         private set
-
     private val _launchIntent = MutableSharedFlow<Intent>()
     val launchIntent = _launchIntent.asSharedFlow() // UI observes this
-
-//    fun signInWithGoogle(@StringRes serverClientIdStringRes: Int, onSuccess: () -> Unit) {
-//        viewModelScope.launch {
-//            userRepository.signInWithGoogle(serverClientIdStringRes).fold(
-//                onSuccess = {
-//                    log.d("splashViewModel::signInWithGoogle: successfully logged")
-//                    onSuccess()
-//                            },
-//                onFailure = { e ->
-//                    log.e("splashViewModel::signInWithGoogle: failed to log",e)
-//                    authErrorMessage = e.message ?: "Google authentication error, try with email"
-//                    showAuthErrorToast()
-//                }
-//            )
-//        }
-//    }
     private var onSuccessfulGoogleSignInDestination: () -> Unit = {}
 
     fun setDestination(onSuccess: () -> Unit) {

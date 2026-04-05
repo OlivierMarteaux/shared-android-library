@@ -1,9 +1,8 @@
 package com.oliviermarteaux.shared.firebase.authentication.domain.mapper
 
-import android.R.attr.accountType
+import com.oliviermarteaux.shared.firebase.authentication.domain.model.LoginMethod
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.NewUser
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.User
-import com.oliviermarteaux.shared.firebase.authentication.domain.model.LoginMethod
 
 /**
  * Converts a [NewUser] object to a [User] object.
