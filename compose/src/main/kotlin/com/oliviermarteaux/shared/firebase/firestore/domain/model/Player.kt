@@ -1,14 +1,7 @@
 package com.oliviermarteaux.shared.firebase.firestore.domain.model
 
-import com.google.android.gms.common.internal.AccountType
-import com.oliviermarteaux.shared.extensions.toDate
-import com.oliviermarteaux.shared.firebase.firestore.domain.model.GameLevel
-import com.oliviermarteaux.shared.firebase.firestore.domain.model.GameLevelStat
-import com.oliviermarteaux.shared.firebase.authentication.domain.model.LoginMethod
 import java.io.Serializable
-import java.time.LocalDate
 import java.util.Date
-import kotlin.text.ifEmpty
 
 /**
  * This class represents a User data object. It holds basic information about a user, including

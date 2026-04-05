@@ -1,6 +1,5 @@
 package com.oliviermarteaux.shared.firebase.authentication.ui.screen.login
 
-import android.R.attr.label
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
@@ -25,6 +24,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -32,6 +33,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.oliviermarteaux.shared.composables.ImageScaffold
+import com.oliviermarteaux.shared.composables.SharedAlertDialog
 import com.oliviermarteaux.shared.composables.SharedButton
 import com.oliviermarteaux.shared.composables.SharedOutlinedEmail
 import com.oliviermarteaux.shared.composables.SharedOutlinedPassword
@@ -42,9 +44,6 @@ import com.oliviermarteaux.shared.compose.R
 import com.oliviermarteaux.shared.extensions.isValidEmail
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.NewUser
 import com.oliviermarteaux.shared.ui.theme.SharedPadding
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
-import com.oliviermarteaux.shared.composables.SharedAlertDialog
 
 /**
  * A screen for logging in or creating an account.
@@ -269,8 +268,7 @@ private fun LoginBody(
                     imeAction = ImeAction.Done,
                 )
                 SharedButton(
-//                    onClick = { createAccount(newUser) { navigateToHomeScreen() } },
-                    onClick = { createAccount(newUser) /*{ navigateToPasswordScreen(newUser.email) }*/ },
+                    onClick = { createAccount(newUser) },
                     text = stringResource(R.string.save),
                     modifier = Modifier
                         .padding(vertical = SharedPadding.xl)

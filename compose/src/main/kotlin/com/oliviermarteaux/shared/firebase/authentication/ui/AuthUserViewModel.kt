@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import coil3.util.CoilUtils.result
 import com.oliviermarteaux.shared.firebase.authentication.data.repository.UserRepository
 import com.oliviermarteaux.shared.firebase.authentication.domain.model.User
 import com.oliviermarteaux.shared.ui.UiState

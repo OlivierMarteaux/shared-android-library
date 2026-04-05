@@ -7,7 +7,6 @@ interface PlayerRepository {
 
     suspend fun checkPseudoAvailability(pseudo: String): Result<Boolean>
     suspend fun createNewPlayer(player: Player) : Result<Player>
-
     fun getAllPlayers(): Flow<Result<List<Player>>>
     suspend fun getCurrentPlayer() : Flow<Result<Player?>>
     suspend fun updatePlayer(player: Player): Result<Player>
