@@ -259,29 +259,31 @@ class UserFirebaseApi: UserApi {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
 
         firebaseAuth.signInWithCredential(credential).await()
-
         val firebaseUser = firebaseAuth.currentUser
-        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser uid: ${firebaseUser?.uid}")
-        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser email: ${firebaseUser?.email}")
-        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser providerData: ${firebaseUser?.providerData}")
-        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser isAnonymous: ${firebaseUser?.isAnonymous}")
-        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser metadata: ${firebaseUser?.metadata}")
-        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser multiFactor: ${firebaseUser?.multiFactor}")
-        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser tenantId: ${firebaseUser?.tenantId}")
-        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser isEmailVerified: ${firebaseUser?.isEmailVerified}")
-        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser phoneNumber: ${firebaseUser?.phoneNumber}")
-        Log.d("OM_TAG", "UserFirebaseApi:signIn: firebaseUser providerId: ${firebaseUser?.providerId}")
+
+        Log.d("OM_TAG", "UserFirebaseApi:signInWithGoogle: firebaseUser uid: ${firebaseUser?.uid}")
+        Log.d("OM_TAG", "UserFirebaseApi:signInWithGoogle: firebaseUser email: ${firebaseUser?.email}")
+        Log.d("OM_TAG", "UserFirebaseApi:signInWithGoogle: firebaseUser providerData: ${firebaseUser?.providerData}")
+        Log.d("OM_TAG", "UserFirebaseApi:signInWithGoogle: firebaseUser isAnonymous: ${firebaseUser?.isAnonymous}")
+        Log.d("OM_TAG", "UserFirebaseApi:signInWithGoogle: firebaseUser metadata: ${firebaseUser?.metadata}")
+        Log.d("OM_TAG", "UserFirebaseApi:signInWithGoogle: firebaseUser multiFactor: ${firebaseUser?.multiFactor}")
+        Log.d("OM_TAG", "UserFirebaseApi:signInWithGoogle: firebaseUser tenantId: ${firebaseUser?.tenantId}")
+        Log.d("OM_TAG", "UserFirebaseApi:signInWithGoogle: firebaseUser isEmailVerified: ${firebaseUser?.isEmailVerified}")
+        Log.d("OM_TAG", "UserFirebaseApi:signInWithGoogle: firebaseUser phoneNumber: ${firebaseUser?.phoneNumber}")
+        Log.d("OM_TAG", "UserFirebaseApi:signInWithGoogle: firebaseUser providerId: ${firebaseUser?.providerId}")
 
         val user = firebaseUser?.toUser(LoginMethod.GOOGLE)
+        Log.d("OM_TAG", "UserFirebaseApi::signInWithGoogle: user = $user")
 
-        val snapshot = firestore.collection("users")
-            .whereEqualTo("id", user?.id)
+        val hasFirestoreEntry = firestore.collection("users")
+            .document(user?.id ?: "")
             .get()
             .await()
+            .exists()
+        Log.d("OM_TAG", "UserFirebaseApi::signInWithGoogle: hasFirestoreEntry = $hasFirestoreEntry")
 
-        val isNewAccount = snapshot.isEmpty
-
-        if (isNewAccount && firebaseUser != null) {
+        if ( !hasFirestoreEntry && firebaseUser != null) {
+            Log.d("OM_TAG", "UserFirebaseApi::signInWithGoogle: firestore entry does not exist, adding entry...")
             val newUser = NewUser(
                 firstname = user?.firstname ?: "",
                 lastname = user?.lastname ?: "",
@@ -290,11 +292,12 @@ class UserFirebaseApi: UserApi {
                 photoUrl = user?.photoUrl ?: "",
                 pseudo = user?.pseudo ?: "",
             )
-
             addNewUserToFirestore(newUser, firebaseUser.uid, LoginMethod.GOOGLE)
         }
-
         user
+    }.onFailure { e ->
+        FirebaseCrashlytics.getInstance().recordException(e)
+        Log.e("OM_TAG", "UserFirebaseApi::signInWithGoogle: Failed: ${e.message}")
     }
 
     //_ #############################################
